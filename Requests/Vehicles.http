@@ -1,0 +1,33 @@
+@host = http://localhost:3000/api
+
+### Obteniendo Todos los Vehiculos
+GET {{host}}/vehicles
+
+### Obteniendo un Solo Vehiculo
+GET {{host}}/vehicles/123
+
+### Creando un Nuevo Vehiculo
+POST {{host}}/vehicles
+Content-Type: application/json
+
+{
+    "vin": "908735saaaaaaaaA",
+    "plate": "O0-618BBY",
+    "type": "PICK-UP",
+    "brand": "D-MAX",
+    "model": 2024
+}
+
+### Modificando un Vehiculo
+PUT {{host}}/vehicles/1234
+Content-Type: application/json
+
+{
+    "plate": "O0-618BBY",
+    "type": "PICK-UP",
+    "brand": "D-MAX"
+}
+
+### Eliminando un Vehiculo
+DELETE {{host}}/vehicles/908735saaaaaaaaaAa
+Content-Type: application/json
