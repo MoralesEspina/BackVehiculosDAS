@@ -4,33 +4,35 @@
 GET {{host}}/vehicles
 
 ### Obteniendo un Solo Vehiculo
-GET {{host}}/vehicles/123
+GET {{host}}/vehicles/908735saaaaaaaaA
 
 ### Creando un Nuevo Vehiculo
 POST {{host}}/vehicles
 Content-Type: application/json
 
 {
-    "vin": "908735saaaaaaaaA",
-    "plate": "O0-618BBY",
-    "type": "2312",
-    "brand": "D-MAX",
-    "model": 2024,
-    "km": 1234,
-    "gas": "DIESEL"
+    "vin": "9872947298734597",
+    "plate": "O0-628BBH",
+    "type": "2",
+    "brand": "MITSUBISHI",
+    "model": 2023,
+    "km": 1,
+    "gas": "SUPER",
+    "status": 1
 }
 
 ### Modificando un Vehiculo
-PUT {{host}}/vehicles/1234
+PUT {{host}}/vehicles/908735saaaaaaaaA
 Content-Type: application/json
 
 {
-    "plate": "O0-618BBY",
-    "type": "PICK-UP",
-    "brand": "D-MAX",
-    "model": 2024,
-    "km": 0,
-    "gas": "DIESEL"
+    "plate": "O0-628BBH",
+    "type": "1",
+    "brand": "MITSUBISHI",
+    "model": 2023,
+    "km": 1,
+    "gas": "SUPER",
+    "status": 2
 }
 
 ### Eliminando un Vehiculo

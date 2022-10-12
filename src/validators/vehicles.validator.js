@@ -28,6 +28,10 @@ const validateCreateVehicle = [
     check('gas')
         .exists()
         .notEmpty(),
+        check('status')
+        .exists()
+        .notEmpty()
+        .isNumeric(),
     (req,res,next) => {
         validateResult(req,res,next)
     }

@@ -44,8 +44,12 @@ const createNewVehicle= async(req,res) =>{
             plate: req.body.plate,
             type: req.body.type,
             brand: req.body.brand,
-            model: req.body.model
+            model: req.body.model,
+            km: req.body.km,
+            gas: req.body.gas,
+            status: req.body.status,
         };
+        console.log(vehicle)
         const createdVehicle = await VehiclesService.createNewVehicle(vehicle);
         if (createdVehicle.status == 400) {
             res.status(400).json({data: createdVehicle})
@@ -75,7 +79,11 @@ const updateOneVehicle= async(req,res) =>{
             plate: req.body.plate,
             type: req.body.type,
             brand: req.body.brand,
-            model: req.body.model
+            model: req.body.model,
+            km: req.body.km,
+            gas: req.body.gas,
+            status: req.body.status,
+            active: req.body.active
         };
         const updatedVehicle = await VehiclesService.updateOneVehicle(id, vehicle);
         if (updatedVehicle.status == 400) {

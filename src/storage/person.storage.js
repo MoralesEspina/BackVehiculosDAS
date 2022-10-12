@@ -86,7 +86,7 @@ const updateOnePerson = async (id, updatedPerson) => {
                 };
             }
 
-             const updated = await connection.query("SELECT fullname,job,phone,dpi,nit from person where uuid = ?", id);
+             const updated = await connection.query("SELECT p.uuid,p.fullname,j.job_name,p.phone,p.dpi,p.nit,active,available from person AS p join job As j where p.job = j.id and uuid = ?", id);
              return updated;
 
     } catch(error)

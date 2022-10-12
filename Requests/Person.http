@@ -4,7 +4,7 @@
 GET {{host}}/persons
 
 ### Obteniendo una Persona
-GET {{host}}/persons/7bcab11c-22a4-48de-a91a-d17a9d1a95ee
+GET {{host}}/persons/dd0e013f-64dd-48ef-9745-f25a2b9a36e1
 
 ### Creando una Nueva Persona
 POST {{host}}/persons
@@ -19,17 +19,17 @@ Content-Type: application/json
 }
 
 ### Modificando una Persona
-PUT {{host}}/persons/32657e8e-d3ce-459f-8116-f6437654dbd3
+PUT {{host}}/persons/dd0e013f-64dd-48ef-9745-f25a2b9a36e1
 Content-Type: application/json
 
 {
-    "fullname": "Dylan",
-    "job": "123",
-    "phone": 41806,
-    "dpi": 41806123123,
-    "nit": 41806
+    "fullname": "Esdras Mefiboseth Morales",
+    "job": "1",
+    "phone": 41806704,
+    "dpi": 3395399682101,
+    "nit": 105777943
 }
 
 ### Eliminando una Persona
-DELETE {{host}}/persons/a85cd22c-88bc-4c40-bb7a-fc3484cb68ee
+DELETE {{host}}/persons/7bcab11c-22a4-48de-a91a-d17a9d1a95ee
 Content-Type: application/json
