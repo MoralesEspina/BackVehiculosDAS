@@ -1,0 +1,35 @@
+@host = http://localhost:3000/api
+
+### Obteniendo Todas las Personas
+GET {{host}}/persons
+
+### Obteniendo una Persona
+GET {{host}}/persons/7bcab11c-22a4-48de-a91a-d17a9d1a95ee
+
+### Creando una Nueva Persona
+POST {{host}}/persons
+Content-Type: application/json
+
+{
+    "fullname": "Esdras Morales",
+    "job": "2",
+    "phone": 41806703,
+    "dpi": 1234567891,
+    "nit": 5885532
+}
+
+### Modificando una Persona
+PUT {{host}}/persons/32657e8e-d3ce-459f-8116-f6437654dbd3
+Content-Type: application/json
+
+{
+    "fullname": "Dylan",
+    "job": "123",
+    "phone": 41806,
+    "dpi": 41806123123,
+    "nit": 41806
+}
+
+### Eliminando una Persona
+DELETE {{host}}/persons/a85cd22c-88bc-4c40-bb7a-fc3484cb68ee
+Content-Type: application/json

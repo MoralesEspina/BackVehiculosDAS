@@ -10,7 +10,8 @@ const validateCreateVehicle = [
         .withMessage("No cumple con las caracteristicas de una placa"),
     check('type')
         .exists()
-        .notEmpty(),
+        .notEmpty()
+        .isNumeric(),
     check('brand') 
         .exists()
         .notEmpty(),
@@ -20,6 +21,13 @@ const validateCreateVehicle = [
         .isNumeric()
         .isLength({min: 4, max: 4})
         .withMessage("Error en la cantidad de caracteres"),
+    check('km')
+        .exists()
+        .notEmpty()
+        .isNumeric(),
+    check('gas')
+        .exists()
+        .notEmpty(),
     (req,res,next) => {
         validateResult(req,res,next)
     }

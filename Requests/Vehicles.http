@@ -13,9 +13,11 @@ Content-Type: application/json
 {
     "vin": "908735saaaaaaaaA",
     "plate": "O0-618BBY",
-    "type": "PICK-UP",
+    "type": "2312",
     "brand": "D-MAX",
-    "model": 2024
+    "model": 2024,
+    "km": 1234,
+    "gas": "DIESEL"
 }
 
 ### Modificando un Vehiculo
@@ -25,7 +27,10 @@ Content-Type: application/json
 {
     "plate": "O0-618BBY",
     "type": "PICK-UP",
-    "brand": "D-MAX"
+    "brand": "D-MAX",
+    "model": 2024,
+    "km": 0,
+    "gas": "DIESEL"
 }
 
 ### Eliminando un Vehiculo
