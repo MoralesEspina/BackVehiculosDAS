@@ -1,0 +1,10 @@
+@host = http://localhost:3000/api/info
+
+### Obteniendo Todos los Tipos
+GET {{host}}/types
+
+### Obteniendo Todos los Trabajos
+GET {{host}}/jobs
+
+### Obteniendo Todos los Estatus
+GET {{host}}/status
