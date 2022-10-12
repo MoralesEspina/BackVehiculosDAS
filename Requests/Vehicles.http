@@ -1,0 +1,40 @@
+@host = http://localhost:3000/api
+
+### Obteniendo Todos los Vehiculos
+GET {{host}}/vehicles
+
+### Obteniendo un Solo Vehiculo
+GET {{host}}/vehicles/908735saaaaaaaaA
+
+### Creando un Nuevo Vehiculo
+POST {{host}}/vehicles
+Content-Type: application/json
+
+{
+    "vin": "9872947298734597",
+    "plate": "O0-628BBH",
+    "type": "2",
+    "brand": "MITSUBISHI",
+    "model": 2023,
+    "km": 1,
+    "gas": "SUPER",
+    "status": 1
+}
+
+### Modificando un Vehiculo
+PUT {{host}}/vehicles/908735saaaaaaaaA
+Content-Type: application/json
+
+{
+    "plate": "O0-628BBH",
+    "type": "1",
+    "brand": "MITSUBISHI",
+    "model": 2023,
+    "km": 1,
+    "gas": "SUPER",
+    "status": 2
+}
+
+### Eliminando un Vehiculo
+DELETE {{host}}/vehicles/908735saaaaaaaaaAa
+Content-Type: application/json

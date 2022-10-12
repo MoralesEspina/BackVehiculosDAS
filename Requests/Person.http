@@ -1,0 +1,35 @@
+@host = http://localhost:3000/api
+
+### Obteniendo Todas las Personas
+GET {{host}}/persons
+
+### Obteniendo una Persona
+GET {{host}}/persons/dd0e013f-64dd-48ef-9745-f25a2b9a36e1
+
+### Creando una Nueva Persona
+POST {{host}}/persons
+Content-Type: application/json
+
+{
+    "fullname": "Esdras Morales",
+    "job": "2",
+    "phone": 41806703,
+    "dpi": 1234567891,
+    "nit": 5885532
+}
+
+### Modificando una Persona
+PUT {{host}}/persons/dd0e013f-64dd-48ef-9745-f25a2b9a36e1
+Content-Type: application/json
+
+{
+    "fullname": "Esdras Mefiboseth Morales",
+    "job": "1",
+    "phone": 41806704,
+    "dpi": 3395399682101,
+    "nit": 105777943
+}
+
+### Eliminando una Persona
+DELETE {{host}}/persons/7bcab11c-22a4-48de-a91a-d17a9d1a95ee
+Content-Type: application/json

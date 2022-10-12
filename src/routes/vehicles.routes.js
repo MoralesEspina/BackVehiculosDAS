@@ -1,11 +1,12 @@
 import { Router } from "express";
 import { methods as VehiclesController } from "../controllers/vehicles.controller";
+const {validateCreateVehicle} = require('../validators/vehicles.validator')
 const router = Router();
 
-router.get("/", VehiclesController.getVehicles);
-router.get("/:id", VehiclesController.getVehicle);
-router.post("/", VehiclesController.createVehicle);
-router.put("/:id", VehiclesController.updateVehicle);
-router.delete("/:id", VehiclesController.deleteVehicle);
+router.get("/", VehiclesController.getAllVehicles);
+router.get("/:id", VehiclesController.getOneVehicle);
+router.post("/", validateCreateVehicle, VehiclesController.createNewVehicle);
+router.put("/:id", validateCreateVehicle, VehiclesController.updateOneVehicle);
+router.delete("/:id", VehiclesController.deleteOneVehicle);
 
 export default router;
