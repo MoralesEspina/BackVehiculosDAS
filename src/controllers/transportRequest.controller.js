@@ -1,5 +1,4 @@
 const RequestService = require("../services/transportRequest.service")
-const { v4: uuidv4 } = require('uuid');
 
 //TODO OBTENER TODAS LAS SOLICITUDES
 const getAllRequests= async(req,res) =>{
@@ -42,7 +41,6 @@ const createNewRequest= async(req,res) =>{
     let detail = data.detail;
     try{
         const Request = {
-            uuid: uuidv4(),
             pilotName: data.pilotName,
             plate: data.plate,
             place: data.place,
@@ -56,7 +54,6 @@ const createNewRequest= async(req,res) =>{
         const createdRequest = await RequestService.createNewRequest(Request);
 
         const detailRequest ={
-            uuid:"",
             dateOf:"",
             dateTo:"",
             schedule:"",
@@ -68,14 +65,13 @@ const createNewRequest= async(req,res) =>{
 
         for (let index = 0; index < detail.length; index++) {
             const element = detail[index];
-            detailRequest.uuid = uuidv4(),
             detailRequest.dateOf = element.dateOf,
             detailRequest.dateTo = element.dateTo,
             detailRequest.schedule = element.schedule,
             detailRequest.destiny = element.destiny,
             detailRequest.peopleNumber = element.peopleNumber,
             detailRequest.comission = element.comission,
-            detailRequest.id_local_request = Request.uuid
+            detailRequest.id_local_request = createdRequest
             await RequestService.createNewDetailRequest(detailRequest);
         }
 

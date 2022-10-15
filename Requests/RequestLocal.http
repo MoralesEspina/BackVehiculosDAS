@@ -4,7 +4,7 @@
 GET {{host}}/requestLocal
 
 ### Obteniendo una Persona
-GET {{host}}/requestLocal/f5243ce7-ed80-40d0-8f0d-264705215efc
+GET {{host}}/requestLocal/b54979e8-1039-4459-ae75-11997a09a0e7
 
 ### Creando una Nueva Persona
 POST {{host}}/requestLocal
@@ -19,7 +19,7 @@ Content-Type: application/json
     "applicantsName": "Dylan Alexis",
     "position": "Encargado de Area",
     "phoneNumber": 1234567891,
-    "observation": "Ninguna",
+    "observations": "Ninguna",
     "detail":   [
         {
         "dateOf": "2022/01/01", 
