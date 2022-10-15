@@ -38,7 +38,7 @@ const createNewRequest = async (newRequest) => {
     try{
         const connection = await getConnection();
         await connection.query("INSERT INTO local_request (uuid,pilotName,plate,place,date,section,applicantsName,position,phoneNumber,observations,status) values (?,?,?,?,?,?,?,?,?,?,?)",
-        [newRequest.uuid,newRequest.pilotName,newRequest.plate,newRequest.place,newRequest.date,newRequest.section,newRequest.applicantsName, newRequest.position, newRequest.phoneNumber, newRequest.observation, newRequest.status]);
+        [newRequest.uuid,newRequest.pilotName,newRequest.plate,newRequest.place,newRequest.date,newRequest.section,newRequest.applicantsName, newRequest.position, newRequest.phoneNumber, newRequest.observations, newRequest.status]);
         return {uuidRequest: newRequest.uuid};
     } catch(error)
     {
