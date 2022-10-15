@@ -19,7 +19,7 @@ Content-Type: application/json
 }
 
 ### Modificando una Persona
-PUT {{host}}/persons/dd0e013f-64dd-48ef-9745-f25a2b9a36e1
+PUT {{host}}/persons/76a01bb7-9eff-44b1-a36a-1c39ed5ede76
 Content-Type: application/json
 
 {
@@ -31,5 +31,5 @@ Content-Type: application/json
 }
 
 ### Eliminando una Persona
-DELETE {{host}}/persons/7bcab11c-22a4-48de-a91a-d17a9d1a95ee
+DELETE {{host}}/persons/76a01bb7-9eff-44b1-a36a-1c39ed5ede76
 Content-Type: application/json

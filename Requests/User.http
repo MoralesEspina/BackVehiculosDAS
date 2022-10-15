@@ -1,0 +1,22 @@
+@host = http://localhost:3000/api/auth
+
+### Login
+POST {{host}}/login
+Content-Type: application/json
+
+{
+    "username": "esdras",
+    "password": "1234"
+}
+
+### Creando un Nuevo Usuario
+POST {{host}}/register
+Content-Type: application/json
+
+{
+    "username": "esdras",
+    "password": "1234",
+    "rol_id": "4",
+    "uuidPerson": "1548e177-2e29-48da-add8-ef1af5c7c2a6"
+}
+
