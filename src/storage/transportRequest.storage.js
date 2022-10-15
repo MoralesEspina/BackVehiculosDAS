@@ -4,7 +4,7 @@ import {getConnection} from "./../database/database";
 const getAllRequests= async () =>{
     try{
         const connection = await getConnection();
-        const result = await connection.query("SELECT uuid,pilotName,plate,place,date,section,applicantsName,position,phoneNumber,observations from local_request")
+        const result = await connection.query("SELECT uuid,pilotName,plate,place,date,section,applicantsName,position,phoneNumber,observations,status from local_request")
         var data=JSON.parse(JSON.stringify(result))
         return data;
     }catch(error){
@@ -16,7 +16,7 @@ const getAllRequests= async () =>{
 const getOneRequest = async (id) => {
     try {
         const connection = await getConnection();
-        const result = await connection.query("SELECT p.uuid,p.fullname,j.job_name,p.phone,p.dpi,p.nit,active,available from Request AS p join job As j where p.job = j.id and uuid = ?", id);
+        const result = await connection.query("SELECT uuid,pilotName,plate,place,date,section,applicantsName,position,phoneNumber,observations,status FROM local_request where uuid = ?", id);
         if (result.length <= 0) {
             return {
             status: 404,
@@ -32,12 +32,13 @@ const getOneRequest = async (id) => {
 
 //TODO CREAR NUEVA SOLICITUD
 const createNewRequest = async (newRequest) => {
+    newRequest.status = 6;
     try{
         const connection = await getConnection();
         const verifyRequest = await connection.query("SELECT uuid FROM local_request where uuid = ? ",newRequest.uuid);
         if (verifyRequest.length <= 0) {
-            await connection.query("INSERT INTO local_request (uuid,pilotName,plate,place,date,section,applicantsName,position,phoneNumber,observations) values (?,?,?,?,?,?,?,?,?,?)",
-            [newRequest.uuid,newRequest.pilotName,newRequest.plate,newRequest.place,newRequest.date,newRequest.section,newRequest.applicantsName, newRequest.position, newRequest.phoneNumber, newRequest.observation]);
+            await connection.query("INSERT INTO local_request (uuid,pilotName,plate,place,date,section,applicantsName,position,phoneNumber,observations,status) values (?,?,?,?,?,?,?,?,?,?,?)",
+            [newRequest.uuid,newRequest.pilotName,newRequest.plate,newRequest.place,newRequest.date,newRequest.section,newRequest.applicantsName, newRequest.position, newRequest.phoneNumber, newRequest.observation, newRequest.status]);
             return {uuid: newRequest.uuid};
         }else{
             return {
