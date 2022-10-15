@@ -16,7 +16,7 @@ const getAllTrips= async () =>{
 const getOneTrip = async (id) => {
     try {
         const connection = await getConnection();
-        const result = await connection.query("SELECT p.uuid,p.fullname,j.job_name,p.phone,p.dpi,p.nit,active,available from Trip AS p join job As j where p.job = j.id and uuid = ?", id);
+        const result = await connection.query("SELECT l.uuid,l.pilotName,l.plate,l.place,l.date,l.section,l.applicantsName,l.position,l.phoneNumber,l.observations,l.status, DL.dateOf, DL.dateTo, DL.schedule, DL.destiny, DL.peopleNumber, DL.comission  FROM detail_local_request AS DL join local_request AS l where id_local_request = ?", id);
         if (result.length <= 0) {
             return {
             status: 404,

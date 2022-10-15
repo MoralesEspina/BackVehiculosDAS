@@ -38,27 +38,47 @@ const getOneRequest= async(req,res) =>{
 
 //TODO CREAR NUEVA SOLICITUD
 const createNewRequest= async(req,res) =>{
-    
+    let data = req.body;
+    let detail = data.detail;
     try{
         const Request = {
             uuid: uuidv4(),
-            pilotName: req.body.pilotName,
-            plate: req.body.plate,
-            place: req.body.place,
-            date: req.body.date,
-            section: req.body.section,
-            applicantsName: req.body.applicantsName,
-            position: req.body.position,
-            phoneNumber: req.body.phoneNumber,
-            observation: req.body.observation,
-            dateOf: req.body.dateOf,
-            dateTo: req.body.dateTo,
-            schedule: req.body.schedule,
-            destiny: req.body.destiny,
-            peopleNumber: req.body.peopleNumber,
-            commission: req.body.commission
+            pilotName: data.pilotName,
+            plate: data.plate,
+            place: data.place,
+            date: data.date,
+            section: data.section,
+            applicantsName: data.applicantsName,
+            position: data.position,
+            phoneNumber: data.phoneNumber,
+            observation: data.observation,
         };
         const createdRequest = await RequestService.createNewRequest(Request);
+
+        const detailRequest ={
+            uuid:"",
+            dateOf:"",
+            dateTo:"",
+            schedule:"",
+            destiny:"",
+            peopleNumber:"",
+            comission:"",
+            id_local_request:""
+        }
+
+        for (let index = 0; index < detail.length; index++) {
+            const element = detail[index];
+            detailRequest.uuid = uuidv4(),
+            detailRequest.dateOf = element.dateOf,
+            detailRequest.dateTo = element.dateTo,
+            detailRequest.schedule = element.schedule,
+            detailRequest.destiny = element.destiny,
+            detailRequest.peopleNumber = element.peopleNumber,
+            detailRequest.comission = element.comission,
+            detailRequest.id_local_request = Request.uuid
+            await RequestService.createNewDetailRequest(detailRequest);
+        }
+
         if (createdRequest.status == 400) {
             res.status(400).json({data: createdRequest})
         }else{
