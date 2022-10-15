@@ -17,8 +17,8 @@ const getAllRequests= async () =>{
 const getOneRequest = async (id) => {
     try {
         const connection = await getConnection();
-        const request = await connection.query("SELECT l.id,l.pilotName,l.plate,l.place,l.date,l.section,l.applicantsName,l.position,l.phoneNumber,l.observations,l.status FROM local_request AS l where uuid = ?", id);
-        const detailRequest = await connection.query("SELECT DL.dateOf, DL.dateTo, DL.schedule, DL.destiny, DL.peopleNumber, DL.comission  FROM detail_local_request AS DL join local_request AS l where id_local_request = l.uuid and DL.id_local_request = ?", id);
+        const request = await connection.query("SELECT l.id,l.pilotName,l.plate,l.place,l.date,l.section,l.applicantsName,l.position,l.phoneNumber,l.observations,l.status FROM local_request AS l where id = ?", id);
+        const detailRequest = await connection.query("SELECT DL.dateOf, DL.dateTo, DL.schedule, DL.destiny, DL.peopleNumber, DL.comission  FROM detail_local_request AS DL join local_request AS l where id_local_request = l.id and DL.id_local_request = ?", id);
         if (request.length <= 0) {
             return {
             status: 404,
