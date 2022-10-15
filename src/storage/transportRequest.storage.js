@@ -1,3 +1,4 @@
+import res from "express/lib/response";
 import {getConnection} from "./../database/database";
 
 //TODO OBTENER TODAS LAS SOLICITUDES
@@ -16,14 +17,15 @@ const getAllRequests= async () =>{
 const getOneRequest = async (id) => {
     try {
         const connection = await getConnection();
-        const result = await connection.query("SELECT uuid,pilotName,plate,place,date,section,applicantsName,position,phoneNumber,observations,status FROM local_request where uuid = ?", id);
-        if (result.length <= 0) {
+        const request = await connection.query("SELECT l.uuid,l.pilotName,l.plate,l.place,l.date,l.section,l.applicantsName,l.position,l.phoneNumber,l.observations,l.status FROM local_request AS l where uuid = ?", id);
+        const detailRequest = await connection.query("SELECT DL.dateOf, DL.dateTo, DL.schedule, DL.destiny, DL.peopleNumber, DL.comission  FROM detail_local_request AS DL join local_request AS l where id_local_request = l.uuid and DL.id_local_request = ?", id);
+        if (request.length <= 0) {
             return {
             status: 404,
-            message: 'No se encontro la Requesta'
+            message: 'No se encontro la Solicitud'
         };
         }else{
-            return result;
+            return {request: request, detailRequest:detailRequest};
         }
     } catch (error) {
         throw error;
@@ -35,17 +37,24 @@ const createNewRequest = async (newRequest) => {
     newRequest.status = 6;
     try{
         const connection = await getConnection();
-        const verifyRequest = await connection.query("SELECT uuid FROM local_request where uuid = ? ",newRequest.uuid);
-        if (verifyRequest.length <= 0) {
-            await connection.query("INSERT INTO local_request (uuid,pilotName,plate,place,date,section,applicantsName,position,phoneNumber,observations,status) values (?,?,?,?,?,?,?,?,?,?,?)",
-            [newRequest.uuid,newRequest.pilotName,newRequest.plate,newRequest.place,newRequest.date,newRequest.section,newRequest.applicantsName, newRequest.position, newRequest.phoneNumber, newRequest.observation, newRequest.status]);
-            return {uuid: newRequest.uuid};
-        }else{
-            return {
-                status: 400,
-                message: 'UUID ya existente'
-            };
-        }
+        await connection.query("INSERT INTO local_request (uuid,pilotName,plate,place,date,section,applicantsName,position,phoneNumber,observations,status) values (?,?,?,?,?,?,?,?,?,?,?)",
+        [newRequest.uuid,newRequest.pilotName,newRequest.plate,newRequest.place,newRequest.date,newRequest.section,newRequest.applicantsName, newRequest.position, newRequest.phoneNumber, newRequest.observation, newRequest.status]);
+        return {uuidRequest: newRequest.uuid};
+    } catch(error)
+    {
+        throw error;
+    }
+}
+
+//TODO CREAR NUEV0 DETALLE DE SOLICITUD
+const createNewDetailRequest = async (newDetailRequest) => {
+    console.log(newDetailRequest)
+    try{
+        const connection = await getConnection();
+        await connection.query("INSERT INTO detail_local_request (uuid, dateOf,dateTo,schedule,destiny,peopleNumber,comission,id_local_request) values (?,?,?,?,?,?,?,?)",
+        [newDetailRequest.uuid,newDetailRequest.dateOf,newDetailRequest.dateTo,newDetailRequest.schedule,newDetailRequest.destiny,newDetailRequest.peopleNumber,newDetailRequest.comission,newDetailRequest.id_local_request]);
+        console.log("2")
+        return {uuidDetailRequest: newDetailRequest.uuid};
     } catch(error)
     {
         throw error;
@@ -85,5 +94,6 @@ module.exports = {
     getAllRequests,
     getOneRequest,
     createNewRequest,
+    createNewDetailRequest,
     updateOneRequest,
 }

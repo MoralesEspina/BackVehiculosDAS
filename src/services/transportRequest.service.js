@@ -20,11 +20,21 @@ const getOneRequest = async (id) => {
     }
 }
 
-//TODO CREAR NUEVA SOLICITYD
+//TODO CREAR NUEVA SOLICITUD
 const createNewRequest = async (newRequest) => {
     try {
         const createdRequest = await RequestStorage.createNewRequest(newRequest);
         return createdRequest;
+    } catch (error) {
+        throw error;
+    }
+}
+
+//TODO CREAR NUEVO DETALLE DE SOLICITUD
+const createNewDetailRequest = async (newDetailRequest) => {
+    try {
+        const createdDetailRequest = await RequestStorage.createNewDetailRequest(newDetailRequest);
+        return createdDetailRequest;
     } catch (error) {
         throw error;
     }
@@ -45,5 +55,6 @@ module.exports = {
     getAllRequests,
     getOneRequest,
     createNewRequest,
+    createNewDetailRequest,
     updateOneRequest
 }

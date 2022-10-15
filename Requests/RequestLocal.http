@@ -4,7 +4,7 @@
 GET {{host}}/requestLocal
 
 ### Obteniendo una Persona
-GET {{host}}/requestLocal/669b6d49-d0c4-4803-92b9-b42aed019fb2
+GET {{host}}/requestLocal/f5243ce7-ed80-40d0-8f0d-264705215efc
 
 ### Creando una Nueva Persona
 POST {{host}}/requestLocal
@@ -19,5 +19,23 @@ Content-Type: application/json
     "applicantsName": "Dylan Alexis",
     "position": "Encargado de Area",
     "phoneNumber": 1234567891,
-    "observation": "Ninguna"
+    "observation": "Ninguna",
+    "detail":   [
+        {
+        "dateOf": "2022/01/01", 
+        "dateTo": "2022/01/01",
+        "schedule": "00:00:00",
+        "destiny":"Jalapa",
+        "peopleNumber":2,
+        "comission":"Local"
+        },
+        {
+        "dateOf": "2022/02/02", 
+        "dateTo": "2022/02/02",
+        "schedule": "10:10:10",
+        "destiny":"Jalapa",
+        "peopleNumber":2,
+        "comission":"Local"
+        }
+    ]
 }
