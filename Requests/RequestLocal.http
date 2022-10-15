@@ -1,0 +1,23 @@
+@host = http://localhost:3000/api
+
+### Obteniendo Todas las Personas
+GET {{host}}/requestLocal
+
+### Obteniendo una Persona
+GET {{host}}/requestLocal/dd0e013f-64dd-48ef-9745-f25a2b9a36e1
+
+### Creando una Nueva Persona
+POST {{host}}/requestLocal
+Content-Type: application/json
+
+{
+    "pilotName": "Esdras Morales",
+    "plate": "O 657BPS",
+    "place": "Jalapa",
+    "date": "01/01/2022",
+    "section": "Jalapa",
+    "applicantsName": "Dylan Alexis",
+    "position": "Encargado de Area",
+    "phoneNumber": 1234567891,
+    "observation": "Ninguna"
+}

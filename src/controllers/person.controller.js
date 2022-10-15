@@ -5,8 +5,8 @@ const PersonService = require("../services/person.service")
 //TODO OBTENER TODAS LOS PERSONAS
 const getAllPersons= async(req,res) =>{
     try{
-        const allVehicles = await PersonService.getAllPersons();
-        res.json({status: 'OK' , data: allVehicles})
+        const allPersons = await PersonService.getAllPersons();
+        res.json({status: 'OK' , data: allPersons})
     }catch(error){
         res.status(500);
         res.send(error.message);
