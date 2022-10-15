@@ -5,7 +5,7 @@ import {getConnection} from "./../database/database";
 const getAllRequests= async () =>{
     try{
         const connection = await getConnection();
-        const result = await connection.query("SELECT uuid,pilotName,plate,place,date,section,applicantsName,position,phoneNumber,observations,status from local_request")
+        const result = await connection.query("SELECT id,pilotName,plate,place,date,section,applicantsName,position,phoneNumber,observations,status from local_request")
         var data=JSON.parse(JSON.stringify(result))
         return data;
     }catch(error){
@@ -17,7 +17,7 @@ const getAllRequests= async () =>{
 const getOneRequest = async (id) => {
     try {
         const connection = await getConnection();
-        const request = await connection.query("SELECT l.uuid,l.pilotName,l.plate,l.place,l.date,l.section,l.applicantsName,l.position,l.phoneNumber,l.observations,l.status FROM local_request AS l where uuid = ?", id);
+        const request = await connection.query("SELECT l.id,l.pilotName,l.plate,l.place,l.date,l.section,l.applicantsName,l.position,l.phoneNumber,l.observations,l.status FROM local_request AS l where uuid = ?", id);
         const detailRequest = await connection.query("SELECT DL.dateOf, DL.dateTo, DL.schedule, DL.destiny, DL.peopleNumber, DL.comission  FROM detail_local_request AS DL join local_request AS l where id_local_request = l.uuid and DL.id_local_request = ?", id);
         if (request.length <= 0) {
             return {
@@ -37,9 +37,9 @@ const createNewRequest = async (newRequest) => {
     newRequest.status = 6;
     try{
         const connection = await getConnection();
-        await connection.query("INSERT INTO local_request (uuid,pilotName,plate,place,date,section,applicantsName,position,phoneNumber,observations,status) values (?,?,?,?,?,?,?,?,?,?,?)",
-        [newRequest.uuid,newRequest.pilotName,newRequest.plate,newRequest.place,newRequest.date,newRequest.section,newRequest.applicantsName, newRequest.position, newRequest.phoneNumber, newRequest.observations, newRequest.status]);
-        return {uuidRequest: newRequest.uuid};
+        const Request = await connection.query("INSERT INTO local_request (pilotName,plate,place,date,section,applicantsName,position,phoneNumber,observations,status) values (?,?,?,?,?,?,?,?,?,?)",
+        [newRequest.pilotName,newRequest.plate,newRequest.place,newRequest.date,newRequest.section,newRequest.applicantsName, newRequest.position, newRequest.phoneNumber, newRequest.observations, newRequest.status]);
+        return Request.insertId
     } catch(error)
     {
         throw error;
@@ -48,13 +48,11 @@ const createNewRequest = async (newRequest) => {
 
 //TODO CREAR NUEV0 DETALLE DE SOLICITUD
 const createNewDetailRequest = async (newDetailRequest) => {
-    console.log(newDetailRequest)
     try{
         const connection = await getConnection();
-        await connection.query("INSERT INTO detail_local_request (uuid, dateOf,dateTo,schedule,destiny,peopleNumber,comission,id_local_request) values (?,?,?,?,?,?,?,?)",
-        [newDetailRequest.uuid,newDetailRequest.dateOf,newDetailRequest.dateTo,newDetailRequest.schedule,newDetailRequest.destiny,newDetailRequest.peopleNumber,newDetailRequest.comission,newDetailRequest.id_local_request]);
-        console.log("2")
-        return {uuidDetailRequest: newDetailRequest.uuid};
+        const newDetail = await connection.query("INSERT INTO detail_local_request (dateOf,dateTo,schedule,destiny,peopleNumber,comission,id_local_request) values (?,?,?,?,?,?,?)",
+        [newDetailRequest.dateOf,newDetailRequest.dateTo,newDetailRequest.schedule,newDetailRequest.destiny,newDetailRequest.peopleNumber,newDetailRequest.comission,newDetailRequest.id_local_request]);
+        return newDetail;
     } catch(error)
     {
         throw error;
