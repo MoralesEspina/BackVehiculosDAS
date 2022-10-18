@@ -1,4 +1,4 @@
-const RequestStorage = require("../storage/transportRequest.storage")
+const RequestStorage = require("../storage/localRequest.storage")
 
 //TODO OBTENER TODAS LAS SOLICITUDES
 const getAllRequests = async () => {

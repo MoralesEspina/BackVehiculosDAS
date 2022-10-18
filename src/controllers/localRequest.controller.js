@@ -1,4 +1,4 @@
-const RequestService = require("../services/transportRequest.service")
+const RequestService = require("../services/localRequest.service")
 
 //TODO OBTENER TODAS LAS SOLICITUDES
 const getAllRequests= async(req,res) =>{

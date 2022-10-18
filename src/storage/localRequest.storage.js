@@ -1,5 +1,4 @@
-import res from "express/lib/response";
-import {getConnection} from "./../database/database";
+import {getConnection} from "../database/database";
 
 //TODO OBTENER TODAS LAS SOLICITUDES
 const getAllRequests= async () =>{

@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { methods as RequestController } from "../controllers/transportRequest.controller";
+import { methods as RequestController } from "../controllers/localRequest.controller";
 //const { validateCreateRequest } = require('../validators/person.validator')
 const router = Router();
 
