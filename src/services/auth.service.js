@@ -14,13 +14,35 @@ const createNewUser = async (newUser) => {
 const getOneUsername = async (detailUsername) => {
     try {
         const OneUsername = await AuthStorage.getOneUsername(detailUsername);
-        console.log("s")
         return OneUsername
     } catch (error) {
         throw error;
     }
 }
+
+//TODO OBTENER TODOS LOS USUARIOS
+const getAllUsers = async () => {
+    try {
+        const allUsers = await AuthStorage.getAllUsers();
+        return allUsers
+    } catch (error) {
+        throw error;
+    }
+}
+
+//TODO OBTENER UN SOLO USUARIO
+const getOneUser = async (uuid) => {
+    try {
+        const oneUser = await AuthStorage.getOneUser(uuid);
+        return oneUser
+    } catch (error) {
+        throw error;
+    }
+}
+
 module.exports = {
     createNewUser,
-    getOneUsername
+    getOneUsername,
+    getAllUsers,
+    getOneUser
 }

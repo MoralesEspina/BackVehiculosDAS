@@ -5,5 +5,6 @@ const router = Router();
 router.get("/jobs", InfoController.getAllJobs);
 router.get("/status", InfoController.getAllStatus);
 router.get("/types", InfoController.getAllTypes);
+router.get("/roles", InfoController.getAllRoles);
 
 export default router;

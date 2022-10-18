@@ -36,8 +36,21 @@ const getAllStatus= async () =>{
     }
 }
 
+//TODO OBTENER TODOS LOS Estatus
+const getAllRoles= async () =>{
+    try{
+        const connection = await getConnection();
+        const result = await connection.query("SELECT idrol,rol,description from rol")
+        var data=JSON.parse(JSON.stringify(result))
+        return data;
+    }catch(error){
+        throw error;
+    }
+}
+
 module.exports = {
     getAllTypes,
     getAllJobs,
     getAllStatus,
+    getAllRoles,
 }

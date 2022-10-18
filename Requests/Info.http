@@ -8,3 +8,6 @@ GET {{host}}/jobs
 
 ### Obteniendo Todos los Estatus
 GET {{host}}/status
+
+### Obteniendo Todos los Roles
+GET {{host}}/roles

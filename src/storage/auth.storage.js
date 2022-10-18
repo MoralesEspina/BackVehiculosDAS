@@ -19,21 +19,31 @@ const createNewUser = async (newUser) => {
 //TODO OBTENER UN USERNAME
 const getOneUsername = async (detailUsername) => {
     try {
-        let user;
         const connection = await getConnection();
-        await connection.query("SELECT uuid, username, password from user where username = ?", detailUsername.username, (error, rows, field) => {
-            if (!error) {
-                user = rows[0];
-                    console.log(user.password)
-                    return user.password;
-                    }   
-        });
+        const result  = await connection.query("SELECT uuid, username, password from user where username = ?", detailUsername.username);
+            return result[0];
     } catch (error) {
         throw error;
     }
 }
 
+//TODO OBTENER TODOS LOS USUARIOS
+const getAllUsers= async () =>{
+    try{
+        const connection = await getConnection();
+        const result = await connection.query("SELECT p.uuid,p.fullname,j.job_name,p.phone,p.dpi,p.nit,active,available from person AS p join job As j where p.job = j.id")
+        var data=JSON.parse(JSON.stringify(result))
+        return data;
+    }catch(error){
+        throw error;
+    }
+}
+
+//TODO OBTENER UN USUARIO
+
+
 module.exports = {
     createNewUser,
-    getOneUsername
+    getOneUsername,
+    getAllUsers
 }

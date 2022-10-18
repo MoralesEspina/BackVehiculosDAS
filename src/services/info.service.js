@@ -30,8 +30,19 @@ const getAllStatus = async () => {
     }   
 }
 
+//TODO OBTENER TODOS LOS ROLES
+const getAllRoles = async () => {
+    try{
+        const allRoles = await InfoStorage.getAllRoles();
+        return allRoles;
+    } catch (error){
+        throw error;
+    }   
+}
+
 module.exports = {
     getAllTypes,
     getAllJobs,
     getAllStatus,
+    getAllRoles
 }

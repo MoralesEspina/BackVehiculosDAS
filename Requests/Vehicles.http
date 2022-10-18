@@ -12,9 +12,9 @@ Content-Type: application/json
 
 {
     "vin": "9872947298734597",
-    "plate": "O0-628BBH",
+    "plate": "O0-",
     "type": "2",
-    "brand": "MITSUBISHI",
+    "brand": null,
     "model": 2023,
     "km": 1,
     "gas": "SUPER",

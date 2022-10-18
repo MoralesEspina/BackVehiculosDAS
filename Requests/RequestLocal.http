@@ -4,7 +4,7 @@
 GET {{host}}/requestLocal
 
 ### Obteniendo una Persona
-GET {{host}}/requestLocal/b54979e8-1039-4459-ae75-11997a09a0e7
+GET {{host}}/requestLocal/1
 
 ### Creando una Nueva Persona
 POST {{host}}/requestLocal

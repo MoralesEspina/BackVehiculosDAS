@@ -14,27 +14,20 @@ const loginUser = async (req, res) => {
             username: body.username
         }
         const detailUser = await AuthService.getOneUsername(detailUsername);
-
-        if (detailUser.status == 404) {
-            res.status(404).json({ data: detailUser })
-        } else {
-            console.log(detailUser)
             const checkPassword = await compare(body.password, detailUser.password)
             if (checkPassword) {
-                console.log("hola")
                 const tokenObject = {
                     token: await generateSign(detailUser),
                     expire: today.add(4, 'hours').format('DD MM YYYY HH:MM:SS')
                 }
                 res.send({
-                    data: detailUser,
+                    data: {status:"OK", data:{username:detailUser.username}},
                     tokenObject
                 })
             } else {
-                res.status(409)
+                res.status(400)
                 res.send({ error: 'Contraseña Invalida' })
             }
-        }
     } catch (error) {
         res.status(error?.status || 500)
         res.send({ status: "Failed", data: { error: error?.message || error } })
@@ -64,17 +57,41 @@ const registerUser = async (req, res) => {
     }
 }
 
-const getCtrl = async (req, res) => {
-    try {
-        const user = req.user;
-        res.send({ data: user })
-    } catch (e) {
-        ctrlError(e, res)
+const getAllUsers = async (req, res) => {
+    try{
+        const allUsers = await AuthService.getAllUsers();
+        res.json({status: 'OK' , data: allUsers})
+    }catch(error){
+        res.status(500);
+        res.send(error.message);
+    }
+}
+
+const getOneUser = async (req, res) => {
+    const { id } = req.params;
+    if (!id) {
+        res.status(400).send({
+            status: "FAILED",
+            data: { error: "ID no puede ir vacio" },
+          });
+          return;
+    }
+    try{
+        const oneUser =  await AuthService.getOneUser(id);
+        if (oneUser.status == 404) {
+            res.status(404).json({data: oneUser})
+        }else{
+            res.status(200).json({status: "OK", data: oneUser})
+        }
+    }catch(error){
+        res.status(500);
+        res.send(error.message);
     }
 }
 
 export const methods = {
     loginUser,
     registerUser,
-    getCtrl
+    getAllUsers,
+    getOneUser,
 }

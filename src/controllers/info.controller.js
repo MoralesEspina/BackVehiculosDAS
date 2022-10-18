@@ -22,7 +22,7 @@ const getAllJobs= async(req,res) =>{
     }
 }
 
-//TODO OBTENER TODOS LOS Estatus
+//TODO OBTENER TODOS LOS ESTATUS
 const getAllStatus= async(req,res) =>{
     try{
         const allStatus = await InfoService.getAllStatus();
@@ -33,8 +33,20 @@ const getAllStatus= async(req,res) =>{
     }
 }
 
+//TODO OBTENER TODOS LOS ROLES
+const getAllRoles= async(req,res) =>{
+    try{
+        const allRoles = await InfoService.getAllRoles();
+        res.json({status: 'OK' , data: allRoles})
+    }catch(error){
+        res.status(500);
+        res.send(error.message);
+    }
+}
+
 export const methods = {
     getAllTypes,
     getAllJobs,
     getAllStatus,
+    getAllRoles
 }
