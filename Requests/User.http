@@ -1,5 +1,11 @@
 @host = http://localhost:3000/api/auth
 
+### OBTENIENDO TODOS LOS USUARIOS
+GET {{host}}/users
+
+### OBTENIENDO UN USUARIO
+GET {{host}}/user/13386ea4-37ed-4d11-8991-9eed2d280580
+
 ### Login
 POST {{host}}/login
 Content-Type: application/json
@@ -19,4 +25,5 @@ Content-Type: application/json
     "rol_id": "4",
     "uuidPerson": "1548e177-2e29-48da-add8-ef1af5c7c2a6"
 }
+
 

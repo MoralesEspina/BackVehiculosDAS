@@ -31,7 +31,7 @@ const getOneUsername = async (detailUsername) => {
 const getAllUsers= async () =>{
     try{
         const connection = await getConnection();
-        const result = await connection.query("SELECT p.uuid,p.fullname,j.job_name,p.phone,p.dpi,p.nit,active,available from person AS p join job As j where p.job = j.id")
+        const result = await connection.query("Select u.uuid,u.username,r.rol,p.fullname from user AS u join rol AS r join person AS p where u.uuidperson = p.uuid and u.rol_id = r.idrol")
         var data=JSON.parse(JSON.stringify(result))
         return data;
     }catch(error){
@@ -40,10 +40,26 @@ const getAllUsers= async () =>{
 }
 
 //TODO OBTENER UN USUARIO
-
+const getOneUser = async (uuid) => {
+    try {
+        const connection = await getConnection();
+        const result = await connection.query("Select u.username,r.rol,p.fullname from user AS u join rol AS r join person AS p where u.uuidperson = p.uuid and u.rol_id = r.idrol and u.uuid = ?", uuid);
+        if (result.length <= 0) {
+            return {
+            status: 404,
+            message: 'No se encontro el usuario'
+        };
+        }else{
+            return result;
+        }
+    } catch (error) {
+        throw error;
+    }
+}
 
 module.exports = {
     createNewUser,
     getOneUsername,
-    getAllUsers
+    getAllUsers,
+    getOneUser
 }
