@@ -4,7 +4,7 @@
 GET {{host}}/requestExterior
 
 ### Obteniendo una Persona
-GET {{host}}/requestExterior/2
+GET {{host}}/requestExterior/3
 
 ### Creando una Nueva Persona
 POST {{host}}/requestExterior
@@ -41,6 +41,33 @@ Content-Type: application/json
         "dateOf": "2022/01/01", 
         "dateTo": "2022/01/01",
         "hour":"20:20:20"
+        },
+        {
+        "number_people": "2",
+        "department": "Jalapa",
+        "municipality":"Jalapa",
+        "village":"Pinula",
+        "dateOf": "2022/02/02", 
+        "dateTo": "2022/02/02",
+        "hour":"10:10:10"
+        },
+        {
+        "number_people": "4",
+        "department": "Guatemala",
+        "municipality":"Guatemala",
+        "village":"Barcenas",
+        "dateOf": "2022/01/01", 
+        "dateTo": "2022/01/01",
+        "hour":"20:20:20"
+        },
+        {
+        "number_people": "2",
+        "department": "Jalapa",
+        "municipality":"Jalapa",
+        "village":"Pinula",
+        "dateOf": "2022/02/02", 
+        "dateTo": "2022/02/02",
+        "hour":"10:10:10"
         }
     ]
 }

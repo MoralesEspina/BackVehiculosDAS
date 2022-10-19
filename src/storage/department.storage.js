@@ -12,7 +12,7 @@ const getAllDepartments= async () =>{
 //TODO OBTENER TODOS LOS DEPARTAMENTOS
 const getOneDepartment= async (id) =>{
     try{
-        const result = DB.departments.find((department) => department.id === id);
+        const result = DB.departments.find((department) => department.title === id);
         if (!result) {
             return {
             status: 404,
