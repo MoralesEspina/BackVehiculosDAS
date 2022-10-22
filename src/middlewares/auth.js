@@ -3,6 +3,7 @@ const { verifySign } = require('../helper/handleJwt')
 const checkToken = async (req, res, next) => {
     try {
         const token = req.headers.authorization.split(' ').pop() //TODO: ['Bearer','TOKEN']
+        
         const verifyToken = verifySign(token);
         if (!verifyToken) {
             res.status(401)

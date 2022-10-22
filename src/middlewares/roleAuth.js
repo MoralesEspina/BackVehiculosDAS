@@ -4,6 +4,7 @@ const AuthService = require("../services/auth.service")
 const checkRole = (roles) => async (req, res, next) => {
     try {
         const token = req.headers.authorization.split(' ').pop() //TODO: ['Bearer','TOKEN']
+        console.log(token)
         const verifyToken = verifySign(token);
         if (!verifyToken) {
             res.status(409)

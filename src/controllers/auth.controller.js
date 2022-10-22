@@ -6,7 +6,6 @@ const AuthService = require("../services/auth.service")
 const loginUser = async (req, res) => {
     try {
         const { body } = req
-        console.log(body)
         const detailUsername = {
             username: body.username
         }
