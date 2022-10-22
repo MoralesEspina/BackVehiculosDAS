@@ -4,7 +4,7 @@
 GET {{host}}/requestExterior
 
 ### Obteniendo una Persona
-GET {{host}}/requestExterior/3
+GET {{host}}/requestExterior/5
 
 ### Creando una Nueva Persona
 POST {{host}}/requestExterior
@@ -20,8 +20,6 @@ Content-Type: application/json
     "observations": "Ninguna",
     "provide_fuel": 0,
     "provide_travel_expenses": 0,
-    "plate_vehicle": "O 678PGN",
-    "pilot_name": "Dylan Alexis",
     "reason_rejected": "Ninguna",
     "detail":   [
         {

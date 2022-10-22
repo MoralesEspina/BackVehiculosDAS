@@ -11,10 +11,8 @@ POST {{host}}/requestLocal
 Content-Type: application/json
 
 {
-    "pilotName": "Esdras Morales",
-    "plate": "O 657BPS",
     "place": "Jalapa",
-    "date": "01/01/2022",
+    "date": "2022/01/01",
     "section": "Jalapa",
     "applicantsName": "Dylan Alexis",
     "position": "Encargado de Area",

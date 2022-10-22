@@ -51,8 +51,6 @@ const createNewRequest= async(req,res) =>{
             provide_fuel: data.provide_fuel,
             provide_travel_expenses: data.provide_travel_expenses,
             status_request: 0,
-            plate_vehicle: data.plate_vehicle,
-            pilot_name: data.pilot_name,
             reason_rejected: data.reason_rejected,
         };
         const createdRequest = await RequestService.createNewRequest(Request);

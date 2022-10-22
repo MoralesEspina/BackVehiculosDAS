@@ -41,8 +41,6 @@ const createNewRequest= async(req,res) =>{
     let detail = data.detail;
     try{
         const Request = {
-            pilotName: data.pilotName,
-            plate: data.plate,
             place: data.place,
             date: data.date,
             section: data.section,

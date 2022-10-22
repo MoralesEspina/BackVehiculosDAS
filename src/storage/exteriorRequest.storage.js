@@ -5,7 +5,7 @@ import { getConnection } from "../database/database";
 const getAllRequests = async () => {
     try {
         const connection = await getConnection();
-        const result = await connection.query("SELECT id,requesting_unit,commission_manager,date_request,objective_request,duration_days,phoneNumber,observations,provide_fuel,provide_travel_expenses,status_request,plate_vehicle,pilot_name,reason_rejected from exterior_request")
+        const result = await connection.query("SELECT id,requesting_unit,commission_manager,date_request,objective_request,duration_days,phoneNumber,observations,provide_fuel,provide_travel_expenses,status_request,reason_rejected from exterior_request")
         var data = JSON.parse(JSON.stringify(result))
         return data;
     } catch (error) {
@@ -17,7 +17,7 @@ const getAllRequests = async () => {
 const getOneRequest = async (id) => {
     try {
         const connection = await getConnection();
-        const request = await connection.query("SELECT id,requesting_unit,commission_manager,date_request,objective_request,duration_days,phoneNumber,observations,provide_fuel,provide_travel_expenses,status_request,plate_vehicle,pilot_name,reason_rejected from exterior_request where id = ?", id);
+        const request = await connection.query("SELECT id,requesting_unit,commission_manager,date_request,objective_request,duration_days,phoneNumber,observations,provide_fuel,provide_travel_expenses,status_request,reason_rejected from exterior_request where id = ?", id);
         const detailRequest = await connection.query("SELECT DE.no, DE.number_people, DE.department, DE.municipality, DE.village, DE.dateOf, DE.dateTo , DE.hour FROM detail_exterior_request AS DE join exterior_request AS e where id_exterior_request = e.id and DE.id_exterior_request = ?", id);
         if (request.length <= 0) {
             return {
@@ -37,8 +37,8 @@ const createNewRequest = async (newRequest) => {
     newRequest.status = 6;
     try {
         const connection = await getConnection();
-        const Request = await connection.query("INSERT INTO exterior_request (requesting_unit,commission_manager,date_request,objective_request,duration_days,phoneNumber,observations,provide_fuel,provide_travel_expenses,status_request,plate_vehicle,pilot_name,reason_rejected) values (?,?,?,?,?,?,?,?,?,?,?,?,?)",
-            [newRequest.requesting_unit, newRequest.commission_manager, newRequest.date_request, newRequest.objective_request, newRequest.duration_days, newRequest.phoneNumber, newRequest.observations, newRequest.provide_fuel, newRequest.provide_travel_expenses, newRequest.status_request, newRequest.plate_vehicle, newRequest.pilot_name, newRequest.reason_rejected]);
+        const Request = await connection.query("INSERT INTO exterior_request (requesting_unit,commission_manager,date_request,objective_request,duration_days,phoneNumber,observations,provide_fuel,provide_travel_expenses,status_request,reason_rejected) values (?,?,?,?,?,?,?,?,?,?,?)",
+            [newRequest.requesting_unit, newRequest.commission_manager, newRequest.date_request, newRequest.objective_request, newRequest.duration_days, newRequest.phoneNumber, newRequest.observations, newRequest.provide_fuel, newRequest.provide_travel_expenses, newRequest.status_request, newRequest.reason_rejected]);
             return Request.insertId
     } catch (error) {
         throw error;
@@ -73,7 +73,7 @@ const updateOneRequest = async (id, updatedRequest) => {
         if (result.affectedRows === 0) {
             return {
                 status: 400,
-                message: 'La Requesta no existe'
+                message: 'La Solicitud no existe'
             };
         }
 
