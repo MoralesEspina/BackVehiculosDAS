@@ -1,28 +1,22 @@
 const { v4: uuidv4 } = require('uuid');
-//const moment = require('moment')
-//const userModel = require('../models/users')
-//const { ctrlError } = require('../helpers/handleError')
 const { encrypt, compare } = require('../helper/handleBcrypt')
 const { generateSign } = require('../helper/handleJwt')
 const AuthService = require("../services/auth.service")
 
 const loginUser = async (req, res) => {
     try {
-        //const today = moment()
         const { body } = req
+        console.log(body)
         const detailUsername = {
             username: body.username
         }
         const detailUser = await AuthService.getOneUsername(detailUsername);
             const checkPassword = await compare(body.password, detailUser.password)
             if (checkPassword) {
-                const tokenObject = {
-                    token: await generateSign(detailUser),
-                    expire: today.add(4, 'hours').format('DD MM YYYY HH:MM:SS')
-                }
+                    const token = await generateSign(detailUser)
                 res.send({
                     data: {status:"OK", data:{username:detailUser.username}},
-                    tokenObject
+                    token
                 })
             } else {
                 res.status(400)

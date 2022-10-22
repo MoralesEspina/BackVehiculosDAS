@@ -1,7 +1,18 @@
 @host = http://localhost:3000/api
 
+###
+# @name login
+POST {{host}}/auth/login
+Content-Type: application/json
+
+{
+    "username": "Esdras",
+    "password": "admin"
+}
+
 ### Obteniendo Todos los Vehiculos
 GET {{host}}/vehicles
+Authorization: Bearer {{login.response.body.token}}
 
 ### Obteniendo un Solo Vehiculo
 GET {{host}}/vehicles/1023813281092381

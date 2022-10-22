@@ -20,7 +20,7 @@ const createNewUser = async (newUser) => {
 const getOneUsername = async (detailUsername) => {
     try {
         const connection = await getConnection();
-        const result  = await connection.query("SELECT uuid, username, password from user where username = ?", detailUsername.username);
+        const result  = await connection.query("SELECT uuid, username, password, rol_id from user where username = ?", detailUsername.username);
             return result[0];
     } catch (error) {
         throw error;
@@ -34,6 +34,18 @@ const getAllUsers= async () =>{
         const result = await connection.query("Select u.uuid,u.username,r.rol,p.fullname from user AS u join rol AS r join person AS p where u.uuidperson = p.uuid and u.rol_id = r.idrol")
         var data=JSON.parse(JSON.stringify(result))
         return data;
+    }catch(error){
+        throw error;
+    }
+}
+
+//TODO OBTENER ROLES
+const getOneRol= async (uuid) =>{
+    try{
+        const connection = await getConnection();
+        const result = await connection.query("Select rol_id from user where uuid = ?", uuid)
+        var data=JSON.parse(JSON.stringify(result))
+        return data[0];
     }catch(error){
         throw error;
     }
@@ -61,5 +73,6 @@ module.exports = {
     createNewUser,
     getOneUsername,
     getAllUsers,
-    getOneUser
+    getOneUser,
+    getOneRol
 }

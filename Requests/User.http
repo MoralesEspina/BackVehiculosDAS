@@ -4,16 +4,9 @@
 GET {{host}}/users
 
 ### OBTENIENDO UN USUARIO
-GET {{host}}/user/13386ea4-37ed-4d11-8991-9eed2d280580
+GET {{host}}/user/4df44fd8-e8cc-40f6-b48e-b3cf0612c26f
 
-### Login
-POST {{host}}/login
-Content-Type: application/json
 
-{
-    "username": "esdras",
-    "password": "1234"
-}
 
 ### Creando un Nuevo Usuario
 POST {{host}}/register

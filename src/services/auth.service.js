@@ -20,6 +20,16 @@ const getOneUsername = async (detailUsername) => {
     }
 }
 
+//TODO OBTENER ROL
+const getOneRol = async (uuid) => {
+    try {
+        const OneRol = await AuthStorage.getOneRol(uuid);
+        return OneRol
+    } catch (error) {
+        throw error;
+    }
+}
+
 //TODO OBTENER TODOS LOS USUARIOS
 const getAllUsers = async () => {
     try {
@@ -44,5 +54,6 @@ module.exports = {
     createNewUser,
     getOneUsername,
     getAllUsers,
-    getOneUser
+    getOneUser,
+    getOneRol
 }
