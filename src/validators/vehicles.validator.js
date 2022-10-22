@@ -14,13 +14,15 @@ const validateCreateVehicle = [
         .isNumeric(),
     check('brand') 
         .exists()
-        .notEmpty(),
+        .notEmpty()
+        .isLength({min: 3})
+        .withMessage("La marca debe contar con un minimo de 3 letras"),
     check('model')
         .exists()
         .notEmpty()
         .isNumeric()
         .isLength({min: 4, max: 4})
-        .withMessage("Error en la cantidad de caracteres"),
+        .withMessage("El modelo no cumple con los caracteres necesarios"),
     check('km')
         .exists()
         .notEmpty()
@@ -28,7 +30,7 @@ const validateCreateVehicle = [
     check('gas')
         .exists()
         .notEmpty(),
-        check('status')
+    check('status')
         .exists()
         .notEmpty()
         .isNumeric(),
