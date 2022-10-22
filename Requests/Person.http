@@ -4,7 +4,7 @@
 GET {{host}}/persons
 
 ### Obteniendo una Persona
-GET {{host}}/persons/dd0e013f-64dd-48ef-9745-f25a2b9a36e1
+GET {{host}}/persons/1548e177-2e29-48da-add8-ef1af5c7c2a6
 
 ### Creando una Nueva Persona
 POST {{host}}/persons

@@ -16,7 +16,7 @@ const getAllPersons= async () =>{
 const getOnePerson = async (id) => {
     try {
         const connection = await getConnection();
-        const result = await connection.query("SELECT p.uuid,p.fullname,j.job_name,p.phone,p.dpi,p.nit,active,available from person AS p join job As j where p.job = j.id and uuid = ?", id);
+        const result = await connection.query("SELECT uuid,fullname,job,phone,dpi,nit,active,available from person where uuid = ?", id);
         if (result.length <= 0) {
             return {
             status: 404,
