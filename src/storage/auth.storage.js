@@ -43,7 +43,7 @@ const getAllUsers= async () =>{
 const getOneUser = async (uuid) => {
     try {
         const connection = await getConnection();
-        const result = await connection.query("Select username,rol_id,p.fullname from user AS u join person AS p where u.uuidperson = p.uuid and u.uuid = ?", uuid);
+        const result = await connection.query("Select username,rol_id, uuidPerson from user where uuid = ?", uuid);
         if (result.length <= 0) {
             return {
             status: 404,
