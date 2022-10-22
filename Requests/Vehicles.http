@@ -11,10 +11,10 @@ POST {{host}}/vehicles
 Content-Type: application/json
 
 {
-    "vin": "9872947298734597",
-    "plate": "O0-",
+    "vin": "987294729873459",
+    "plate": "O0-678PBG",
     "type": "2",
-    "brand": null,
+    "brand": "D-MAX",
     "model": 2023,
     "km": 1,
     "gas": "SUPER",
@@ -36,5 +36,5 @@ Content-Type: application/json
 }
 
 ### Eliminando un Vehiculo
-DELETE {{host}}/vehicles/908735saaaaaaaaaAa
+DELETE {{host}}/vehicles/908735s52415632
 Content-Type: application/json

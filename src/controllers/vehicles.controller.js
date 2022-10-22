@@ -7,7 +7,7 @@ const getAllVehicles= async(req,res) =>{
         res.json({status: 'OK' , data: allVehicles})
     }catch(error){
         res.status(500);
-        res.send(error.message);
+        res.send({data: error.message});
     }
 }
 
@@ -24,14 +24,14 @@ const getOneVehicle= async(req,res) =>{
     try{
         const oneVehicle =  await VehiclesService.getOneVehicle(id);
         if (oneVehicle.status == 404) {
-            res.status(404).json({error: oneVehicle})
+            res.status(404).json({data: oneVehicle})
         }else{
             res.status(200).json({status: "OK", data: oneVehicle})
         }
         
     }catch(error){
         res.status(500);
-        res.send(error.message);
+        res.send({data: error.message});
     }
 }
 
@@ -52,7 +52,7 @@ const createNewVehicle= async(req,res) =>{
         console.log(vehicle)
         const createdVehicle = await VehiclesService.createNewVehicle(vehicle);
         if (createdVehicle.status == 400) {
-            res.status(400).json({error: createdVehicle})
+            res.status(400).json({data: createdVehicle})
         }else{
             res.status(201).json({status: "OK", data: createdVehicle})
         }
@@ -87,7 +87,7 @@ const updateOneVehicle= async(req,res) =>{
         };
         const updatedVehicle = await VehiclesService.updateOneVehicle(id, vehicle);
         if (updatedVehicle.status == 400) {
-            res.status(400).json({error: updatedVehicle})
+            res.status(400).json({data: updatedVehicle})
         }else{
             res.status(201).json({status: "OK", data: updatedVehicle})
         }
