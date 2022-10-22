@@ -15,7 +15,7 @@ const getOneDepartment= async(req,res) =>{
     if (!id) {
         res.status(400).send({
             status: "FAILED",
-            data: { error: "ID no puede ir vacio" },
+            error: { message: "ID no puede ir vacio" },
           });
           return;
         }

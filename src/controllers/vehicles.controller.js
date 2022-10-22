@@ -24,7 +24,7 @@ const getOneVehicle= async(req,res) =>{
     try{
         const oneVehicle =  await VehiclesService.getOneVehicle(id);
         if (oneVehicle.status == 404) {
-            res.status(404).json({data: oneVehicle})
+            res.status(404).json({error: oneVehicle})
         }else{
             res.status(200).json({status: "OK", data: oneVehicle})
         }
@@ -52,14 +52,14 @@ const createNewVehicle= async(req,res) =>{
         console.log(vehicle)
         const createdVehicle = await VehiclesService.createNewVehicle(vehicle);
         if (createdVehicle.status == 400) {
-            res.status(400).json({data: createdVehicle})
+            res.status(400).json({error: createdVehicle})
         }else{
-            res.status(201).json({status: "Creado Correctamente", data: createdVehicle})
+            res.status(201).json({status: "OK", data: createdVehicle})
         }
             
     }catch(error){
         res.status(error?.status || 500)
-        res.send({status: "Failed",data:{error: error?.message || error}})
+        res.send({status:"FAILED",data:{error: error?.message || error}})
     }
 }
 
@@ -87,14 +87,13 @@ const updateOneVehicle= async(req,res) =>{
         };
         const updatedVehicle = await VehiclesService.updateOneVehicle(id, vehicle);
         if (updatedVehicle.status == 400) {
-            res.status(400).json({data: updatedVehicle})
+            res.status(400).json({error: updatedVehicle})
         }else{
-            res.status(201).json({status: "Actualizado Correctamente", data: updatedVehicle})
+            res.status(201).json({status: "OK", data: updatedVehicle})
         }
-            
     }catch(error){
         res.status(error?.status || 500)
-        res.send({status: "Failed",data:{error: error?.message || error}})
+        res.send({status: "FAILED",data:{error: error?.message || error}})
     }
 }
 
@@ -113,7 +112,7 @@ const deleteOneVehicle= async(req,res) =>{
         if (deletedVehicle.status == 400) {
             res.status(400).json({data: deletedVehicle})
         }else{
-            res.status(204).json({status: "Eliminado Correctamente", data: deletedVehicle})
+            res.status(204).json({status: "OK", data: deletedVehicle})
         }
     }catch(error){
     

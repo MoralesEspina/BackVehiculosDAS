@@ -5,7 +5,7 @@ import { getConnection } from "../database/database";
 const getAllRequests = async () => {
     try {
         const connection = await getConnection();
-        const result = await connection.query("SELECT id,requesting_unit,commission_manager,date_request,objective_request,duration_days,phoneNumber,observations,provide_fuel,provide_travel_expenses,status_request,reason_rejected from exterior_request")
+        const result = await connection.query("SELECT id,requesting_unit,commission_manager,date_request,objective_request,duration_days,phoneNumber,observations,provide_fuel,provide_travel_expenses,status_request,reason_rejected from exterior_request");
         var data = JSON.parse(JSON.stringify(result))
         return data;
     } catch (error) {
