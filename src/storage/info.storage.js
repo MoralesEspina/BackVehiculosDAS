@@ -25,10 +25,46 @@ const getAllJobs= async () =>{
 }
 
 //TODO OBTENER TODOS LOS Estatus
-const getAllStatus= async () =>{
+const getAllStatusForVehicles= async () =>{
     try{
         const connection = await getConnection();
-        const result = await connection.query("SELECT idstatus,status_name,description from status")
+        const result = await connection.query("SELECT idstatus,status_name,description from status where forVehicle = 1")
+        var data=JSON.parse(JSON.stringify(result))
+        return data;
+    }catch(error){
+        throw error;
+    }
+}
+
+//TODO OBTENER TODOS LOS Estatus
+const getAllStatusForPersons= async () =>{
+    try{
+        const connection = await getConnection();
+        const result = await connection.query("SELECT idstatus,status_name,description from status where forPerson = 1")
+        var data=JSON.parse(JSON.stringify(result))
+        return data;
+    }catch(error){
+        throw error;
+    }
+}
+
+//TODO OBTENER TODOS LOS Estatus
+const getAllStatusForRequest= async () =>{
+    try{
+        const connection = await getConnection();
+        const result = await connection.query("SELECT idstatus,status_name,description from status where forRequest = 1")
+        var data=JSON.parse(JSON.stringify(result))
+        return data;
+    }catch(error){
+        throw error;
+    }
+}
+
+//TODO OBTENER TODOS LOS Estatus
+const getAllStatusForTrips= async () =>{
+    try{
+        const connection = await getConnection();
+        const result = await connection.query("SELECT idstatus,status_name,description from status where forTrips = 1")
         var data=JSON.parse(JSON.stringify(result))
         return data;
     }catch(error){
@@ -51,6 +87,9 @@ const getAllRoles= async () =>{
 module.exports = {
     getAllTypes,
     getAllJobs,
-    getAllStatus,
+    getAllStatusForVehicles,
     getAllRoles,
+    getAllStatusForPersons,
+    getAllStatusForRequest,
+    getAllStatusForTrips
 }

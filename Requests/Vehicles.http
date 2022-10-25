@@ -6,8 +6,8 @@ POST {{host}}/auth/login
 Content-Type: application/json
 
 {
-    "username": "Esdras",
-    "password": "admin"
+    "username": "DTKingdom",
+    "password": "admin234"
 }
 
 ### Obteniendo Todos los Vehiculos

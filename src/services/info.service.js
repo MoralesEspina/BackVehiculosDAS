@@ -20,15 +20,46 @@ const getAllJobs = async () => {
     }   
 }
 
-//TODO OBTENER TODOS LOS Estatus
-const getAllStatus = async () => {
+//TODO OBTENER TODOS LOS ESTATUS DE VEHICULOS
+const getAllStatusForVehicles = async () => {
     try{
-        const allStatus = await InfoStorage.getAllStatus();
+        const allStatus = await InfoStorage.getAllStatusForVehicles();
         return allStatus;
     } catch (error){
         throw error;
     }   
 }
+
+//TODO OBTENER TODOS LOS ESTATUS DE PERSONAS
+const getAllStatusForPersons = async () => {
+    try{
+        const allStatus = await InfoStorage.getAllStatusForPersons();
+        return allStatus;
+    } catch (error){
+        throw error;
+    }   
+}
+
+//TODO OBTENER TODOS LOS ESTATUS DE SOLICITUDES
+const getAllStatusForRequest = async () => {
+    try{
+        const allStatus = await InfoStorage.getAllStatusForRequest();
+        return allStatus;
+    } catch (error){
+        throw error;
+    }   
+}
+
+//TODO OBTENER TODOS LOS ESTATUS DE VIAJES
+const getAllStatusForTrips = async () => {
+    try{
+        const allStatus = await InfoStorage.getAllStatusForTrips();
+        return allStatus;
+    } catch (error){
+        throw error;
+    }   
+}
+
 
 //TODO OBTENER TODOS LOS ROLES
 const getAllRoles = async () => {
@@ -43,6 +74,9 @@ const getAllRoles = async () => {
 module.exports = {
     getAllTypes,
     getAllJobs,
-    getAllStatus,
+    getAllStatusForVehicles,
+    getAllStatusForPersons,
+    getAllStatusForRequest,
+    getAllStatusForTrips,
     getAllRoles
 }

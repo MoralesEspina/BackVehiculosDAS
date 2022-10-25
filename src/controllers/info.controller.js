@@ -22,10 +22,43 @@ const getAllJobs= async(req,res) =>{
     }
 }
 
-//TODO OBTENER TODOS LOS ESTATUS
-const getAllStatus= async(req,res) =>{
+//TODO OBTENER TODOS LOS ESTATUS DE VEHICULOS
+const getAllStatusForVehicles= async(req,res) =>{
     try{
-        const allStatus = await InfoService.getAllStatus();
+        const allStatus = await InfoService.getAllStatusForVehicles();
+        res.json({status: 'OK' , data: allStatus})
+    }catch(error){
+        res.status(500);
+        res.send(error.message);
+    }
+}
+
+//TODO OBTENER TODOS LOS ESTATUS DE PERSONAS
+const getAllStatusForPersons= async(req,res) =>{
+    try{
+        const allStatus = await InfoService.getAllStatusForPersons();
+        res.json({status: 'OK' , data: allStatus})
+    }catch(error){
+        res.status(500);
+        res.send(error.message);
+    }
+}
+
+//TODO OBTENER TODOS LOS ESTATUS DE SOLICITUDES
+const getAllStatusForRequest= async(req,res) =>{
+    try{
+        const allStatus = await InfoService.getAllStatusForRequest();
+        res.json({status: 'OK' , data: allStatus})
+    }catch(error){
+        res.status(500);
+        res.send(error.message);
+    }
+}
+
+//TODO OBTENER TODOS LOS ESTATUS DE VIAJES
+const getAllStatusForTrips= async(req,res) =>{
+    try{
+        const allStatus = await InfoService.getAllStatusForTrips();
         res.json({status: 'OK' , data: allStatus})
     }catch(error){
         res.status(500);
@@ -47,6 +80,9 @@ const getAllRoles= async(req,res) =>{
 export const methods = {
     getAllTypes,
     getAllJobs,
-    getAllStatus,
+    getAllStatusForVehicles,
+    getAllStatusForPersons,
+    getAllStatusForRequest,
+    getAllStatusForTrips,
     getAllRoles
 }

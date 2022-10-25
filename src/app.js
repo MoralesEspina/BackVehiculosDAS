@@ -20,6 +20,7 @@ app.use(express.json());
 app.use(morgan("dev"));
 app.use(cors())
 
+
 //Use Routes
 app.use('/api/vehicles',vehiclesRoutes);
 app.use('/api/persons',personRoutes);

@@ -20,7 +20,7 @@ const createNewUser = async (newUser) => {
 const getOneUsername = async (detailUsername) => {
     try {
         const connection = await getConnection();
-        const result  = await connection.query("SELECT uuid, username, password, rol_id from user where username = ?", detailUsername.username);
+        const result  = await connection.query("SELECT uuid, username, password, rol_id from user where username = ?", detailUsername);
             return result[0];
     } catch (error) {
         throw error;
@@ -68,11 +68,44 @@ const getOneUser = async (uuid) => {
         throw error;
     }
 }
+//TODO OBTENER UN USERNAME
+const getPassword = async (uuid) => {
+    try {
+        const connection = await getConnection();
+        const result  = await connection.query("SELECT password from user where uuid = ?", uuid);
+            return result[0];
+    } catch (error) {
+        throw error;
+    }
+}
+
+//TODO ACTUALIZAR UN USUARIO
+const updateOneUser = async (id, updatedUser) => {
+    try{
+        const connection = await getConnection();
+            const result = await connection.query("UPDATE user SET username = IFNULL(?, username), password = IFNULL(?, password), rol_id = IFNULL(?, rol_id) WHERE uuid = ?",
+            [updatedUser.username,updatedUser.password,updatedUser.rol_id,id]);
+            if (result.affectedRows === 0) {
+                return {
+                    status: 400,
+                    message: 'El usuario no existe'
+                };
+            }
+             const updated = await connection.query("Select u.uuid,u.username,r.rol from user AS u join rol AS r where u.rol_id = r.idrol and uuid = ?", id);
+             return updated;
+
+    } catch(error)
+    {
+        throw error;
+    }
+}
 
 module.exports = {
     createNewUser,
     getOneUsername,
     getAllUsers,
     getOneUser,
-    getOneRol
+    getOneRol,
+    updateOneUser,
+    getPassword
 }

@@ -59,16 +59,9 @@ const createNewDetailRequest = async (newDetailRequest) => {
 
 //TODO ACTUALIZAR UNA SOLICITUD
 const updateOneRequest = async (id, updatedRequest) => {
-    const Request = {
-        fullname: updatedRequest.fullname,
-        job: updatedRequest.job,
-        phone: updatedRequest.phone,
-        dpi: updatedRequest.dpi,
-        nit: updatedRequest.nit
-    }
     try {
         const connection = await getConnection();
-        const result = await connection.query("UPDATE Request SET fullname = IFNULL(?, fullname), job = IFNULL(?, job), phone = IFNULL(?, phone), dpi = IFNULL(?, dpi), nit = IFNULL(?, nit) WHERE uuid = ?",
+        const result = await connection.query("INSERT INTO trips(no,number_people,department,municipality,village,dateOf,dateTo,hour,id_exterior_request) values (?,?,?,?,?,?,?,?,?)",
             [Request.fullname, Request.job, Request.phone, Request.dpi, Request.nit, id]);
         if (result.affectedRows === 0) {
             return {

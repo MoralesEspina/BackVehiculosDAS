@@ -93,7 +93,7 @@ const createNewRequest= async(req,res) =>{
 }
 
 //TODO ACTUALIZAR UNA SOLICITUD
-const updateOneRequest= async(req,res) =>{
+const updateOneRequest = async(req,res) =>{
     const { id } = req.params;
     if (!id) {
         res.status(400).send({
@@ -105,17 +105,16 @@ const updateOneRequest= async(req,res) =>{
 
     try{
         const Request = {
-            fullname: req.body.fullname,
-            job: req.body.job,
-            phone: req.body.phone,
-            dpi: req.body.dpi,
-            nit: req.body.nit
+            pilot: req.body.pilot,
+            vehicle_plate: req.body.vehicle_plate,
+            status: req.body.status,
+            reason_rejected: req.body.reason_rejected
         };
         const updatedRequest = await RequestService.updateOneRequest(id, Request);
         if (updatedRequest.status == 400) {
             res.status(400).json({data: updatedRequest})
         }else{
-            res.status(201).json({status: "Actualizado Correctamente", data: updatedRequest})
+            res.status(201).json({status: "Actualizada Correctamente", data: updatedRequest})
         }
             
     }catch(error){

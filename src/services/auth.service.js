@@ -50,10 +50,33 @@ const getOneUser = async (uuid) => {
     }
 }
 
+//TODO OBTENER CONTRASEÑA
+const getPassword = async (uuid) => {
+    try {
+        const OneUsername = await AuthStorage.getPassword(uuid);
+        return OneUsername
+    } catch (error) {
+        throw error;
+    }
+}
+
+//TODO ACTUALIZAR UN VEHICULO
+const updateOneUser = async (id, User) => {
+    try {
+        const updatedUser = await AuthStorage.updateOneUser(id, User);
+        return updatedUser;
+    } catch (error) {
+        throw error;
+    }
+
+}
+
 module.exports = {
     createNewUser,
     getOneUsername,
     getAllUsers,
     getOneUser,
-    getOneRol
+    getOneRol,
+    updateOneUser,
+    getPassword
 }
