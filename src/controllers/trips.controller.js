@@ -1,10 +1,10 @@
-const TripService = require("../services/Trip.service")
+const TripService = require("../services/trips.service")
 
 
 //TODO OBTENER TODOS LOS VIAJES
-const getAllTrips= async(req,res) =>{
+const getAllTripsFromExteriorRequest= async(req,res) =>{
     try{
-        const allTrips = await TripService.getAllTrips();
+        const allTrips = await TripService.getAllTripsFromExteriorRequest();
         res.json({status: 'OK' , data: allTrips})
     }catch(error){
         res.status(500);
@@ -94,7 +94,7 @@ const updateOneTrip= async(req,res) =>{
 }
 
 export const methods = {
-    getAllTrips,
+    getAllTripsFromExteriorRequest,
     getOneTrip,
     createNewTrip,
     updateOneTrip,

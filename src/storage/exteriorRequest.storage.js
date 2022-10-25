@@ -60,12 +60,16 @@ const createNewDetailRequest = async (newDetailRequest) => {
 const updateOneRequest = async (id, updatedRequest) => {
     try {
         const connection = await getConnection();
-        const result = await connection.query("INSERT INTO trips(pilot,vehicle_plate,status) values (?,?,?)",
-            [updatedRequest.pilot, updatedRequest.job, updatedRequest.phone]);
-        const updatedRequest = await connection.query("INSERT INTO trips(pilot,vehicle_plate,status) values (?,?,?)",
-            [updatedRequest.pilot, updatedRequest.job, updatedRequest.phone]);        return updated;
-        return result;
-
+        if (updatedRequest.status == 6) {
+            const updated = await connection.query("UPDATE exterior_request SET status_request = ? where id = ?",
+            [updatedRequest.status_request, id]);  
+            const result = await connection.query("INSERT INTO trips(pilot,vehicle_plate,status,transp_request_exterior) values (?,?,?,?)",
+            [updatedRequest.pilot, updatedRequest.vehicle_plate, updatedRequest.status,updatedRequest.transp_request_exterior]);
+            return { request: result, updated: updated };
+        }
+            const updated = await connection.query("UPDATE exterior_request SET status_request = IFNULL(?, status_request), reason_rejected = IFNULL(?, reason_rejected) values (?,?) where id = ?",
+            [updatedRequest.status, updatedRequest.reason_rejected, id]);
+            return updated;
     } catch (error) {
         throw error;
     }

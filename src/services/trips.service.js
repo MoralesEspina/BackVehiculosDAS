@@ -1,9 +1,9 @@
 const TripStorage = require("../storage/trips.storage")
 
 //TODO OBTENER TODOS LOS TRIPS
-const getAllTrips = async () => {
+const getAllTripsFromExteriorRequest = async () => {
     try{
-        const allTrips = await TripStorage.getAllTrips();
+        const allTrips = await TripStorage.getAllTripsFromExteriorRequest();
         return allTrips;
     } catch (error){
         throw error;
@@ -42,7 +42,7 @@ const updateOneTrip = async (id, Trip) => {
 }
 
 module.exports = {
-    getAllTrips,
+    getAllTripsFromExteriorRequest,
     getOneTrip,
     createNewTrip,
     updateOneTrip,

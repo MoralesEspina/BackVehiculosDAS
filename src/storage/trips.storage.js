@@ -1,10 +1,22 @@
 import {getConnection} from "./../database/database";
 
-//TODO OBTENER TODOS LOS VIAJES
-const getAllTrips= async () =>{
+//TODO OBTENER TODOS LOS VIAJES EXTERIORES
+const getAllTripsFromExteriorRequest= async () =>{
     try{
         const connection = await getConnection();
-        const result = await connection.query("SELECT p.uuid,p.fullname,j.job_name,p.phone,p.dpi,p.nit,active,available from Trip AS p join job As j where p.job = j.id")
+        const result = await connection.query("Select idtrips,ER.requesting_unit,ER.commission_manager,ER.date_request,transp_request_exterior,P.fullname,V.plate from trips join exterior_request as ER join person as P join vehicle as V where pilot = P.uuid and vehicle_plate = V.vin and transp_request_exterior = ER.id")
+        var data=JSON.parse(JSON.stringify(result))
+        return data;
+    }catch(error){
+        throw error;
+    }
+}
+
+//TODO OBTENER TODOS LOS VIAJES LOCALES
+const getAllTripsFromLocalRequest= async () =>{
+    try{
+        const connection = await getConnection();
+        const result = await connection.query("Select idtrips,LR.applicantsName,LR.date,transp_request_local,P.fullname,V.plate from trips join local_request as LR join person as P join vehicle as V where pilot = P.uuid and vehicle_plate = V.vin and transp_request_local = LR.id")
         var data=JSON.parse(JSON.stringify(result))
         return data;
     }catch(error){
@@ -96,7 +108,8 @@ const updateOneTrip = async (id, updatedTrip) => {
 }
 
 module.exports = {
-    getAllTrips,
+    getAllTripsFromExteriorRequest,
+    getAllTripsFromLocalRequest,
     getOneTrip,
     createNewTrip,
     updateOneTrip,

@@ -6,6 +6,6 @@ const router = Router();
 router.get("/", RequestController.getAllRequests);
 router.get("/:id", RequestController.getOneRequest);
 router.post("/", /*validateCreateRequest,*/ RequestController.createNewRequest);
-router.put("/:id", RequestController.updateOneRequest);
+router.put("/edit/:id", RequestController.updateOneRequest);
 
 export default router;
