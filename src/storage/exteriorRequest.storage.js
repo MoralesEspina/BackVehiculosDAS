@@ -5,7 +5,7 @@ import { getConnection } from "../database/database";
 const getAllRequests = async () => {
     try {
         const connection = await getConnection();
-        const result = await connection.query("SELECT id,requesting_unit,commission_manager,date_request,objective_request,duration_days,phoneNumber,observations,provide_fuel,provide_travel_expenses,status_request,reason_rejected from exterior_request");
+        const result = await connection.query("SELECT id,requesting_unit,commission_manager,date_request,objective_request,duration_days,phoneNumber,observations,provide_fuel,provide_travel_expenses,s.status_name,reason_rejected from exterior_request join status AS s where status_request = s.idstatus");
         var data = JSON.parse(JSON.stringify(result))
         return data;
     } catch (error) {
@@ -34,7 +34,6 @@ const getOneRequest = async (id) => {
 
 //TODO CREAR NUEVA SOLICITUD
 const createNewRequest = async (newRequest) => {
-    newRequest.status = 6;
     try {
         const connection = await getConnection();
         const Request = await connection.query("INSERT INTO exterior_request (requesting_unit,commission_manager,date_request,objective_request,duration_days,phoneNumber,observations,provide_fuel,provide_travel_expenses,status_request,reason_rejected) values (?,?,?,?,?,?,?,?,?,?,?)",
@@ -61,17 +60,11 @@ const createNewDetailRequest = async (newDetailRequest) => {
 const updateOneRequest = async (id, updatedRequest) => {
     try {
         const connection = await getConnection();
-        const result = await connection.query("INSERT INTO trips(no,number_people,department,municipality,village,dateOf,dateTo,hour,id_exterior_request) values (?,?,?,?,?,?,?,?,?)",
-            [Request.fullname, Request.job, Request.phone, Request.dpi, Request.nit, id]);
-        if (result.affectedRows === 0) {
-            return {
-                status: 400,
-                message: 'La Solicitud no existe'
-            };
-        }
-
-        const updated = await connection.query("SELECT p.uuid,p.fullname,j.job_name,p.phone,p.dpi,p.nit,active,available from Request AS p join job As j where p.job = j.id and uuid = ?", id);
-        return updated;
+        const result = await connection.query("INSERT INTO trips(pilot,vehicle_plate,status) values (?,?,?)",
+            [updatedRequest.pilot, updatedRequest.job, updatedRequest.phone]);
+        const updatedRequest = await connection.query("INSERT INTO trips(pilot,vehicle_plate,status) values (?,?,?)",
+            [updatedRequest.pilot, updatedRequest.job, updatedRequest.phone]);        return updated;
+        return result;
 
     } catch (error) {
         throw error;
