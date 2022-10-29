@@ -11,7 +11,8 @@ const loginUser = async (req, res) => {
         if (checkPassword) {
             const token = await generateSign(detailUser)
             res.send({
-                data: { status: "OK", data: { username: detailUser.username } },
+                data: { status: "OK", data: {   username: detailUser.username,
+                                                rol: detailUser.rol } },
                 token
             })
         } else {

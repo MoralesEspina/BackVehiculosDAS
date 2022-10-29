@@ -20,7 +20,7 @@ const createNewUser = async (newUser) => {
 const getOneUsername = async (detailUsername) => {
     try {
         const connection = await getConnection();
-        const result  = await connection.query("SELECT uuid, username, password, rol_id from user where username = ?", detailUsername);
+        const result  = await connection.query("SELECT uuid, username, password, r.rol from user join rol as r where rol_id = r.idrol and username =  ?", detailUsername);
             return result[0];
     } catch (error) {
         throw error;
