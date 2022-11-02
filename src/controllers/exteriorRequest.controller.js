@@ -129,11 +129,12 @@ const updateOneRequest = async (req, res) => {
 
     try {
         const Request = {
-            pilot: req.body.pilot,
-            vehicle_plate: req.body.vehicle_plate,
+            pilot_name: req.body.pilot_name,
+            plate_vehicle: req.body.plate_vehicle,
             status_request: req.body.status_request,
             reason_rejected: req.body.reason_rejected,
-            status: 6,
+            provide_fuel: req.body.provide_fuel,
+            provide_travel_expenses: req.body.provide_travel_expenses,
             transp_request_exterior: parseInt(id)
         };
         console.log(Request)

@@ -71,12 +71,13 @@ Content-Type: application/json
 }
 
 ### Actualizando Solicitud
-PUT {{host}}/requestExterior/edit/1
+PUT {{host}}/requestExterior/edit/14
 Content-Type: application/json
 
 {
-    "pilot": "08e25be0-b84e-4bf4-aead-b78990a6072a",
-    "vehicle_plate": "1023813281092381",
-    "status_request": 7,
-    "reason_rejected": "Ver el estado de los carros"
+    "pilot_name": "08e25be0-b84e-4bf4-aead-b78990a6072a",
+    "plate_vehicle": "1023813281092381",
+    "provide_fuel": 0,
+    "provide_travel_expenses":1,
+    "status_request": 7
 }
