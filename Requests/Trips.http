@@ -1,4 +1,18 @@
 @host = http://localhost:3000/api/trips
 
-### Obteniendo Todas las Personas
+### Obteniendo Todos los viajes exteriores
 GET {{host}}/exteriorRequest
+
+### Obteniendo Todos los viajes locales
+GET {{host}}/localRequest
+
+### Creando un Nuevo Viaje
+POST {{host}}/
+Content-Type: application/json
+
+{
+    "transp_request_exterior": 2,
+    "pilot": "08e25be0-b84e-4bf4-aead-b78990a6072a",
+    "vehicle_plate": "1023813281092381"
+}
+

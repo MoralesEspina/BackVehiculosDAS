@@ -1,10 +1,21 @@
 const TripService = require("../services/trips.service")
 
 
-//TODO OBTENER TODOS LOS VIAJES
+//TODO OBTENER TODOS LOS VIAJES EXTERIORES
 const getAllTripsFromExteriorRequest= async(req,res) =>{
     try{
         const allTrips = await TripService.getAllTripsFromExteriorRequest();
+        res.json({status: 'OK' , data: allTrips})
+    }catch(error){
+        res.status(500);
+        res.send(error.message);
+    }
+}
+
+//TODO OBTENER TODOS LOS VIAJES LOCALES
+const getAllTripsFromLocalRequest= async(req,res) =>{
+    try{
+        const allTrips = await TripService.getAllTripsFromLocalRequest();
         res.json({status: 'OK' , data: allTrips})
     }catch(error){
         res.status(500);
@@ -38,15 +49,13 @@ const getOneTrip= async(req,res) =>{
 
 //TODO CREAR UN VIAJE
 const createNewTrip= async(req,res) =>{
-    
     try{
         const Trip = {
-            uuid: uuidv4(),
-            fullname: req.body.fullname,
-            job: req.body.job,
-            phone: req.body.phone,
-            dpi: req.body.dpi,
-            nit: req.body.nit
+            transp_request_local: req.body.transp_request_local,
+            transp_request_exterior: req.body.transp_request_exterior,
+            pilot: req.body.pilot,
+            vehicle_plate: req.body.vehicle_plate,
+            status: 6
         };
         const createdTrip = await TripService.createNewTrip(Trip);
         if (createdTrip.status == 400) {
@@ -95,6 +104,7 @@ const updateOneTrip= async(req,res) =>{
 
 export const methods = {
     getAllTripsFromExteriorRequest,
+    getAllTripsFromLocalRequest,
     getOneTrip,
     createNewTrip,
     updateOneTrip,

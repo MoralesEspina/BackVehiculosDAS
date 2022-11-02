@@ -1,9 +1,19 @@
 const TripStorage = require("../storage/trips.storage")
 
-//TODO OBTENER TODOS LOS TRIPS
+//TODO OBTENER TODOS LOS VIAJES EXTERIORES
 const getAllTripsFromExteriorRequest = async () => {
     try{
         const allTrips = await TripStorage.getAllTripsFromExteriorRequest();
+        return allTrips;
+    } catch (error){
+        throw error;
+    }   
+}
+
+//TODO OBTENER TODOS LOS VIAJES LOCALES
+const getAllTripsFromLocalRequest = async () => {
+    try{
+        const allTrips = await TripStorage.getAllTripsFromLocalRequest();
         return allTrips;
     } catch (error){
         throw error;
@@ -43,6 +53,7 @@ const updateOneTrip = async (id, Trip) => {
 
 module.exports = {
     getAllTripsFromExteriorRequest,
+    getAllTripsFromLocalRequest,
     getOneTrip,
     createNewTrip,
     updateOneTrip,

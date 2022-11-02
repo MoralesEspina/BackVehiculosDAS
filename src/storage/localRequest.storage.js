@@ -4,7 +4,7 @@ import {getConnection} from "../database/database";
 const getAllRequests= async () =>{
     try{
         const connection = await getConnection();
-        const result = await connection.query("SELECT id,place,date,section,applicantsName,position,phoneNumber,observations,s.status_name from local_request join status AS s where status = s.idstatus")
+        const result = await connection.query("SELECT id,place,date,section,applicantsName,position,phoneNumber,observations,s.status_name from local_request join status AS s where status = s.idstatus order by id desc")
         var data=JSON.parse(JSON.stringify(result))
         return data;
     }catch(error){

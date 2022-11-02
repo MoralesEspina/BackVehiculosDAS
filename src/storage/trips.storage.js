@@ -4,7 +4,7 @@ import {getConnection} from "./../database/database";
 const getAllTripsFromExteriorRequest= async () =>{
     try{
         const connection = await getConnection();
-        const result = await connection.query("Select idtrips,ER.requesting_unit,ER.commission_manager,ER.date_request,transp_request_exterior,P.fullname,V.plate from trips join exterior_request as ER join person as P join vehicle as V where pilot = P.uuid and vehicle_plate = V.vin and transp_request_exterior = ER.id")
+        const result = await connection.query("Select t.idtrips,ER.requesting_unit,ER.commission_manager,ER.date_request,t.transp_request_exterior,P.fullname,V.plate,S.status_name from trips as t join exterior_request as ER join person as P join vehicle as V join status as S where pilot = P.uuid and vehicle_plate = V.vin and t.status = S.idstatus and transp_request_exterior = ER.id")
         var data=JSON.parse(JSON.stringify(result))
         return data;
     }catch(error){
@@ -16,7 +16,7 @@ const getAllTripsFromExteriorRequest= async () =>{
 const getAllTripsFromLocalRequest= async () =>{
     try{
         const connection = await getConnection();
-        const result = await connection.query("Select idtrips,LR.applicantsName,LR.date,transp_request_local,P.fullname,V.plate from trips join local_request as LR join person as P join vehicle as V where pilot = P.uuid and vehicle_plate = V.vin and transp_request_local = LR.id")
+        const result = await connection.query("Select LR.applicantsName,LR.date,t.transp_request_local,P.fullname,V.plate,S.status_name from trips as t join local_request as LR join person as P join vehicle as V join status as S where pilot = P.uuid and vehicle_plate = V.vin and t.status = S.idstatus and transp_request_local = LR.id")
         var data=JSON.parse(JSON.stringify(result))
         return data;
     }catch(error){
@@ -32,7 +32,7 @@ const getOneTrip = async (id) => {
         if (result.length <= 0) {
             return {
             status: 404,
-            message: 'No se encontro la Tripa'
+            message: 'No se encontro el viaje'
         };
         }else{
             return result;
@@ -43,35 +43,16 @@ const getOneTrip = async (id) => {
 }
 
 //TODO CREAR NUEVO VIAJE
-const createNewTrip = async (newTrip) => {
-    const Trip = {
-        uuid: newTrip.uuid,
-        fullname: newTrip.fullname,
-        job: newTrip.job,
-        phone: newTrip.phone,
-        dpi: newTrip.dpi,
-        nit: newTrip.nit,
-        active: 1,
-        availabale: 1
-    }
+const createNewTrip = async (Trip) => {
     try{
         const connection = await getConnection();
-        const verifyTrip = await connection.query("SELECT uuid FROM Trip where uuid = ? ",Trip.uuid);
-        if (verifyTrip.length <= 0) {
-            await connection.query("INSERT INTO Trip (uuid,fullname,job,phone,dpi,nit,active,available) values (?,?,?,?,?,?,?,?)",
-            [Trip.uuid,Trip.fullname,Trip.job,Trip.phone,Trip.dpi,Trip.nit,Trip.active, Trip.availabale]);
-            return {uuid: Trip.uuid, 
-                    fullname: Trip.fullname,
-                    job: Trip.job,
-                    phone: Trip.phone,
-                    dpi: Trip.dpi,
-                    nit: Trip.nit};
-        }else{
-            return {
-                status: 400,
-                message: 'UUID ya existente'
-            };
-        }
+            await connection.query("INSERT INTO trips (transp_request_local,transp_request_exterior,pilot,vehicle_plate,status) values (?,?,?,?,?)",
+            [Trip.transp_request_local,Trip.transp_request_exterior,Trip.pilot,Trip.vehicle_plate,Trip.status]);
+            return {transp_request_local: Trip.transp_request_local, 
+                    transp_request_exterior: Trip.transp_request_exterior,
+                    pilot: Trip.pilot,
+                    vehicle_plate: Trip.vehicle_plate,
+                    status: Trip.status};
     } catch(error)
     {
         throw error;

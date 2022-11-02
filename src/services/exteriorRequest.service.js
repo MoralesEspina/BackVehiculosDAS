@@ -20,6 +20,16 @@ const getOneRequest = async (id) => {
     }
 }
 
+//TODO OBTENER UNA SOLICITYD
+const getOneRequestComplete = async (id) => {
+    try {
+        const oneRequest = await RequestStorage.getOneRequestComplete(id);
+        return oneRequest
+    } catch (error) {
+        
+    }
+}
+
 //TODO CREAR NUEVA SOLICITUD
 const createNewRequest = async (newRequest) => {
     try {
@@ -54,6 +64,7 @@ const updateOneRequest = async (id, Request) => {
 module.exports = {
     getAllRequests,
     getOneRequest,
+    getOneRequestComplete,
     createNewRequest,
     createNewDetailRequest,
     updateOneRequest

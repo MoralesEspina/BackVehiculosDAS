@@ -4,6 +4,7 @@ import { methods as TripController } from "../controllers/trips.controller";
 const router = Router();
 
 router.get("/exteriorRequest", TripController.getAllTripsFromExteriorRequest);
+router.get("/localRequest", TripController.getAllTripsFromLocalRequest);
 router.get("/:id", TripController.getOneTrip);
 router.post("/", /*validateCreateTrip,*/ TripController.createNewTrip);
 router.put("/:id", /*validateCreateTrip,*/ TripController.updateOneTrip);
