@@ -72,7 +72,7 @@ const updateOneVehicle = async (id, updatedVehicle) => {
                     message: 'El número de VIN no existe'
                 };
             }
-             const updated = await connection.query("SELECT v.vin,v.brand,v.model,v.plate,v.km,t.type_name,v.gas,s.status_name,v.active,v.cylinders, v.color from vehicle AS v join vtype As t join status AS s where v.type = t.idvtype and v.status = s.idstatus and vin = ?", id);
+             const updated = await connection.query("SELECT v.vin,v.brand,v.model,v.plate,v.km,t.type_name,v.gas,s.status_name,v.active,v.cylinders,v.color from vehicle AS v join vtype As t join status AS s where v.type = t.idvtype and v.status = s.idstatus and vin = ?", id);
              return updated;
 
     } catch(error)

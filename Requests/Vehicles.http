@@ -33,17 +33,20 @@ Content-Type: application/json
 }
 
 ### Modificando un Vehiculo
-PUT {{host}}/vehicles/908735saaaaaaaaA
+PUT {{host}}/vehicles/1023813281092381
 Content-Type: application/json
 
 {
     "plate": "O0-628BBH",
     "type": "1",
-    "brand": "MITSUBISHI",
+    "brand": "D-MAX",
     "model": 2023,
     "km": 1,
     "gas": "SUPER",
-    "status": 2
+    "status": 2,
+    "color": "blanco",
+    "cylinders": 4
+
 }
 
 ### Eliminando un Vehiculo
