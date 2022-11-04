@@ -135,7 +135,8 @@ const updateOneRequest = async (req, res) => {
             reason_rejected: req.body.reason_rejected,
             provide_fuel: req.body.provide_fuel,
             provide_travel_expenses: req.body.provide_travel_expenses,
-            transp_request_exterior: parseInt(id)
+            transp_request_exterior: parseInt(id),
+            status: 6
         };
         console.log(Request)
         const updatedRequest = await RequestService.updateOneRequest(id, Request);

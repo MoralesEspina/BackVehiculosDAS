@@ -47,6 +47,8 @@ const createNewVehicle= async(req,res) =>{
             model: req.body.model,
             km: req.body.km,
             gas: req.body.gas,
+            cylinders: req.body.cylinders,
+            color: req.boy.color,
             status: req.body.status,
         };
         console.log(vehicle)
@@ -83,6 +85,8 @@ const updateOneVehicle= async(req,res) =>{
             km: req.body.km,
             gas: req.body.gas,
             status: req.body.status,
+            cylinders: req.body.cylinders,
+            color: req.boy.color,
             active: req.body.active
         };
         const updatedVehicle = await VehiclesService.updateOneVehicle(id, vehicle);

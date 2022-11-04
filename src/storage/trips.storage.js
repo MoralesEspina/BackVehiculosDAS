@@ -4,7 +4,7 @@ import {getConnection} from "./../database/database";
 const getAllTripsFromExteriorRequest= async () =>{
     try{
         const connection = await getConnection();
-        const result = await connection.query("Select t.idtrips,ER.requesting_unit,ER.commission_manager,ER.date_request,t.transp_request_exterior,P.fullname,V.plate,S.status_name from trips as t join exterior_request as ER join person as P join vehicle as V join status as S where pilot = P.uuid and vehicle_plate = V.vin and t.status = S.idstatus and transp_request_exterior = ER.id")
+        const result = await connection.query("Select t.idtrips,ER.requesting_unit,ER.commission_manager,ER.date_request,t.transp_request_exterior,P.fullname,V.plate,S.status_name from trips as t join exterior_request as ER join person as P join vehicle as V join status as S where pilot = P.uuid and vehicle_plate = V.vin and t.status = S.idstatus and transp_request_exterior = ER.id order by t.idtrips desc")
         var data=JSON.parse(JSON.stringify(result))
         return data;
     }catch(error){
@@ -16,7 +16,7 @@ const getAllTripsFromExteriorRequest= async () =>{
 const getAllTripsFromLocalRequest= async () =>{
     try{
         const connection = await getConnection();
-        const result = await connection.query("Select LR.applicantsName,LR.date,t.transp_request_local,P.fullname,V.plate,S.status_name from trips as t join local_request as LR join person as P join vehicle as V join status as S where pilot = P.uuid and vehicle_plate = V.vin and t.status = S.idstatus and transp_request_local = LR.id")
+        const result = await connection.query("Select LR.applicantsName,LR.date,t.transp_request_local,P.fullname,V.plate,S.status_name from trips as t join local_request as LR join person as P join vehicle as V join status as S where pilot = P.uuid and vehicle_plate = V.vin and t.status = S.idstatus and transp_request_local = LR.id order by t.idtrips desc")
         var data=JSON.parse(JSON.stringify(result))
         return data;
     }catch(error){

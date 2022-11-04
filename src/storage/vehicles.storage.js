@@ -16,7 +16,7 @@ const getAllVehicles= async () =>{
 const getOneVehicle = async (id) => {
     try {
         const connection = await getConnection();
-        const result = await connection.query("SELECT vin,brand,model,plate,km,type,gas,status,active from vehicle where vin = ?", id);
+        const result = await connection.query("SELECT vin,brand,model,plate,km,type,gas,status,active,cylinders,color from vehicle where vin = ?", id);
         if (result.length <= 0) {
             return {
             status: 404,
@@ -37,11 +37,13 @@ const createNewVehicle = async (newVehicle) => {
         const connection = await getConnection();
         const verifyVehicle = await connection.query("SELECT vin FROM vehicle where vin = ? ",newVehicle.vin);
         if (verifyVehicle.length <= 0) {
-            await connection.query("INSERT INTO vehicle (vin,plate,type,brand,model,km,gas,status,active) values (?,?,?,?,?,?,?,?,?)",
-            [newVehicle.vin, newVehicle.plate, newVehicle.type, newVehicle.brand, newVehicle.model, newVehicle.km, newVehicle.gas, newVehicle.status, newVehicle.active]);
+            await connection.query("INSERT INTO vehicle (vin,plate,type,cylinders,color,brand,model,km,gas,status,active,) values (?,?,?,?,?,?,?,?,?)",
+            [newVehicle.vin, newVehicle.plate, newVehicle.type,newVehicle.cylinders,newVehicle.color, newVehicle.brand, newVehicle.model, newVehicle.km, newVehicle.gas, newVehicle.status, newVehicle.active]);
             return {vin: newVehicle.vin, 
                     plate: newVehicle.plate,
                     type: newVehicle.type,
+                    cylinders: newVehicle.cylinders,
+                    color: newVehicle.color,
                     brand: newVehicle.brand,
                     model: newVehicle.model,
                     km: newVehicle.km,
@@ -62,15 +64,15 @@ const createNewVehicle = async (newVehicle) => {
 const updateOneVehicle = async (id, updatedVehicle) => {
     try{
         const connection = await getConnection();
-            const result = await connection.query("UPDATE vehicle SET plate = IFNULL(?, plate), type = IFNULL(?, type), brand = IFNULL(?, brand), model = IFNULL(?, model), km = IFNULL(?, km), gas = IFNULL(?, gas), status = IFNULL(?, status), active = IFNULL(?, active) WHERE vin = ?",
-            [updatedVehicle.plate,updatedVehicle.type,updatedVehicle.brand,updatedVehicle.model,updatedVehicle.km, updatedVehicle.gas, updatedVehicle.status, updatedVehicle.active,id]);
+            const result = await connection.query("UPDATE vehicle SET plate = IFNULL(?, plate), type = IFNULL(?, type), brand = IFNULL(?, brand), model = IFNULL(?, model), km = IFNULL(?, km), gas = IFNULL(?, gas), status = IFNULL(?, status), active = IFNULL(?, active), cylinders = IFNULL(?, cylinders), color = IFNULL(?, color) WHERE vin = ?",
+            [updatedVehicle.plate,updatedVehicle.type,updatedVehicle.brand,updatedVehicle.model,updatedVehicle.km, updatedVehicle.gas, updatedVehicle.status, updatedVehicle.active, updatedVehicle.cylinders, updatedVehicle.color, id]);
             if (result.affectedRows === 0) {
                 return {
                     status: 400,
                     message: 'El número de VIN no existe'
                 };
             }
-             const updated = await connection.query("SELECT v.vin,v.brand,v.model,v.plate,v.km,t.type_name,v.gas,s.status_name,v.active from vehicle AS v join vtype As t join status AS s where v.type = t.idvtype and v.status = s.idstatus and vin = ?", id);
+             const updated = await connection.query("SELECT v.vin,v.brand,v.model,v.plate,v.km,t.type_name,v.gas,s.status_name,v.active,v.cylinders, v.color from vehicle AS v join vtype As t join status AS s where v.type = t.idvtype and v.status = s.idstatus and vin = ?", id);
              return updated;
 
     } catch(error)

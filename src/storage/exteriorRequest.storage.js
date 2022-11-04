@@ -83,7 +83,7 @@ const updateOneRequest = async (id, updatedRequest) => {
             const updated = await connection.query("UPDATE exterior_request SET provide_fuel = IFNULL(?, provide_fuel),provide_travel_expenses = IFNULL(?, provide_travel_expenses), status_request = IFNULL(?, status_request) where id = ?",
             [updatedRequest.provide_fuel, updatedRequest.provide_travel_expenses, updatedRequest.status_request, id]);  
             const result = await connection.query("INSERT INTO trips(transp_request_exterior,pilot,vehicle_plate,status) values (?,?,?,?)",
-            [updatedRequest.transp_request_exterior,updatedRequest.pilot_name, updatedRequest.plate_vehicle, updatedRequest.status_request]);
+            [updatedRequest.transp_request_exterior,updatedRequest.pilot_name, updatedRequest.plate_vehicle, updatedRequest.status]);
             return { request: result, updated: updated };
         }
             const updated = await connection.query("UPDATE exterior_request SET status_request = IFNULL(?, status_request), reason_rejected = IFNULL(?, reason_rejected) where id = ?",
