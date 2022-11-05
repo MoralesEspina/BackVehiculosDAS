@@ -13,6 +13,18 @@ const getAllPersons= async () =>{
 }
 
 //TODO OBTENER TODAS LAS PERSONAS
+const getAllPilots= async () =>{
+    try{
+        const connection = await getConnection();
+        const result = await connection.query("SELECT uuid,fullname,phone,dpi,active,available from person where job = 1")
+        var data=JSON.parse(JSON.stringify(result))
+        return data;
+    }catch(error){
+        throw error;
+    }
+}
+
+//TODO OBTENER TODAS LAS PERSONAS
 const getAllPilotsActives= async () =>{
     try{
         const connection = await getConnection();
@@ -111,6 +123,7 @@ const deleteOnePerson = async (id) => {
 }
 module.exports = {
     getAllPersons,
+    getAllPilots,
     getAllPilotsActives,
     getOnePerson,
     createNewPerson,

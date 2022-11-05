@@ -14,6 +14,17 @@ const getAllPersons= async(req,res) =>{
 }
 
 //TODO OBTENER TODAS LOS PERSONAS
+const getAllPilots= async(req,res) =>{
+    try{
+        const allPersons = await PersonService.getAllPilots();
+        res.json({status: 'OK' , data: allPersons})
+    }catch(error){
+        res.status(500);
+        res.send(error.message);
+    }
+}
+
+//TODO OBTENER TODAS LOS PERSONAS
 const getAllPilotsActives= async(req,res) =>{
     try{
         const allPersons = await PersonService.getAllPilotsActives();
@@ -129,6 +140,7 @@ const deleteOnePerson= async(req,res) =>{
 
 export const methods = {
     getAllPersons,
+    getAllPilots,
     getAllPilotsActives,
     getOnePerson,
     createNewPerson,
