@@ -5,7 +5,7 @@ import { getConnection } from "../database/database";
 const getAllRequests = async () => {
     try {
         const connection = await getConnection();
-        const result = await connection.query("SELECT id,requesting_unit,commission_manager,date_request,objective_request,duration_days,phoneNumber,observations,provide_fuel,provide_travel_expenses,s.status_name,reason_rejected from exterior_request join status AS s where status_request = s.idstatus order by id desc");
+        const result = await connection.query("SELECT id,requesting_unit,commission_manager,date_request,objective_request,duration_days,phoneNumber,observations,provide_fuel,provide_travel_expenses,s.status_name,reason_rejected from exterior_request join status AS s where status_request = s.idstatus and status_request != 7 order by id desc");
         var data = JSON.parse(JSON.stringify(result))
         return data;
     } catch (error) {
@@ -17,7 +17,7 @@ const getAllRequests = async () => {
 const getOneRequest = async (id) => {
     try {
         const connection = await getConnection();
-        const request = await connection.query("SELECT id,requesting_unit,commission_manager,date_request,objective_request,duration_days,phoneNumber,observations,provide_fuel,provide_travel_expenses,status_request,reason_rejected from exterior_request where id = ?", id);
+        const request = await connection.query("SELECT id,requesting_unit,commission_manager,date_request,objective_request,duration_days,phoneNumber,observations,provide_fuel,provide_travel_expenses,status_request,reason_rejected,boss from exterior_request where id = ?", id);
         const detailRequest = await connection.query("SELECT DE.no, DE.number_people, DE.department, DE.municipality, DE.village, DE.dateOf, DE.dateTo , DE.hour FROM detail_exterior_request AS DE join exterior_request AS e where id_exterior_request = e.id and DE.id_exterior_request = ?", id);
         if (request.length <= 0) {
             return {
