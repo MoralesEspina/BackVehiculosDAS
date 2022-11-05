@@ -67,7 +67,7 @@ const createNewVehicle = async (newVehicle) => {
         const connection = await getConnection();
         const verifyVehicle = await connection.query("SELECT vin FROM vehicle where vin = ? ",newVehicle.vin);
         if (verifyVehicle.length <= 0) {
-            await connection.query("INSERT INTO vehicle (vin,plate,type,cylinders,color,brand,model,km,gas,status,active,) values (?,?,?,?,?,?,?,?,?)",
+            await connection.query("INSERT INTO vehicle (vin,plate,type,cylinders,color,brand,model,km,gas,status,active) values (?,?,?,?,?,?,?,?,?,?,?)",
             [newVehicle.vin, newVehicle.plate, newVehicle.type,newVehicle.cylinders,newVehicle.color, newVehicle.brand, newVehicle.model, newVehicle.km, newVehicle.gas, newVehicle.status, newVehicle.active]);
             return {vin: newVehicle.vin, 
                     plate: newVehicle.plate,
