@@ -30,6 +30,24 @@ const getOneVehicle = async (id) => {
     }
 }
 
+//TODO OBTENER UN VEHICULO PARA EL VALE
+const getOneVehicleForVoucher = async (id) => {
+    try {
+        const connection = await getConnection();
+        const result = await connection.query("SELECT v.plate,v.brand,v.model,t.type_name,v.color from vehicle AS v join vtype As t  where v.type = t.idvtype and vin = ?", id);
+        if (result.length <= 0) {
+            return {
+            status: 404,
+            message: 'No se encontro el vehiculo'
+        };
+        }else{
+            return result;
+        }
+    } catch (error) {
+        throw error;
+    }
+}
+
 //TODO CREAR NUEVO VEHICULO
 const createNewVehicle = async (newVehicle) => {
         newVehicle.active = 1
@@ -103,6 +121,7 @@ const deleteOneVehicle = async (id) => {
 module.exports = {
     getAllVehicles,
     getOneVehicle,
+    getOneVehicleForVoucher,
     createNewVehicle,
     updateOneVehicle,
     deleteOneVehicle

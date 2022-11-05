@@ -20,6 +20,16 @@ const getOneVehicle = async (id) => {
     }
 }
 
+//TODO OBTENER UN VEHICULO PARA EL VALE
+const getOneVehicleForVoucher = async (id) => {
+    try {
+        const oneVehicle = await VehicleStorage.getOneVehicleForVoucher(id);
+        return oneVehicle
+    } catch (error) {
+        
+    }
+}
+
 //TODO CREAR NUEVO VEHICULO
 const createNewVehicle = async (newVehicle) => {
     try {
@@ -54,6 +64,7 @@ const deleteOneVehicle = async (id) => {
 module.exports = {
     getAllVehicles,
     getOneVehicle,
+    getOneVehicleForVoucher,
     createNewVehicle,
     updateOneVehicle,
     deleteOneVehicle

@@ -35,6 +35,30 @@ const getOneVehicle= async(req,res) =>{
     }
 }
 
+//TODO OBTENER UN VEHICULO 
+const getOneVehicleForVoucher= async(req,res) =>{
+    const { id } = req.params;
+    if (!id) {
+        res.status(400).send({
+            status: "FAILED",
+            data: { error: "ID no puede ir vacio" },
+          });
+          return;
+    }
+    try{
+        const oneVehicle =  await VehiclesService.getOneVehicleForVoucher(id);
+        if (oneVehicle.status == 404) {
+            res.status(404).json({data: oneVehicle})
+        }else{
+            res.status(200).json({status: "OK", data: oneVehicle})
+        }
+        
+    }catch(error){
+        res.status(500);
+        res.send({data: error.message});
+    }
+}
+
 //TODO CREAR NUEVO VEHICULO
 const createNewVehicle= async(req,res) =>{
     
@@ -127,6 +151,7 @@ const deleteOneVehicle= async(req,res) =>{
 export const methods = {
     getAllVehicles,
     getOneVehicle,
+    getOneVehicleForVoucher,
     createNewVehicle,
     updateOneVehicle,
     deleteOneVehicle,

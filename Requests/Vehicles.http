@@ -17,6 +17,9 @@ Authorization: Bearer {{login.response.body.token}}
 ### Obteniendo un Solo Vehiculo
 GET {{host}}/vehicles/1023813281092381
 
+### Obteniendo un Solo Vehiculo Para el Voucher
+GET {{host}}/vehicles/voucher/1023813281092381
+
 ### Creando un Nuevo Vehiculo
 POST {{host}}/vehicles
 Content-Type: application/json
