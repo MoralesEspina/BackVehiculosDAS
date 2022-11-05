@@ -10,6 +10,16 @@ const getAllPersons = async () => {
     }   
 }
 
+//TODO OBTENER TODAS LAS PERSONAS
+const getAllPilotsActives = async () => {
+    try{
+        const allPersons = await PersonStorage.getAllPilotsActives();
+        return allPersons;
+    } catch (error){
+        throw error;
+    }   
+}
+
 //TODO OBTENER UNA PERSONA
 const getOnePerson = async (id) => {
     try {
@@ -53,6 +63,7 @@ const deleteOnePerson = async (id) => {
 
 module.exports = {
     getAllPersons,
+    getAllPilotsActives,
     getOnePerson,
     createNewPerson,
     updateOnePerson,

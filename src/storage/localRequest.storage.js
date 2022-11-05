@@ -60,29 +60,19 @@ const createNewDetailRequest = async (newDetailRequest) => {
 
 //TODO ACTUALIZAR UNA SOLICITUD
 const updateOneRequest = async (id, updatedRequest) => {
-    const Request = {
-        fullname: updatedRequest.fullname,
-        job: updatedRequest.job,
-        phone: updatedRequest.phone,
-        dpi: updatedRequest.dpi,
-        nit: updatedRequest.nit
-    }
-    try{
+    try {
         const connection = await getConnection();
-            const result = await connection.query("UPDATE Request SET fullname = IFNULL(?, fullname), job = IFNULL(?, job), phone = IFNULL(?, phone), dpi = IFNULL(?, dpi), nit = IFNULL(?, nit) WHERE uuid = ?",
-            [Request.fullname,Request.job,Request.phone,Request.dpi,Request.nit,id]);
-            if (result.affectedRows === 0) {
-                return {
-                    status: 400,
-                    message: 'La Requesta no existe'
-                };
-            }
-
-             const updated = await connection.query("SELECT p.uuid,p.fullname,j.job_name,p.phone,p.dpi,p.nit,active,available from Request AS p join job As j where p.job = j.id and uuid = ?", id);
-             return updated;
-
-    } catch(error)
-    {
+        if (updatedRequest.status_request == 7) {
+            const updated = await connection.query("UPDATE local_request SET status = IFNULL(?, status) where id = ?",
+            [updatedRequest.status_request, id]);  
+            const result = await connection.query("INSERT INTO trips(transp_request_local,pilot,vehicle_plate,status) values (?,?,?,?)",
+            [updatedRequest.transp_request_local,updatedRequest.pilot_name, updatedRequest.plate_vehicle, updatedRequest.status]);
+            return { request: result, updated: updated };
+        }
+            const updated = await connection.query("UPDATE local_request SET status = IFNULL(?, status) where id = ?",
+            [updatedRequest.status, id]);
+            return updated;
+    } catch (error) {
         throw error;
     }
 }

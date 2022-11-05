@@ -6,12 +6,22 @@ GET {{host}}/exteriorRequest
 ### Obteniendo Todos los viajes locales
 GET {{host}}/localRequest
 
-### Creando un Nuevo Viaje
+### Creando un Nuevo Viaje Exterior
 POST {{host}}/
 Content-Type: application/json
 
 {
     "transp_request_exterior": 2,
+    "pilot": "08e25be0-b84e-4bf4-aead-b78990a6072a",
+    "vehicle_plate": "1023813281092381"
+}
+
+### Creando un Nuevo Viaje Local
+POST {{host}}/
+Content-Type: application/json
+
+{
+    "transp_request_local": 2,
     "pilot": "08e25be0-b84e-4bf4-aead-b78990a6072a",
     "vehicle_plate": "1023813281092381"
 }

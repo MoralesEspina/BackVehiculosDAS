@@ -12,6 +12,18 @@ const getAllPersons= async () =>{
     }
 }
 
+//TODO OBTENER TODAS LAS PERSONAS
+const getAllPilotsActives= async () =>{
+    try{
+        const connection = await getConnection();
+        const result = await connection.query("SELECT uuid,fullname,phone,dpi,active,available from person where job = 1 and available = 3")
+        var data=JSON.parse(JSON.stringify(result))
+        return data;
+    }catch(error){
+        throw error;
+    }
+}
+
 //TODO OBTENER UNA PERSONA
 const getOnePerson = async (id) => {
     try {
@@ -33,7 +45,7 @@ const getOnePerson = async (id) => {
 //TODO CREAR NUEVA PERSONA
 const createNewPerson = async (newPerson) => {
     newPerson.active = 1,
-    newPerson.availabale = 1
+    newPerson.availabale = 3
     try{
         const connection = await getConnection();
         const verifyPerson = await connection.query("SELECT uuid FROM person where uuid = ? ",newPerson.uuid);
@@ -99,6 +111,7 @@ const deleteOnePerson = async (id) => {
 }
 module.exports = {
     getAllPersons,
+    getAllPilotsActives,
     getOnePerson,
     createNewPerson,
     updateOnePerson,

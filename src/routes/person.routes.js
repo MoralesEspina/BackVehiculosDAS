@@ -4,6 +4,7 @@ const {validateCreatePerson} = require('../validators/person.validator')
 const router = Router();
 
 router.get("/", PersonController.getAllPersons);
+router.get("/pilots/", PersonController.getAllPilotsActives);
 router.get("/:id", PersonController.getOnePerson);
 router.post("/", validateCreatePerson, PersonController.createNewPerson);
 router.put("/:id", validateCreatePerson, PersonController.updateOnePerson);

@@ -37,3 +37,13 @@ Content-Type: application/json
         }
     ]
 }
+
+### Actualizando Solicitud
+PUT {{host}}/requestLocal/3
+Content-Type: application/json
+
+{
+    "pilot_name": "08e25be0-b84e-4bf4-aead-b78990a6072a",
+    "plate_vehicle": "1023813281092381",
+    "status": 7
+}

@@ -9,6 +9,7 @@ import requestLocalRoutes from "./routes/localRequest.routes"
 import requestExteriorRoutes from "./routes/exteriorRequest.routes"
 import departmentRoutes from "./routes/department.routes"
 import tripsRoutes from "./routes/trips.routes"
+import voucherRoutes from "./routes/voucher.routes"
 
 var cors = require('cors')
 const app=express();
@@ -31,7 +32,7 @@ app.use('/api/requestLocal',requestLocalRoutes);
 app.use('/api/requestExterior',requestExteriorRoutes);
 app.use('/api/departments',departmentRoutes);
 app.use('/api/trips',tripsRoutes);
-
+app.use('/api/voucher',voucherRoutes);
 app.use((req,res,next) => {
     res.status(404).json({
         message: 'Ruta invalida'

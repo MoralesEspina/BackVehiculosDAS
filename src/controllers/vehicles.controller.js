@@ -11,6 +11,17 @@ const getAllVehicles= async(req,res) =>{
     }
 }
 
+//TODO OBTENER TODOS LOS VEHICULOS
+const getAllVehiclesActives= async(req,res) =>{
+    try{
+        const allVehicles = await VehiclesService.getAllVehiclesActives();
+        res.json({status: 'OK' , data: allVehicles})
+    }catch(error){
+        res.status(500);
+        res.send({data: error.message});
+    }
+}
+
 //TODO OBTENER UN VEHICULO
 const getOneVehicle= async(req,res) =>{
     const { id } = req.params;
@@ -150,6 +161,7 @@ const deleteOneVehicle= async(req,res) =>{
 
 export const methods = {
     getAllVehicles,
+    getAllVehiclesActives,
     getOneVehicle,
     getOneVehicleForVoucher,
     createNewVehicle,

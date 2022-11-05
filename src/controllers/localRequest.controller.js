@@ -86,34 +86,35 @@ const createNewRequest= async(req,res) =>{
 }
 
 //TODO ACTUALIZAR UNA SOLICITUD
-const updateOneRequest= async(req,res) =>{
+const updateOneRequest = async (req, res) => {
     const { id } = req.params;
     if (!id) {
         res.status(400).send({
             status: "FAILED",
             data: { error: "Se necesita un ID" },
-          });
-          return;
+        });
+        return;
     }
 
-    try{
+    try {
         const Request = {
-            fullname: req.body.fullname,
-            job: req.body.job,
-            phone: req.body.phone,
-            dpi: req.body.dpi,
-            nit: req.body.nit
+            pilot_name: req.body.pilotName,
+            plate_vehicle: req.body.plate,
+            status_request: req.body.status,
+            transp_request_local: parseInt(id),
+            status: 6
         };
+        console.log(Request)
         const updatedRequest = await RequestService.updateOneRequest(id, Request);
         if (updatedRequest.status == 400) {
-            res.status(400).json({data: updatedRequest})
-        }else{
-            res.status(201).json({status: "Actualizado Correctamente", data: updatedRequest})
+            res.status(400).json({ data: updatedRequest })
+        } else {
+            res.status(201).json({ status: "Actualizada Correctamente", data: updatedRequest })
         }
-            
-    }catch(error){
+
+    } catch (error) {
         res.status(error?.status || 500)
-        res.send({status: "Failed",data:{error: error?.message || error}})
+        res.send({ status: "Failed", data: { error: error?.message || error } })
     }
 }
 

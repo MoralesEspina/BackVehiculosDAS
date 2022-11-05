@@ -12,6 +12,18 @@ const getAllVehicles= async () =>{
     }
 }
 
+//TODO OBTENER TODOS LOS VEHICULOS
+const getAllVehiclesActives= async () =>{
+    try{
+        const connection = await getConnection();
+        const result = await connection.query("SELECT v.vin,v.brand,v.model,v.plate,v.km,t.type_name,v.gas,s.status_name,v.active,v.color,v.cylinders from vehicle AS v join vtype As t join status AS s where v.type = t.idvtype and v.status = s.idstatus and v.status = 3")
+        var data=JSON.parse(JSON.stringify(result))
+        return data;
+    }catch(error){
+        throw error;
+    }
+}
+
 //TODO OBTENER UN VEHICULO
 const getOneVehicle = async (id) => {
     try {
@@ -120,9 +132,10 @@ const deleteOneVehicle = async (id) => {
 }
 module.exports = {
     getAllVehicles,
+    getAllVehiclesActives,
     getOneVehicle,
     getOneVehicleForVoucher,
     createNewVehicle,
-    updateOneVehicle,
+    updateOneVehicle,   
     deleteOneVehicle
 }
