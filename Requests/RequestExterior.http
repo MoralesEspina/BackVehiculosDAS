@@ -4,7 +4,7 @@
 GET {{host}}/requestExterior
 
 ### Obteniendo una Persona
-GET {{host}}/requestExterior/3
+GET {{host}}/requestExterior/28
 
 ### Creando una Nueva Persona
 POST {{host}}/requestExterior
@@ -21,6 +21,7 @@ Content-Type: application/json
     "provide_fuel": 0,
     "provide_travel_expenses": 0,
     "reason_rejected": "Ninguna",
+    "boss":"Dylan",
     "detail":   [
         {
         "number_people": "2",
@@ -71,7 +72,7 @@ Content-Type: application/json
 }
 
 ### Actualizando Solicitud
-PUT {{host}}/requestExterior/edit/14
+PUT {{host}}/requestExterior/edit/20
 Content-Type: application/json
 
 {
@@ -81,3 +82,6 @@ Content-Type: application/json
     "provide_travel_expenses":1,
     "status_request": 7
 }
+
+### Obteniendo una Persona
+GET {{host}}/requestExterior/complete/25

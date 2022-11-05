@@ -21,9 +21,19 @@ const getAllVouchersRegular = async () => {
 }
 
 //TODO OBTENER UN VALE
-const getOneVoucher = async (id) => {
+const getOneVoucherDiesel = async (id) => {
     try {
-        const oneVoucher = await VoucherStorage.getOneVoucher(id);
+        const oneVoucher = await VoucherStorage.getOneVoucherDiesel(id);
+        return oneVoucher
+    } catch (error) {
+        
+    }
+}
+
+//TODO OBTENER UN VALE
+const getOneVoucherRegular = async (id) => {
+    try {
+        const oneVoucher = await VoucherStorage.getOneVoucherRegular(id);
         return oneVoucher
     } catch (error) {
         
@@ -74,7 +84,8 @@ const deleteOneVoucher = async (id) => {
 module.exports = {
     getAllVouchersDiesel,
     getAllVouchersRegular,
-    getOneVoucher,
+    getOneVoucherDiesel,
+    getOneVoucherRegular,
     createNewVoucherDiesel,
     createNewVoucherRegular,
     updateOneVoucher,

@@ -4,7 +4,7 @@
 GET {{host}}/requestLocal
 
 ### Obteniendo una Persona
-GET {{host}}/requestLocal/11
+GET {{host}}/requestLocal/15
 
 ### Creando una Nueva Persona
 POST {{host}}/requestLocal
@@ -18,6 +18,7 @@ Content-Type: application/json
     "position": "Encargado de Area",
     "phoneNumber": 1234567891,
     "observations": "Ninguna",
+    "boss": "Dylan",
     "detail":   [
         {
         "dateOf": "2022/01/01", 

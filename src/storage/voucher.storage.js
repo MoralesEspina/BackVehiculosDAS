@@ -16,7 +16,7 @@ const getAllVouchersDiesel= async () =>{
 const getAllVouchersRegular= async () =>{
     try{
         const connection = await getConnection();
-        const result = await connection.query("SELECT v.idregular,v.date,vh.plate,v.comission_to,v.cost,p.fullname from voucher_regular AS v join vehicle as vh join person as p where vh.vin = v.id_vehicle and p.uuid = v.id_pilot")
+        const result = await connection.query("SELECT date,cost,v.plate,v.type,v.brand,v.model,v.color,comission_to,objective,p.fullname,p.dpi from voucher_diesel join vehicle AS v join person AS p where v.vin = id_vehicle and p.uuid = id_pilot and idregular = ?")
         var data=JSON.parse(JSON.stringify(result))
         return data;
     }catch(error){
@@ -25,10 +25,28 @@ const getAllVouchersRegular= async () =>{
 }
 
 //TODO OBTENER UN VEHICULO
-const getOneVoucher = async (id) => {
+const getOneVoucherDiesel = async (id) => {
     try {
         const connection = await getConnection();
-        const result = await connection.query("SELECT vin,brand,model,plate,km,type,gas,status,active,cylinders,color from Voucher where vin = ?", id);
+        const result = await connection.query("SELECT iddiesel,date,cost,v.plate,v.brand,v.model,v.color,comission_to,objective,km_gallon,service_of,comission_date,km_to_travel,p.fullname,p.dpi,vt.type_name from voucher_diesel join vehicle AS v join person AS p join vtype AS vt where v.vin = id_vehicle and p.uuid = id_pilot and vt.idvtype = v.type and iddiesel = ?", id);
+        if (result.length <= 0) {
+            return {
+            status: 404,
+            message: 'No se encontro el vehiculo'
+        };
+        }else{
+            return result;
+        }
+    } catch (error) {
+        throw error;
+    }
+}
+
+//TODO OBTENER UN VEHICULO
+const getOneVoucherRegular = async (id) => {
+    try {
+        const connection = await getConnection();
+        const result = await connection.query("SELECT idregular,date,cost,v.plate,v.brand,v.model,v.color,comission_to,objective,p.fullname,p.dpi,vt.type_name from voucher_regular join vehicle AS v join person AS p join vtype AS vt where v.vin = id_vehicle and p.uuid = id_pilot and vt.idvtype = v.type and idregular = ?", id);
         if (result.length <= 0) {
             return {
             status: 404,
@@ -125,7 +143,8 @@ const deleteOneVoucher = async (id) => {
 module.exports = {
     getAllVouchersDiesel,
     getAllVouchersRegular,
-    getOneVoucher,
+    getOneVoucherDiesel,
+    getOneVoucherRegular,
     createNewVoucherDiesel,
     createNewVoucherRegular,
     updateOneVoucher,   

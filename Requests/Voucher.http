@@ -22,8 +22,14 @@ Authorization: Bearer {{login.response.body.token}}
 GET {{host}}/vehicles/active
 Authorization: Bearer {{login.response.body.token}}
 
-### Obteniendo un Solo Vehiculo
-GET {{host}}/vehicles/1023813281092381
+### Obteniendo Todos los Vales Diesel
+GET {{host}}/voucher/diesel/1
+Authorization: Bearer {{login.response.body.token}}
+
+
+### Obteniendo Todos los Vales Diesel
+GET {{host}}/voucher/regular/1
+Authorization: Bearer {{login.response.body.token}}
 
 ### Obteniendo un Solo Vehiculo Para el Voucher
 GET {{host}}/vehicles/voucher/123141231

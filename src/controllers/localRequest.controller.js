@@ -48,6 +48,7 @@ const createNewRequest= async(req,res) =>{
             position: data.position,
             phoneNumber: data.phoneNumber,
             observations: data.observations,
+            boss: data.boss,
         };
         const createdRequest = await RequestService.createNewRequest(Request);
 

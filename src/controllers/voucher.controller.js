@@ -23,7 +23,7 @@ const getAllVouchersRegular= async(req,res) =>{
 }
 
 //TODO OBTENER UN VEHICULO
-const getOneVoucher= async(req,res) =>{
+const getOneVoucherDiesel= async(req,res) =>{
     const { id } = req.params;
     if (!id) {
         res.status(400).send({
@@ -33,7 +33,7 @@ const getOneVoucher= async(req,res) =>{
           return;
     }
     try{
-        const oneVoucher =  await VoucherService.getOneVoucher(id);
+        const oneVoucher =  await VoucherService.getOneVoucherDiesel(id);
         if (oneVoucher.status == 404) {
             res.status(404).json({data: oneVoucher})
         }else{
@@ -45,6 +45,31 @@ const getOneVoucher= async(req,res) =>{
         res.send({data: error.message});
     }
 }
+
+//TODO OBTENER UN VEHICULO
+const getOneVoucherRegular= async(req,res) =>{
+    const { id } = req.params;
+    if (!id) {
+        res.status(400).send({
+            status: "FAILED",
+            data: { error: "ID no puede ir vacio" },
+          });
+          return;
+    }
+    try{
+        const oneVoucher =  await VoucherService.getOneVoucherRegular(id);
+        if (oneVoucher.status == 404) {
+            res.status(404).json({data: oneVoucher})
+        }else{
+            res.status(200).json({status: "OK", data: oneVoucher})
+        }
+        
+    }catch(error){
+        res.status(500);
+        res.send({data: error.message});
+    }
+}
+
 
 //TODO CREAR NUEVO VALE
 const createNewVoucherDiesel= async(req,res) =>{
@@ -164,7 +189,8 @@ const deleteOneVoucher= async(req,res) =>{
 export const methods = {
     getAllVouchersDiesel,
     getAllVouchersRegular,
-    getOneVoucher,
+    getOneVoucherDiesel,
+    getOneVoucherRegular,
     createNewVoucherRegular,
     createNewVoucherDiesel,
     updateOneVoucher,
