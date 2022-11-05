@@ -89,7 +89,7 @@ const createNewVoucherRegular= async(req,res) =>{
             id_pilot: req.body.id_pilot,
         };
         console.log(Voucher)
-        const createdVoucher = await VouchersService.createNewVoucherRegular(Voucher);
+        const createdVoucher = await VoucherService.createNewVoucherRegular(Voucher);
         if (createdVoucher.status == 400) {
             res.status(400).json({data: createdVoucher})
         }else{

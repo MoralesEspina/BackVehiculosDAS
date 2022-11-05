@@ -7,8 +7,8 @@ const router = Router();
 router.get("/diesel/", VouchersController.getAllVouchersDiesel);
 router.get("/regular/", VouchersController.getAllVouchersRegular);
 router.get("/:id", VouchersController.getOneVoucher);
-router.post("/", VouchersController.createNewVoucherDiesel);
-router.post("/", VouchersController.createNewVoucherRegular);
+router.post("/diesel/", VouchersController.createNewVoucherDiesel);
+router.post("/regular/", VouchersController.createNewVoucherRegular);
 router.put("/:id", VouchersController.updateOneVoucher);
 router.delete("/:id", VouchersController.deleteOneVoucher);
 

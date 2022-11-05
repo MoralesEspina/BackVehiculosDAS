@@ -68,17 +68,14 @@ const createNewVoucherDiesel = async (newVoucher) => {
 const createNewVoucherRegular= async (newVoucher) => {
     try{
         const connection = await getConnection();
-            await connection.query("INSERT INTO voucher_diesel (date,cost,id_vehicle,comission_to,objective,id_pilot,km_gallon,service_of,comission_date,km_to_travel) values (?,?,?,?,?,?,?,?)",
-            [newVoucher.date, newVoucher.cost, newVoucher.id_vehicle,newVoucher.comission_to,newVoucher.objective, newVoucher.id_pilot, newVoucher.km_gallon, newVoucher.service_of, newVoucher.comission_date, newVoucher.km_to_travel]);
+            await connection.query("INSERT INTO voucher_regular (date,cost,id_vehicle,comission_to,objective,id_pilot) values (?,?,?,?,?,?)",
+            [newVoucher.date, newVoucher.cost, newVoucher.id_vehicle,newVoucher.comission_to,newVoucher.objective, newVoucher.id_pilot]);
             return {date: newVoucher.date, 
                     cost: newVoucher.cost,
                     id_vehicle: newVoucher.id_vehicle,
                     comission_to: newVoucher.comission_to,
                     objective: newVoucher.objective,
-                    id_pilot: newVoucher.id_pilot,
-                    km_gallon: newVoucher.km_gallon,
-                    service_of: newVoucher.service_of,
-                    comission_date: newVoucher.comission_date};
+                    id_pilot: newVoucher.id_pilot,};
     } catch(error)
     {
         throw error;
