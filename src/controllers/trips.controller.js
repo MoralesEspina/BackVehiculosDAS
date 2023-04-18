@@ -80,14 +80,9 @@ const updateOneTrip= async(req,res) =>{
           });
           return;
     }
-
     try{
         const Trip = {
-            fullname: req.body.fullname,
-            job: req.body.job,
-            phone: req.body.phone,
-            dpi: req.body.dpi,
-            nit: req.body.nit
+            status: 13,    
         };
         const updatedTrip = await TripService.updateOneTrip(id, Trip);
         if (updatedTrip.status == 400) {

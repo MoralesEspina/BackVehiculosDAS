@@ -35,6 +35,30 @@ const getOneRequest= async(req,res) =>{
     }
 }
 
+//TODO OBTENER UNA SOLICITUD
+const getOneRequestComplete= async(req,res) =>{
+    const { id } = req.params;
+    if (!id) {
+        res.status(400).send({
+            status: "FAILED",
+            data: { error: "ID no puede ir vacio" },
+          });
+          return;
+    }
+    try{
+        const oneRequest =  await RequestService.getOneRequestComplete(id);
+        if (oneRequest.status == 404) {
+            res.status(404).json({data: oneRequest})
+        }else{
+            res.status(200).json({status: "OK", data: oneRequest})
+        }
+        
+    }catch(error){
+        res.status(500);
+        res.send(error.message);
+    }
+}
+
 //TODO CREAR NUEVA SOLICITUD
 const createNewRequest= async(req,res) =>{
     let data = req.body;
@@ -122,6 +146,7 @@ const updateOneRequest = async (req, res) => {
 export const methods = {
     getAllRequests,
     getOneRequest,
+    getOneRequestComplete,
     createNewRequest,
     updateOneRequest,
 }

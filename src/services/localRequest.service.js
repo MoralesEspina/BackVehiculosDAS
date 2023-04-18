@@ -11,6 +11,16 @@ const getAllRequests = async () => {
 }
 
 //TODO OBTENER UNA SOLICITYD
+const getOneRequestComplete = async (id) => {
+    try {
+        const oneRequest = await RequestStorage.getOneRequestComplete(id);
+        return oneRequest
+    } catch (error) {
+        
+    }
+}
+
+//TODO OBTENER UNA SOLICITYD
 const getOneRequest = async (id) => {
     try {
         const oneRequest = await RequestStorage.getOneRequest(id);
@@ -54,6 +64,7 @@ const updateOneRequest = async (id, Request) => {
 module.exports = {
     getAllRequests,
     getOneRequest,
+    getOneRequestComplete,
     createNewRequest,
     createNewDetailRequest,
     updateOneRequest

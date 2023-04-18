@@ -58,10 +58,10 @@ Content-Type: application/json
 {
     "date": "2022-01-01",
     "cost": 1500,
-    "id_vehicle": "1023813281092381",
+    "id_vehicle": "O 618BBY",
     "comission_to": "Nose",
     "objective": "nmose",
-    "id_pilot": "08e25be0-b84e-4bf4-aead-b78990a6072a"
+    "id_pilot": "a32f4098-de18-4486-9ea6-23977dc55aed"
 }
 
 ### Modificando un Vehiculo

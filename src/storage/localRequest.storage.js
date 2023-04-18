@@ -12,11 +12,31 @@ const getAllRequests= async () =>{
     }
 }
 
+
 //TODO OBTENER UNA SOLICITUD
 const getOneRequest = async (id) => {
     try {
         const connection = await getConnection();
         const request = await connection.query("SELECT l.id,l.place,l.date,l.section,l.applicantsName,l.position,l.phoneNumber,l.observations,l.status,l.boss FROM local_request AS l where id = ?", id);
+        const detailRequest = await connection.query("SELECT DL.dateOf, DL.dateTo, DL.schedule, DL.destiny, DL.peopleNumber, DL.comission  FROM detail_local_request AS DL join local_request AS l where id_local_request = l.id and DL.id_local_request = ?", id);
+        if (request.length <= 0) {
+            return {
+            status: 404,
+            message: 'No se encontro la Solicitud'
+        };
+        }else{
+            return {request: request, detailRequest:detailRequest};
+        }
+    } catch (error) {
+        throw error;
+    }
+}
+
+//TODO OBTENER UNA SOLICITUD
+const getOneRequestComplete = async (id) => {
+    try {
+        const connection = await getConnection();
+        const request = await connection.query("SELECT l.id,l.place,l.date,l.section,l.applicantsName,l.position,l.phoneNumber,l.observations,l.status,l.boss,V.plate,P.fullname FROM local_request AS l join trips as T join vehicle as V join person as P where T.transp_request_local = id and T.vehicle_plate = V.vin and T.pilot = P.uuid and id = ?", id);
         const detailRequest = await connection.query("SELECT DL.dateOf, DL.dateTo, DL.schedule, DL.destiny, DL.peopleNumber, DL.comission  FROM detail_local_request AS DL join local_request AS l where id_local_request = l.id and DL.id_local_request = ?", id);
         if (request.length <= 0) {
             return {
@@ -70,7 +90,7 @@ const updateOneRequest = async (id, updatedRequest) => {
             return { request: result, updated: updated };
         }
             const updated = await connection.query("UPDATE local_request SET status = IFNULL(?, status) where id = ?",
-            [updatedRequest.status, id]);
+            [updatedRequest.status_request, id]);
             return updated;
     } catch (error) {
         throw error;
@@ -80,6 +100,7 @@ const updateOneRequest = async (id, updatedRequest) => {
 module.exports = {
     getAllRequests,
     getOneRequest,
+    getOneRequestComplete,
     createNewRequest,
     createNewDetailRequest,
     updateOneRequest,

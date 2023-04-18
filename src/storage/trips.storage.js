@@ -16,7 +16,7 @@ const getAllTripsFromExteriorRequest= async () =>{
 const getAllTripsFromLocalRequest= async () =>{
     try{
         const connection = await getConnection();
-        const result = await connection.query("Select LR.applicantsName,LR.date,t.transp_request_local,P.fullname,V.plate,S.status_name from trips as t join local_request as LR join person as P join vehicle as V join status as S where pilot = P.uuid and vehicle_plate = V.vin and t.status = S.idstatus and transp_request_local = LR.id order by t.idtrips desc")
+        const result = await connection.query("Select t.idtrips,LR.applicantsName,LR.date,t.transp_request_local,P.fullname,V.plate,S.status_name from trips as t join local_request as LR join person as P join vehicle as V join status as S where pilot = P.uuid and vehicle_plate = V.vin and t.status = S.idstatus and transp_request_local = LR.id order by t.idtrips desc")
         var data=JSON.parse(JSON.stringify(result))
         return data;
     }catch(error){
@@ -61,26 +61,21 @@ const createNewTrip = async (Trip) => {
 
 //TODO ACTUALIZAR UN VIAJE
 const updateOneTrip = async (id, updatedTrip) => {
-    const Trip = {
-        fullname: updatedTrip.fullname,
-        job: updatedTrip.job,
-        phone: updatedTrip.phone,
-        dpi: updatedTrip.dpi,
-        nit: updatedTrip.nit
-    }
     try{
         const connection = await getConnection();
-            const result = await connection.query("UPDATE Trip SET fullname = IFNULL(?, fullname), job = IFNULL(?, job), phone = IFNULL(?, phone), dpi = IFNULL(?, dpi), nit = IFNULL(?, nit) WHERE uuid = ?",
-            [Trip.fullname,Trip.job,Trip.phone,Trip.dpi,Trip.nit,id]);
+            const result = await connection.query("UPDATE trips SET status = IFNULL(?, status) WHERE idtrips = ?",
+            [updatedTrip.status,id]);
+            /*const vehicle = await connection.query("UPDATE vehicle SET status = IFNULL(?, status) WHERE vin = ?",
+            [updatedTrip.status_vehicle,updatedTrip.vin]);
+            const pilot = await connection.query("UPDATE person SET available = IFNULL(?, available) WHERE uuid = ?",
+            [updatedTrip.status_pilot,updatedTrip.uuid]);*/
             if (result.affectedRows === 0) {
                 return {
                     status: 400,
-                    message: 'La Tripa no existe'
+                    message: 'El viaje no existe'
                 };
             }
-
-             const updated = await connection.query("SELECT p.uuid,p.fullname,j.job_name,p.phone,p.dpi,p.nit,active,available from Trip AS p join job As j where p.job = j.id and uuid = ?", id);
-             return updated;
+             return result;
 
     } catch(error)
     {

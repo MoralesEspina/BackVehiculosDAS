@@ -36,7 +36,9 @@ Content-Type: application/json
     "model": 2023,
     "km": 1,
     "gas": "SUPER",
-    "status": 1
+    "status": 1,
+    "color": 1,
+    "cylinders": 4
 }
 
 ### Modificando un Vehiculo
