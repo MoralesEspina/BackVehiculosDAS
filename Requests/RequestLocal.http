@@ -3,6 +3,9 @@
 ### Obteniendo Todas las Personas
 GET {{host}}/requestLocal
 
+### Obteniendo Todas las Personas
+GET {{host}}/requestLocal/onhold
+
 ### Obteniendo una Persona
 GET {{host}}/requestLocal/15
 

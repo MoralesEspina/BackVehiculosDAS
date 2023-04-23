@@ -4,7 +4,19 @@ import {getConnection} from "./../database/database";
 const getAllTripsFromExteriorRequest= async () =>{
     try{
         const connection = await getConnection();
-        const result = await connection.query("Select t.idtrips,ER.requesting_unit,ER.commission_manager,ER.date_request,t.transp_request_exterior,P.fullname,V.plate,S.status_name from trips as t join exterior_request as ER join person as P join vehicle as V join status as S where pilot = P.uuid and vehicle_plate = V.idVehicle and t.status = S.idstatus and transp_request_exterior = ER.id order by t.idtrips desc")
+        const result = await connection.query("Select t.idtrips,ER.requesting_unit,ER.commission_manager,ER.date_request,t.transp_request_exterior,P.fullname,V.plate,S.status_name from trips as t join exterior_request as ER join person as P join vehicle as V join status as S where pilot = P.uuid and vehicle_plate = V.idVehicle and t.status = S.idstatus and transp_request_exterior = ER.id AND t.status = 13 order by t.idtrips desc ")
+        var data=JSON.parse(JSON.stringify(result))
+        return data;
+    }catch(error){
+        throw error;
+    }
+}
+
+//TODO OBTENER TODOS LOS VIAJES EXTERIORES EN ESPERA
+const getTripsOnHoldFromExteriorRequest= async () =>{
+    try{
+        const connection = await getConnection();
+        const result = await connection.query("Select t.idtrips,ER.requesting_unit,ER.commission_manager,ER.date_request,t.transp_request_exterior,P.fullname,V.plate,S.status_name from trips as t join exterior_request as ER join person as P join vehicle as V join status as S where pilot = P.uuid and vehicle_plate = V.idVehicle and t.status = S.idstatus and transp_request_exterior = ER.id AND t.status != 13 order by t.idtrips desc")
         var data=JSON.parse(JSON.stringify(result))
         return data;
     }catch(error){
@@ -16,7 +28,19 @@ const getAllTripsFromExteriorRequest= async () =>{
 const getAllTripsFromLocalRequest= async () =>{
     try{
         const connection = await getConnection();
-        const result = await connection.query("Select t.idtrips,LR.applicantsName,LR.date,t.transp_request_local,P.fullname,V.plate,S.status_name from trips as t join local_request as LR join person as P join vehicle as V join status as S where pilot = P.uuid and vehicle_plate = V.idVehicle and t.status = S.idstatus and transp_request_local = LR.id order by t.idtrips desc")
+        const result = await connection.query("Select t.idtrips,LR.applicantsName,LR.date,t.transp_request_local,P.fullname,V.plate,S.status_name from trips as t join local_request as LR join person as P join vehicle as V join status as S where pilot = P.uuid and vehicle_plate = V.idVehicle and t.status = S.idstatus and transp_request_local = LR.id AND t.status = 13 order by t.idtrips desc")
+        var data=JSON.parse(JSON.stringify(result))
+        return data;
+    }catch(error){
+        throw error;
+    }
+}
+
+//TODO OBTENER TODOS LOS VIAJES LOCALES EN ESPERA
+const getTripsOnHoldFromLocalRequest= async () =>{
+    try{
+        const connection = await getConnection();
+        const result = await connection.query("Select t.idtrips,LR.applicantsName,LR.date,t.transp_request_local,P.fullname,V.plate,S.status_name from trips as t join local_request as LR join person as P join vehicle as V join status as S where pilot = P.uuid and vehicle_plate = V.idVehicle and t.status = S.idstatus and transp_request_local = LR.id AND t.status != 13 order by t.idtrips desc")
         var data=JSON.parse(JSON.stringify(result))
         return data;
     }catch(error){
@@ -85,7 +109,9 @@ const updateOneTrip = async (id, updatedTrip) => {
 
 module.exports = {
     getAllTripsFromExteriorRequest,
+    getTripsOnHoldFromExteriorRequest,
     getAllTripsFromLocalRequest,
+    getTripsOnHoldFromLocalRequest,
     getOneTrip,
     createNewTrip,
     updateOneTrip,

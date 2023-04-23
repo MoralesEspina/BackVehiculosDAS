@@ -4,6 +4,7 @@ import { methods as RequestController } from "../controllers/exteriorRequest.con
 const router = Router();
 
 router.get("/", RequestController.getAllRequests);
+router.get("/onhold/", RequestController.getRequestsOnHold);
 router.get("/:id", RequestController.getOneRequest);
 router.get("/complete/:id", RequestController.getOneRequestComplete);
 router.post("/", /*validateCreateRequest,*/ RequestController.createNewRequest);

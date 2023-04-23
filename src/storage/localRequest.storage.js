@@ -4,7 +4,7 @@ import {getConnection} from "../database/database";
 const getAllRequests= async () =>{
     try{
         const connection = await getConnection();
-        const result = await connection.query("SELECT id,place,date,section,applicantsName,position,phoneNumber,observations,s.status_name from local_request join status AS s where status = s.idstatus and status != 7 order by id desc")
+        const result = await connection.query("SELECT id,place,date,section,applicantsName,position,phoneNumber,observations,s.status_name from local_request join status AS s where status = s.idstatus and status != 6 order by id desc")
         var data=JSON.parse(JSON.stringify(result))
         return data;
     }catch(error){
@@ -12,6 +12,17 @@ const getAllRequests= async () =>{
     }
 }
 
+//TODO OBTENER SOLICITUDES EN ESPERA
+const getRequestsOnHold= async () =>{
+    try{
+        const connection = await getConnection();
+        const result = await connection.query("SELECT id,place,date,section,applicantsName,position,phoneNumber,observations,s.status_name from local_request join status AS s where status = s.idstatus and status = 6 order by id desc")
+        var data=JSON.parse(JSON.stringify(result))
+        return data;
+    }catch(error){
+        throw error;
+    }
+}
 
 //TODO OBTENER UNA SOLICITUD
 const getOneRequest = async (id) => {
@@ -99,6 +110,7 @@ const updateOneRequest = async (id, updatedRequest) => {
 
 module.exports = {
     getAllRequests,
+    getRequestsOnHold,
     getOneRequest,
     getOneRequestComplete,
     createNewRequest,

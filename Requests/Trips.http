@@ -3,8 +3,14 @@
 ### Obteniendo Todos los viajes exteriores
 GET {{host}}/exteriorRequest
 
+### Obteniendo Todos los viajes exteriores
+GET {{host}}/exteriorRequest/onhold
+
 ### Obteniendo Todos los viajes locales
 GET {{host}}/localRequest
+
+### Obteniendo Todos los viajes locales
+GET {{host}}/localRequest/onhold
 
 ### Creando un Nuevo Viaje Exterior
 POST {{host}}/

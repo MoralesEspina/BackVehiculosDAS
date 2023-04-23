@@ -11,6 +11,17 @@ const getAllRequests= async(req,res) =>{
     }
 }
 
+//TODO OBTENER LAS SOLICITUDES EN ESPERA    
+const getRequestsOnHold = async (req, res) => {
+    try {
+        const allRequestsOnHold = await RequestService.getRequestsOnHold();
+        res.json({ status: 'OK', data: allRequestsOnHold })
+    } catch (error) {
+        res.status(500);
+        res.send(error.message);
+    }
+}
+
 //TODO OBTENER UNA SOLICITUD
 const getOneRequest= async(req,res) =>{
     const { id } = req.params;
@@ -145,6 +156,7 @@ const updateOneRequest = async (req, res) => {
 
 export const methods = {
     getAllRequests,
+    getRequestsOnHold,
     getOneRequest,
     getOneRequestComplete,
     createNewRequest,

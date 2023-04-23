@@ -1,17 +1,29 @@
-import { compareSync } from "bcryptjs";
 import { getConnection } from "../database/database";
 
 //TODO OBTENER TODAS LAS SOLICITUDES
 const getAllRequests = async () => {
     try {
         const connection = await getConnection();
-        const result = await connection.query("SELECT id,requesting_unit,commission_manager,date_request,objective_request,duration_days,phoneNumber,observations,provide_fuel,provide_travel_expenses,s.status_name,reason_rejected from exterior_request join status AS s where status_request = s.idstatus and status_request != 7 order by id desc");
+        const result = await connection.query("SELECT id,requesting_unit,commission_manager,date_request,objective_request,duration_days,phoneNumber,observations,provide_fuel,provide_travel_expenses,s.status_name,reason_rejected from exterior_request join status AS s where status_request = s.idstatus and status_request != 6 order by id desc");
         var data = JSON.parse(JSON.stringify(result))
         return data;
     } catch (error) {
         throw error;
     }
 }
+
+//TODO OBTENER LAS SOLICITUDES EN ESPERA
+const getRequestsOnHold = async () => {
+    try {
+        const connection = await getConnection();
+        const result = await connection.query("SELECT id,requesting_unit,commission_manager,date_request,objective_request,duration_days,phoneNumber,observations,provide_fuel,provide_travel_expenses,s.status_name,reason_rejected from exterior_request join status AS s where status_request = s.idstatus and status_request = 6 order by id desc");
+        var data = JSON.parse(JSON.stringify(result))
+        return data;
+    } catch (error) {
+        throw error;
+    }
+}
+
 
 //TODO OBTENER UNA SOLICITUD
 const getOneRequest = async (id) => {
@@ -96,6 +108,7 @@ const updateOneRequest = async (id, updatedRequest) => {
 
 module.exports = {
     getAllRequests,
+    getRequestsOnHold,
     getOneRequest,
     getOneRequestComplete,
     createNewRequest,

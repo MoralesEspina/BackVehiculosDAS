@@ -12,11 +12,34 @@ const getAllTripsFromExteriorRequest= async(req,res) =>{
     }
 }
 
+//TODO OBTENER TODOS LOS VIAJES EXTERIORES EN ESPERA
+const getTripsOnHoldFromExteriorRequest= async(req,res) =>{
+    try{
+        const tripsOnHold = await TripService.getTripsOnHoldFromExteriorRequest();
+        res.json({status: 'OK' , data: tripsOnHold})
+    }catch(error){
+        res.status(500);
+        res.send(error.message);
+    }
+}
+
+
 //TODO OBTENER TODOS LOS VIAJES LOCALES
 const getAllTripsFromLocalRequest= async(req,res) =>{
     try{
         const allTrips = await TripService.getAllTripsFromLocalRequest();
         res.json({status: 'OK' , data: allTrips})
+    }catch(error){
+        res.status(500);
+        res.send(error.message);
+    }
+}
+
+//TODO OBTENER TODOS LOS VIAJES LOCALES EN ESPERA
+const getTripsOnHoldFromLocalRequest= async(req,res) =>{
+    try{
+        const tripsOnHold = await TripService.getTripsOnHoldFromLocalRequest();
+        res.json({status: 'OK' , data: tripsOnHold})
     }catch(error){
         res.status(500);
         res.send(error.message);
@@ -99,7 +122,9 @@ const updateOneTrip= async(req,res) =>{
 
 export const methods = {
     getAllTripsFromExteriorRequest,
+    getTripsOnHoldFromExteriorRequest,
     getAllTripsFromLocalRequest,
+    getTripsOnHoldFromLocalRequest,
     getOneTrip,
     createNewTrip,
     updateOneTrip,

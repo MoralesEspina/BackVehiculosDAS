@@ -3,6 +3,9 @@
 ### Obteniendo Todas las Personas
 GET {{host}}/requestExterior
 
+### Obteniendo Todas las Personas
+GET {{host}}/requestExterior/onhold
+
 ### Obteniendo una Persona
 GET {{host}}/requestExterior/28
 

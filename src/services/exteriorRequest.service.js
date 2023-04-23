@@ -10,6 +10,16 @@ const getAllRequests = async () => {
     }   
 }
 
+//TODO OBTENER TODAS LAS SOLICITUDES
+const getRequestsOnHold = async () => {
+    try{
+        const allRequestsOnHold = await RequestStorage.getRequestsOnHold();
+        return allRequestsOnHold;
+    } catch (error){
+        throw error;
+    }   
+}
+
 //TODO OBTENER UNA SOLICITYD
 const getOneRequest = async (id) => {
     try {
@@ -63,6 +73,7 @@ const updateOneRequest = async (id, Request) => {
 
 module.exports = {
     getAllRequests,
+    getRequestsOnHold,
     getOneRequest,
     getOneRequestComplete,
     createNewRequest,
