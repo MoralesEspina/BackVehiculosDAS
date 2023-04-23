@@ -36,7 +36,7 @@ const getOneRequest = async (id) => {
 const getOneRequestComplete = async (id) => {
     try {
         const connection = await getConnection();
-        const request = await connection.query("SELECT id,requesting_unit,commission_manager,date_request,objective_request,duration_days,phoneNumber,observations,provide_fuel,provide_travel_expenses,status_request,reason_rejected,boss,V.plate,P.fullname from exterior_request join trips as T join vehicle as V join person as P where T.transp_request_exterior = id and T.vehicle_plate = V.vin and T.pilot = P.uuid and id = ?", id);
+        const request = await connection.query("SELECT id,requesting_unit,commission_manager,date_request,objective_request,duration_days,phoneNumber,observations,provide_fuel,provide_travel_expenses,status_request,reason_rejected,boss,V.plate,P.fullname from exterior_request join trips as T join vehicle as V join person as P where T.transp_request_exterior = id and T.vehicle_plate = V.idVehicle and T.pilot = P.uuid and id = ?", id);
         const detailRequest = await connection.query("SELECT DE.no, DE.number_people, DE.department, DE.municipality, DE.village, DE.dateOf, DE.dateTo , DE.hour FROM detail_exterior_request AS DE join exterior_request AS e where id_exterior_request = e.id and DE.id_exterior_request = ?", id);
         if (request.length <= 0) {
             return {

@@ -36,7 +36,7 @@ const getOneRequest = async (id) => {
 const getOneRequestComplete = async (id) => {
     try {
         const connection = await getConnection();
-        const request = await connection.query("SELECT l.id,l.place,l.date,l.section,l.applicantsName,l.position,l.phoneNumber,l.observations,l.status,l.boss,V.plate,P.fullname FROM local_request AS l join trips as T join vehicle as V join person as P where T.transp_request_local = id and T.vehicle_plate = V.vin and T.pilot = P.uuid and id = ?", id);
+        const request = await connection.query("SELECT l.id,l.place,l.date,l.section,l.applicantsName,l.position,l.phoneNumber,l.observations,l.status,l.boss,V.plate,P.fullname FROM local_request AS l join trips as T join vehicle as V join person as P where T.transp_request_local = id and T.vehicle_plate = V.idVehicle and T.pilot = P.uuid and id = ?", id);
         const detailRequest = await connection.query("SELECT DL.dateOf, DL.dateTo, DL.schedule, DL.destiny, DL.peopleNumber, DL.comission  FROM detail_local_request AS DL join local_request AS l where id_local_request = l.id and DL.id_local_request = ?", id);
         if (request.length <= 0) {
             return {

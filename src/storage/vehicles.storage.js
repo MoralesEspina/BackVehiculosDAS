@@ -4,7 +4,7 @@ import {getConnection} from "./../database/database";
 const getAllVehicles= async () =>{
     try{
         const connection = await getConnection();
-        const result = await connection.query("SELECT v.vin,v.brand,v.model,v.plate,v.km,t.type_name,v.gas,s.status_name,v.active from vehicle AS v join vtype As t join status AS s where v.type = t.idvtype and v.status = s.idstatus")
+        const result = await connection.query("SELECT  v.idVehicle, v.vin,v.brand,v.model,v.plate,v.km,t.type_name,v.gas,s.status_name,v.active from vehicle AS v join vtype As t join status AS s where v.type = t.idvtype and v.status = s.idstatus")
         var data=JSON.parse(JSON.stringify(result))
         return data;
     }catch(error){
@@ -16,7 +16,7 @@ const getAllVehicles= async () =>{
 const getAllVehiclesActives= async () =>{
     try{
         const connection = await getConnection();
-        const result = await connection.query("SELECT v.vin,v.brand,v.model,v.plate,v.km,t.type_name,v.gas,s.status_name,v.active,v.color,v.cylinders from vehicle AS v join vtype As t join status AS s where v.type = t.idvtype and v.status = s.idstatus and v.status = 3")
+        const result = await connection.query("SELECT v.idVehicle, v.vin,v.brand,v.model,v.plate,v.km,t.type_name,v.gas,s.status_name,v.active,v.color,v.cylinders from vehicle AS v join vtype As t join status AS s where v.type = t.idvtype and v.status = s.idstatus and v.status = 3")
         var data=JSON.parse(JSON.stringify(result))
         return data;
     }catch(error){
@@ -46,7 +46,7 @@ const getOneVehicle = async (id) => {
 const getOneVehicleForVoucher = async (id) => {
     try {
         const connection = await getConnection();
-        const result = await connection.query("SELECT v.plate,v.brand,v.model,t.type_name,v.color from vehicle AS v join vtype As t  where v.type = t.idvtype and vin = ?", id);
+        const result = await connection.query("SELECT v.idVehicle, v.plate,v.brand,v.model,t.type_name,v.color from vehicle AS v join vtype As t  where v.type = t.idvtype and idVehicle = ?", id);
         if (result.length <= 0) {
             return {
             status: 404,

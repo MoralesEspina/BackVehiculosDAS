@@ -108,7 +108,7 @@ const createNewVoucherRegular= async(req,res) =>{
         const Voucher = {
             date: req.body.date,
             cost: req.body.cost,
-            id_vehicle: req.body.id_vehicle,
+            id_vehicle: req.body.idVehicle,
             comission_to: req.body.comission_to,
             objective: req.body.objective,
             id_pilot: req.body.id_pilot,
