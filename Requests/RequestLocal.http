@@ -1,16 +1,16 @@
 @host = http://localhost:3000/api
 
 ### Obteniendo Todas las Personas
-GET {{host}}/requestLocal
+GET {{host}}/localRequest
 
 ### Obteniendo Todas las Personas
-GET {{host}}/requestLocal/onhold
+GET {{host}}/localRequest/onhold
 
 ### Obteniendo una Persona
-GET {{host}}/requestLocal/15
+GET {{host}}/localRequest/15
 
 ### Creando una Nueva Persona
-POST {{host}}/requestLocal
+POST {{host}}/localRequest
 Content-Type: application/json
 
 {
@@ -43,7 +43,7 @@ Content-Type: application/json
 }
 
 ### Actualizando Solicitud
-PUT {{host}}/requestLocal/3
+PUT {{host}}/localRequest/3
 Content-Type: application/json
 
 {
