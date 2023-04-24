@@ -42,7 +42,7 @@ Content-Type: application/json
 }
 
 ### Modificando un Vehiculo
-PUT {{host}}/vehicles/1023813281092381
+PUT {{host}}/vehicles/2
 Content-Type: application/json
 
 {

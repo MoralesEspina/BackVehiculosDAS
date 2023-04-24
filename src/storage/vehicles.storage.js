@@ -4,7 +4,7 @@ import {getConnection} from "./../database/database";
 const getAllVehicles= async () =>{
     try{
         const connection = await getConnection();
-        const result = await connection.query("SELECT  v.idVehicle, v.vin,v.brand,v.model,v.plate,v.km,t.type_name,v.gas,s.status_name,v.active from vehicle AS v join vtype As t join status AS s where v.type = t.idvtype and v.status = s.idstatus")
+        const result = await connection.query("SELECT  v.idVehicle, v.vin,v.brand,v.model,v.plate,v.km,t.type_name,v.gas,s.status_name,v.active from vehicle AS v join vtype As t join status AS s where v.type = t.idvtype and v.status = s.idstatus ORDER BY idVehicle asc")
         var data=JSON.parse(JSON.stringify(result))
         return data;
     }catch(error){
@@ -28,7 +28,7 @@ const getAllVehiclesActives= async () =>{
 const getOneVehicle = async (id) => {
     try {
         const connection = await getConnection();
-        const result = await connection.query("SELECT vin,brand,model,plate,km,type,gas,status,active,cylinders,color from vehicle where vin = ?", id);
+        const result = await connection.query("SELECT idVehicle, vin,brand,model,plate,km,type,gas,status,active,cylinders,color from vehicle where idVehicle = ?", id);
         if (result.length <= 0) {
             return {
             status: 404,
@@ -94,15 +94,15 @@ const createNewVehicle = async (newVehicle) => {
 const updateOneVehicle = async (id, updatedVehicle) => {
     try{
         const connection = await getConnection();
-            const result = await connection.query("UPDATE vehicle SET plate = IFNULL(?, plate), type = IFNULL(?, type), brand = IFNULL(?, brand), model = IFNULL(?, model), km = IFNULL(?, km), gas = IFNULL(?, gas), status = IFNULL(?, status), active = IFNULL(?, active), cylinders = IFNULL(?, cylinders), color = IFNULL(?, color) WHERE vin = ?",
-            [updatedVehicle.plate,updatedVehicle.type,updatedVehicle.brand,updatedVehicle.model,updatedVehicle.km, updatedVehicle.gas, updatedVehicle.status, updatedVehicle.active, updatedVehicle.cylinders, updatedVehicle.color, id]);
+            const result = await connection.query("UPDATE vehicle SET vin = IFNULL (?, vin), plate = IFNULL(?, plate), type = IFNULL(?, type), brand = IFNULL(?, brand), model = IFNULL(?, model), km = IFNULL(?, km), gas = IFNULL(?, gas), status = IFNULL(?, status), active = IFNULL(?, active), cylinders = IFNULL(?, cylinders), color = IFNULL(?, color) WHERE idVehicle = ?",
+            [updatedVehicle.vin, updatedVehicle.plate,updatedVehicle.type,updatedVehicle.brand,updatedVehicle.model,updatedVehicle.km, updatedVehicle.gas, updatedVehicle.status, updatedVehicle.active, updatedVehicle.cylinders, updatedVehicle.color, id]);
             if (result.affectedRows === 0) {
                 return {
                     status: 400,
-                    message: 'El número de VIN no existe'
+                    message: 'El número de vehiculo no existe'
                 };
             }
-             const updated = await connection.query("SELECT v.vin,v.brand,v.model,v.plate,v.km,t.type_name,v.gas,s.status_name,v.active,v.cylinders,v.color from vehicle AS v join vtype As t join status AS s where v.type = t.idvtype and v.status = s.idstatus and vin = ?", id);
+             const updated = await connection.query("SELECT v.vin,v.brand,v.model,v.plate,v.km,t.type_name,v.gas,s.status_name,v.active,v.cylinders,v.color from vehicle AS v join vtype As t join status AS s where v.type = t.idvtype and v.status = s.idstatus and idVehicle = ?", id);
              return updated;
 
     } catch(error)
@@ -115,11 +115,11 @@ const updateOneVehicle = async (id, updatedVehicle) => {
 const deleteOneVehicle = async (id) => {
     try {
         const connection = await getConnection();
-        const result = await connection.query("DELETE FROM vehicle WHERE vin = ?", id);
+        const result = await connection.query("DELETE FROM vehicle WHERE idVehicle = ?", id);
         if (result.affectedRows <= 0) {
             return {
                 status: 400,
-                message: 'El número de VIN no existe'
+                message: 'El número de vehiculo no existe'
             };
         }
         return {

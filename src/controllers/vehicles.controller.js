@@ -113,6 +113,7 @@ const updateOneVehicle= async(req,res) =>{
 
     try{
         const vehicle = {
+            vin: req.body.vin,
             plate: req.body.plate,
             type: req.body.type,
             brand: req.body.brand,

@@ -4,7 +4,7 @@ import {getConnection} from "./../database/database";
 const getAllVouchersDiesel= async () =>{
     try{
         const connection = await getConnection();
-        const result = await connection.query("SELECT v.iddiesel,v.date,vh.plate,v.comission_to,v.cost,p.fullname from voucher_diesel AS v join vehicle as vh join person as p where vh.idVehicle = v.id_vehicle and p.uuid = v.id_pilot")
+        const result = await connection.query("SELECT v.iddiesel,v.date,vh.plate,v.comission_to,v.cost,p.fullname from voucher_diesel AS v join vehicle as vh join person as p where vh.idVehicle = v.id_vehicle and p.uuid = v.id_pilot ORDER BY v.iddiesel desc")
         var data=JSON.parse(JSON.stringify(result))
         return data;
     }catch(error){
@@ -16,7 +16,7 @@ const getAllVouchersDiesel= async () =>{
 const getAllVouchersRegular= async () =>{
     try{
         const connection = await getConnection();
-        const result = await connection.query("SELECT v.idregular,v.date,vh.plate,v.comission_to,v.cost,p.fullname from voucher_regular AS v join vehicle as vh join person as p where vh.idVehicle = v.id_vehicle and p.uuid = v.id_pilot")
+        const result = await connection.query("SELECT v.idregular,v.date,vh.plate,v.comission_to,v.cost,p.fullname from voucher_regular AS v join vehicle as vh join person as p where vh.idVehicle = v.id_vehicle and p.uuid = v.id_pilot ORDER BY v.idregular desc")
         var data=JSON.parse(JSON.stringify(result))
         return data;
     }catch(error){
