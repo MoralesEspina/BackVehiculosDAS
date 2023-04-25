@@ -50,23 +50,18 @@ const getOneRequest = async (id) => {
             JOIN vehicle as V ON V.idVehicle = T.vehicle_plate 
             JOIN person as P ON P.uuid = T.pilot 
             WHERE id = ?`, id);
-            detailRequest = await connection.query(`
-            SELECT DL.dateOf, DL.dateTo, DL.schedule, DL.destiny, DL.peopleNumber, DL.comission  
-            FROM detail_local_request AS DL 
-            JOIN local_request AS l 
-            WHERE id_local_request = l.id and DL.id_local_request = ?`, id);
         }
         else {
             request = await connection.query(`
             SELECT l.id,l.place,l.date,l.section,l.applicantsName,l.position,l.phoneNumber,l.observations,l.status,l.boss
             FROM local_request AS l 
             WHERE id = ?`, id);
+        }
             detailRequest = await connection.query(`
             SELECT DL.dateOf, DL.dateTo, DL.schedule, DL.destiny, DL.peopleNumber, DL.comission  
             FROM detail_local_request AS DL 
             JOIN local_request AS l 
             WHERE id_local_request = l.id and DL.id_local_request = ?`, id);
-        }
         if (request.length <= 0) {
             return {
                 status: 404,
@@ -116,7 +111,7 @@ const createNewRequest = async (newRequest) => {
         const connection = await getConnection();
         const Request = await connection.query(`
         INSERT INTO local_request (place,date,section,applicantsName,position,phoneNumber,observations,status, boss) 
-        values (?,?,?,?,?,?,?,?,?)`,
+        VALUES (?,?,?,?,?,?,?,?,?)`,
             [newRequest.place, newRequest.date, newRequest.section, newRequest.applicantsName, newRequest.position, newRequest.phoneNumber, newRequest.observations, newRequest.status, newRequest.boss]);
         return Request.insertId
     } catch (error) {
@@ -130,7 +125,7 @@ const createNewDetailRequest = async (newDetailRequest) => {
         const connection = await getConnection();
         const newDetail = await connection.query(`
         INSERT INTO detail_local_request (dateOf,dateTo,schedule,destiny,peopleNumber,comission,id_local_request) 
-        values (?,?,?,?,?,?,?)`,
+        VALUES (?,?,?,?,?,?,?)`,
             [newDetailRequest.dateOf, newDetailRequest.dateTo, newDetailRequest.schedule, newDetailRequest.destiny, newDetailRequest.peopleNumber, newDetailRequest.comission, newDetailRequest.id_local_request]);
         return newDetail;
     } catch (error) {
@@ -150,7 +145,7 @@ const updateOneRequest = async (id, updatedRequest) => {
                 [updatedRequest.status_request, id]);
             const result = await connection.query(`
             INSERT INTO trips(transp_request_local,pilot,vehicle_plate,status) 
-            values (?,?,?,?)`,
+            VALUES (?,?,?,?)`,
                 [updatedRequest.transp_request_local, updatedRequest.pilot_name, updatedRequest.plate_vehicle, updatedRequest.status]);
             return { request: result, updated: updated };
         }

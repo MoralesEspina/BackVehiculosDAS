@@ -80,7 +80,7 @@ const createNewPerson = async (newPerson) => {
         if (verifyPerson.length <= 0) {
             await connection.query(`
             INSERT INTO person (uuid,fullname,job,phone,dpi,nit,active,available) 
-            values (?,?,?,?,?,?,?,?)`,
+            VALUES (?,?,?,?,?,?,?,?)`,
             [newPerson.uuid,newPerson.fullname,newPerson.job,newPerson.phone,newPerson.dpi,newPerson.nit,newPerson.active, newPerson.availabale]);
             return {uuid: newPerson.uuid, 
                     fullname: newPerson.fullname,

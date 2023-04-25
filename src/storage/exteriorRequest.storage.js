@@ -39,19 +39,31 @@ const getRequestsOnHold = async () => {
 const getOneRequest = async (id) => {
     try {
         const connection = await getConnection();
-        const request = await connection.query(`
-        SELECT id,requesting_unit,commission_manager,date_request,objective_request,duration_days,phoneNumber,observations,provide_fuel,provide_travel_expenses,status_request,reason_rejected,boss,V.plate as plate_vehicle2,P.fullname as pilot_name2
-        FROM exterior_request 
-        JOIN trips as T 
-        JOIN vehicle as V 
-        JOIN person as P 
-        WHERE T.transp_request_exterior = id and T.vehicle_plate = V.idVehicle and T.pilot = P.uuid and id = ?`, id);
-        const detailRequest = await connection.query(`
-        SELECT DE.no, DE.number_people, DE.department, DE.municipality, DE.village, DE.dateOf, DE.dateTo , DE.hour 
-        FROM detail_exterior_request AS DE 
-        JOIN exterior_request AS e 
-        WHERE id_exterior_request = e.id and DE.id_exterior_request = ?`, id);
-
+        const status = await connection.query(`
+        SELECT status_request 
+        FROM exterior_request
+        WHERE id = ? `, id);
+        let request, detailRequest;
+        if (status[0].status != 6) {
+            request = await connection.query(`
+            SELECT id,requesting_unit,commission_manager,date_request,objective_request,duration_days,phoneNumber,observations,provide_fuel,provide_travel_expenses,status_request,reason_rejected,boss,V.idVehicle as plate_vehicle,P.uuid as pilot_name
+            FROM exterior_request 
+            JOIN trips as T ON T.transp_request_exterior = id
+            JOIN vehicle as V ON T.vehicle_plate = V.idVehicle
+            JOIN person as P ON T.pilot = P.uuid
+            WHERE id = ?`, id);
+        }
+        else {
+            request = await connection.query(`
+            SELECT id,requesting_unit,commission_manager,date_request,objective_request,duration_days,phoneNumber,observations,provide_fuel,provide_travel_expenses,status_request,reason_rejected,boss,V.plate as plate_vehicle2,P.fullname as pilot_name2
+            FROM exterior_request 
+            WHERE id = ?`, id);
+        }
+            detailRequest = await connection.query(`
+            SELECT DE.no, DE.number_people, DE.department, DE.municipality, DE.village, DE.dateOf, DE.dateTo , DE.hour 
+            FROM detail_exterior_request AS DE 
+            JOIN exterior_request AS e 
+            WHERE id_exterior_request = e.id and DE.id_exterior_request = ?`, id);
         if (request.length <= 0) {
             return {
                 status: 404,
@@ -100,7 +112,7 @@ const createNewRequest = async (newRequest) => {
         const connection = await getConnection();
         const Request = await connection.query(`
         INSERT INTO exterior_request (requesting_unit,commission_manager,date_request,objective_request,duration_days,phoneNumber,observations,provide_fuel,provide_travel_expenses,status_request,reason_rejected,boss) 
-        values (?,?,?,?,?,?,?,?,?,?,?,?)`,
+        VALUES (?,?,?,?,?,?,?,?,?,?,?,?)`,
             [newRequest.requesting_unit, newRequest.commission_manager, newRequest.date_request, newRequest.objective_request, newRequest.duration_days, newRequest.phoneNumber, newRequest.observations, newRequest.provide_fuel, newRequest.provide_travel_expenses, newRequest.status_request, newRequest.reason_rejected, newRequest.boss ]);
             return Request.insertId
     } catch (error) {
@@ -114,7 +126,7 @@ const createNewDetailRequest = async (newDetailRequest) => {
         const connection = await getConnection();
         const newDetail = await connection.query(`
         INSERT INTO detail_exterior_request (no,number_people,department,municipality,village,dateOf,dateTo,hour,id_exterior_request) 
-        values (?,?,?,?,?,?,?,?,?)`,
+        VALUES (?,?,?,?,?,?,?,?,?)`,
             [newDetailRequest.no, newDetailRequest.number_people, newDetailRequest.department, newDetailRequest.municipality, newDetailRequest.village, newDetailRequest.dateOf, newDetailRequest.dateTo, newDetailRequest.hour, newDetailRequest.id_exterior_request]);
         return newDetail;
     } catch (error) {
@@ -134,7 +146,7 @@ const updateOneRequest = async (id, updatedRequest) => {
             [updatedRequest.provide_fuel, updatedRequest.provide_travel_expenses, updatedRequest.status_request, id]);  
             const result = await connection.query(`
             INSERT INTO trips(transp_request_exterior,pilot,vehicle_plate,status) 
-            values (?,?,?,?)`,
+            VALUES (?,?,?,?)`,
             [updatedRequest.transp_request_exterior,updatedRequest.pilot_name, updatedRequest.plate_vehicle, updatedRequest.status]);
             return { request: result, updated: updated };
         }

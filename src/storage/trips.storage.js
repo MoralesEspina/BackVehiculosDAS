@@ -122,7 +122,7 @@ const createNewTrip = async (Trip) => {
         const connection = await getConnection();
             await connection.query(`
             INSERT INTO trips (transp_request_local,transp_request_exterior,pilot,vehicle_plate,status) 
-            values (?,?,?,?,?)`,
+            VALUES (?,?,?,?,?)`,
             [Trip.transp_request_local,Trip.transp_request_exterior,Trip.pilot,Trip.vehicle_plate,Trip.status]);
             return {transp_request_local: Trip.transp_request_local, 
                     transp_request_exterior: Trip.transp_request_exterior,

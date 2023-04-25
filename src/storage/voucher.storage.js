@@ -98,7 +98,7 @@ const createNewVoucherDiesel = async (newVoucher) => {
         const connection = await getConnection();
             await connection.query(`
             INSERT INTO voucher_diesel (date,cost,id_vehicle,comission_to,objective,id_pilot,km_gallon,service_of,comission_date,km_to_travel) 
-            values (?,?,?,?,?,?,?,?,?,?)`,
+            VALUES (?,?,?,?,?,?,?,?,?,?)`,
             [newVoucher.date, newVoucher.cost, newVoucher.id_vehicle,newVoucher.comission_to,newVoucher.objective, newVoucher.id_pilot, newVoucher.km_gallon, newVoucher.service_of, newVoucher.comission_date, newVoucher.km_to_travel]);
             return {date: newVoucher.date, 
                     cost: newVoucher.cost,
@@ -122,7 +122,7 @@ const createNewVoucherRegular= async (newVoucher) => {
         const connection = await getConnection();
             await connection.query(`
             INSERT INTO voucher_regular (date,cost,id_vehicle,comission_to,objective,id_pilot) 
-            values (?,?,?,?,?,?)`,
+            VALUES (?,?,?,?,?,?)`,
             [newVoucher.date, newVoucher.cost, newVoucher.id_vehicle,newVoucher.comission_to,newVoucher.objective, newVoucher.id_pilot]);
             return {date: newVoucher.date, 
                     cost: newVoucher.cost,
