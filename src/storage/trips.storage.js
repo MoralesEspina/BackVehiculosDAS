@@ -6,8 +6,8 @@ const getAllTripsFromExteriorRequest= async () =>{
         const connection = await getConnection();
         const result = await connection.query(`
         SELECT t.idtrips,ER.requesting_unit,ER.commission_manager,ER.date_request,t.transp_request_exterior,P.fullname,V.plate,S.status_name 
-        FROM trips as t J
-        OIN exterior_request as ER 
+        FROM trips as t
+        JOIN exterior_request as ER 
         JOIN person as P 
         JOIN vehicle as V 
         JOIN status as S 

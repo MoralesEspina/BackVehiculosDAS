@@ -44,18 +44,18 @@ const getOneRequest = async (id) => {
         FROM exterior_request
         WHERE id = ? `, id);
         let request, detailRequest;
-        if (status[0].status != 6) {
+        if (status[0].status_request != 6) {
             request = await connection.query(`
             SELECT id,requesting_unit,commission_manager,date_request,objective_request,duration_days,phoneNumber,observations,provide_fuel,provide_travel_expenses,status_request,reason_rejected,boss,V.idVehicle as plate_vehicle,P.uuid as pilot_name
             FROM exterior_request 
             JOIN trips as T ON T.transp_request_exterior = id
-            JOIN vehicle as V ON T.vehicle_plate = V.idVehicle
-            JOIN person as P ON T.pilot = P.uuid
+            JOIN vehicle as V ON V.idVehicle = T.vehicle_plate 
+            JOIN person as P ON P.uuid = T.pilot 
             WHERE id = ?`, id);
         }
         else {
             request = await connection.query(`
-            SELECT id,requesting_unit,commission_manager,date_request,objective_request,duration_days,phoneNumber,observations,provide_fuel,provide_travel_expenses,status_request,reason_rejected,boss,V.plate as plate_vehicle2,P.fullname as pilot_name2
+            SELECT id,requesting_unit,commission_manager,date_request,objective_request,duration_days,phoneNumber,observations,provide_fuel,provide_travel_expenses,status_request,reason_rejected,boss 
             FROM exterior_request 
             WHERE id = ?`, id);
         }
