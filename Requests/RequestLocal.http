@@ -7,7 +7,7 @@ GET {{host}}/localRequest
 GET {{host}}/localRequest/onhold
 
 ### Obteniendo una Persona
-GET {{host}}/localRequest/15
+GET {{host}}/localRequest/1
 
 ### Creando una Nueva Persona
 POST {{host}}/localRequest

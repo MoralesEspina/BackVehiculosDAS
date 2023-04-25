@@ -7,7 +7,7 @@ GET {{host}}/exteriorRequest
 GET {{host}}/exteriorRequest/onhold
 
 ### Obteniendo una Persona
-GET {{host}}/exteriorRequest/28
+GET {{host}}/exteriorRequest/2
 
 ### Creando una Nueva Persona
 POST {{host}}/exteriorRequest
