@@ -127,13 +127,20 @@ const updateOneRequest = async (id, updatedRequest) => {
     try {
         const connection = await getConnection();
         if (updatedRequest.status_request == 7) {
-            const updated = await connection.query("UPDATE exterior_request SET provide_fuel = IFNULL(?, provide_fuel),provide_travel_expenses = IFNULL(?, provide_travel_expenses), status_request = IFNULL(?, status_request) WHERE id = ?",
+            const updated = await connection.query(`
+            UPDATE exterior_request 
+            SET provide_fuel = IFNULL(?, provide_fuel),provide_travel_expenses = IFNULL(?, provide_travel_expenses), status_request = IFNULL(?, status_request) 
+            WHERE id = ?`,
             [updatedRequest.provide_fuel, updatedRequest.provide_travel_expenses, updatedRequest.status_request, id]);  
-            const result = await connection.query("INSERT INTO trips(transp_request_exterior,pilot,vehicle_plate,status) values (?,?,?,?)",
+            const result = await connection.query(`
+            INSERT INTO trips(transp_request_exterior,pilot,vehicle_plate,status) 
+            values (?,?,?,?)`,
             [updatedRequest.transp_request_exterior,updatedRequest.pilot_name, updatedRequest.plate_vehicle, updatedRequest.status]);
             return { request: result, updated: updated };
         }
-            const updated = await connection.query("UPDATE exterior_request SET status_request = IFNULL(?, status_request), reason_rejected = IFNULL(?, reason_rejected) WHERE id = ?",
+            const updated = await connection.query(`
+            UPDATE exterior_request SET status_request = IFNULL(?, status_request), reason_rejected = IFNULL(?, reason_rejected) 
+            WHERE id = ?`,
             [updatedRequest.status_request, updatedRequest.reason_rejected, id]);
             return updated;
     } catch (error) {

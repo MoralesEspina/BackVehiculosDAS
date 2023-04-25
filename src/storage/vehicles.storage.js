@@ -4,7 +4,14 @@ import {getConnection} from "./../database/database";
 const getAllVehicles= async () =>{
     try{
         const connection = await getConnection();
-        const result = await connection.query("SELECT  v.idVehicle, v.vin,v.brand,v.model,v.plate,v.km,t.type_name,v.gas,s.status_name,v.active from vehicle AS v join vtype As t join status AS s where v.type = t.idvtype and v.status = s.idstatus ORDER BY idVehicle asc")
+        const result = await connection.query(`
+        SELECT  v.idVehicle, v.vin,v.brand,v.model,v.plate,v.km,t.type_name,v.gas,s.status_name,v.active 
+        FROM vehicle AS v 
+        JOIN vtype As t 
+        JOIN status AS s 
+        WHERE v.type = t.idvtype 
+        AND v.status = s.idstatus 
+        ORDER BY idVehicle asc`)
         var data=JSON.parse(JSON.stringify(result))
         return data;
     }catch(error){
@@ -16,7 +23,14 @@ const getAllVehicles= async () =>{
 const getAllVehiclesActives= async () =>{
     try{
         const connection = await getConnection();
-        const result = await connection.query("SELECT v.idVehicle, v.vin,v.brand,v.model,v.plate,v.km,t.type_name,v.gas,s.status_name,v.active,v.color,v.cylinders from vehicle AS v join vtype As t join status AS s where v.type = t.idvtype and v.status = s.idstatus and v.status = 3")
+        const result = await connection.query(`
+        SELECT v.idVehicle, v.vin,v.brand,v.model,v.plate,v.km,t.type_name,v.gas,s.status_name,v.active,v.color,v.cylinders 
+        FROM vehicle AS v 
+        JOIN vtype As t 
+        JOIN status AS s 
+        WHERE v.type = t.idvtype 
+        AND v.status = s.idstatus 
+        AND v.status = 3`)
         var data=JSON.parse(JSON.stringify(result))
         return data;
     }catch(error){
@@ -28,7 +42,10 @@ const getAllVehiclesActives= async () =>{
 const getOneVehicle = async (id) => {
     try {
         const connection = await getConnection();
-        const result = await connection.query("SELECT idVehicle, vin,brand,model,plate,km,type,gas,status,active,cylinders,color from vehicle where idVehicle = ?", id);
+        const result = await connection.query(`
+        SELECT idVehicle, vin,brand,model,plate,km,type,gas,status,active,cylinders,color 
+        FROM vehicle 
+        WHERE idVehicle = ?`, id);
         if (result.length <= 0) {
             return {
             status: 404,
@@ -46,7 +63,12 @@ const getOneVehicle = async (id) => {
 const getOneVehicleForVoucher = async (id) => {
     try {
         const connection = await getConnection();
-        const result = await connection.query("SELECT v.idVehicle, v.plate,v.brand,v.model,t.type_name,v.color from vehicle AS v join vtype As t  where v.type = t.idvtype and idVehicle = ?", id);
+        const result = await connection.query(`
+        SELECT v.idVehicle, v.plate,v.brand,v.model,t.type_name,v.color 
+        FROM vehicle AS v 
+        JOIN vtype As t  
+        WHERE v.type = t.idvtype 
+        AND idVehicle = ?`, id);
         if (result.length <= 0) {
             return {
             status: 404,
@@ -65,9 +87,14 @@ const createNewVehicle = async (newVehicle) => {
         newVehicle.active = 1
     try{
         const connection = await getConnection();
-        const verifyVehicle = await connection.query("SELECT vin FROM vehicle where vin = ? ",newVehicle.vin);
+        const verifyVehicle = await connection.query(`
+        SELECT vin 
+        FROM vehicle 
+        WHERE vin = ? `,newVehicle.vin);
         if (verifyVehicle.length <= 0) {
-            await connection.query("INSERT INTO vehicle (vin,plate,type,cylinders,color,brand,model,km,gas,status,active) values (?,?,?,?,?,?,?,?,?,?,?)",
+            await connection.query(`
+            INSERT INTO vehicle (vin,plate,type,cylinders,color,brand,model,km,gas,status,active) 
+            values (?,?,?,?,?,?,?,?,?,?,?)`,
             [newVehicle.vin, newVehicle.plate, newVehicle.type,newVehicle.cylinders,newVehicle.color, newVehicle.brand, newVehicle.model, newVehicle.km, newVehicle.gas, newVehicle.status, newVehicle.active]);
             return {vin: newVehicle.vin, 
                     plate: newVehicle.plate,
@@ -94,7 +121,10 @@ const createNewVehicle = async (newVehicle) => {
 const updateOneVehicle = async (id, updatedVehicle) => {
     try{
         const connection = await getConnection();
-            const result = await connection.query("UPDATE vehicle SET vin = IFNULL (?, vin), plate = IFNULL(?, plate), type = IFNULL(?, type), brand = IFNULL(?, brand), model = IFNULL(?, model), km = IFNULL(?, km), gas = IFNULL(?, gas), status = IFNULL(?, status), active = IFNULL(?, active), cylinders = IFNULL(?, cylinders), color = IFNULL(?, color) WHERE idVehicle = ?",
+            const result = await connection.query(`
+            UPDATE vehicle 
+            SET vin = IFNULL (?, vin), plate = IFNULL(?, plate), type = IFNULL(?, type), brand = IFNULL(?, brand), model = IFNULL(?, model), km = IFNULL(?, km), gas = IFNULL(?, gas), status = IFNULL(?, status), active = IFNULL(?, active), cylinders = IFNULL(?, cylinders), color = IFNULL(?, color) 
+            WHERE idVehicle = ?`,
             [updatedVehicle.vin, updatedVehicle.plate,updatedVehicle.type,updatedVehicle.brand,updatedVehicle.model,updatedVehicle.km, updatedVehicle.gas, updatedVehicle.status, updatedVehicle.active, updatedVehicle.cylinders, updatedVehicle.color, id]);
             if (result.affectedRows === 0) {
                 return {
@@ -102,7 +132,14 @@ const updateOneVehicle = async (id, updatedVehicle) => {
                     message: 'El número de vehiculo no existe'
                 };
             }
-             const updated = await connection.query("SELECT v.vin,v.brand,v.model,v.plate,v.km,t.type_name,v.gas,s.status_name,v.active,v.cylinders,v.color from vehicle AS v join vtype As t join status AS s where v.type = t.idvtype and v.status = s.idstatus and idVehicle = ?", id);
+             const updated = await connection.query(`
+             SELECT v.vin,v.brand,v.model,v.plate,v.km,t.type_name,v.gas,s.status_name,v.active,v.cylinders,v.color 
+             FROM vehicle AS v 
+             JOIN vtype As t 
+             JOIN status AS s 
+             WHERE v.type = t.idvtype 
+             AND v.status = s.idstatus 
+             AND idVehicle = ?`, id);
              return updated;
 
     } catch(error)
@@ -115,7 +152,9 @@ const updateOneVehicle = async (id, updatedVehicle) => {
 const deleteOneVehicle = async (id) => {
     try {
         const connection = await getConnection();
-        const result = await connection.query("DELETE FROM vehicle WHERE idVehicle = ?", id);
+        const result = await connection.query(`
+        DELETE FROM vehicle 
+        WHERE idVehicle = ?`, id);
         if (result.affectedRows <= 0) {
             return {
                 status: 400,

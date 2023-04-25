@@ -4,7 +4,14 @@ import {getConnection} from "./../database/database";
 const getAllVouchersDiesel= async () =>{
     try{
         const connection = await getConnection();
-        const result = await connection.query("SELECT v.iddiesel,v.date,vh.plate,v.comission_to,v.cost,p.fullname from voucher_diesel AS v join vehicle as vh join person as p where vh.idVehicle = v.id_vehicle and p.uuid = v.id_pilot ORDER BY v.iddiesel desc")
+        const result = await connection.query(`
+        SELECT v.iddiesel,v.date,vh.plate,v.comission_to,v.cost,p.fullname 
+        FROM voucher_diesel AS v 
+        JOIN vehicle as vh 
+        JOIN person as p 
+        WHERE vh.idVehicle = v.id_vehicle 
+        AND p.uuid = v.id_pilot 
+        ORDER BY v.iddiesel desc`)
         var data=JSON.parse(JSON.stringify(result))
         return data;
     }catch(error){
@@ -16,7 +23,14 @@ const getAllVouchersDiesel= async () =>{
 const getAllVouchersRegular= async () =>{
     try{
         const connection = await getConnection();
-        const result = await connection.query("SELECT v.idregular,v.date,vh.plate,v.comission_to,v.cost,p.fullname from voucher_regular AS v join vehicle as vh join person as p where vh.idVehicle = v.id_vehicle and p.uuid = v.id_pilot ORDER BY v.idregular desc")
+        const result = await connection.query(`
+        SELECT v.idregular,v.date,vh.plate,v.comission_to,v.cost,p.fullname 
+        FROM voucher_regular AS v 
+        JOIN vehicle as vh 
+        JOIN person as p 
+        WHERE vh.idVehicle = v.id_vehicle 
+        AND p.uuid = v.id_pilot 
+        ORDER BY v.idregular desc`)
         var data=JSON.parse(JSON.stringify(result))
         return data;
     }catch(error){
@@ -28,7 +42,16 @@ const getAllVouchersRegular= async () =>{
 const getOneVoucherDiesel = async (id) => {
     try {
         const connection = await getConnection();
-        const result = await connection.query("SELECT iddiesel,date,cost,v.idVehicle,v.plate,v.brand,v.model,v.color,comission_to,objective,km_gallon,service_of,comission_date,km_to_travel,p.fullname,p.dpi,vt.type_name from voucher_diesel join vehicle AS v join person AS p join vtype AS vt where v.idVehicle = id_vehicle and p.uuid = id_pilot and vt.idvtype = v.type and iddiesel = ?", id);
+        const result = await connection.query(`
+        SELECT iddiesel,date,cost,v.idVehicle,v.plate,v.brand,v.model,v.color,comission_to,objective,km_gallon,service_of,comission_date,km_to_travel,p.fullname,p.dpi,vt.type_name 
+        FROM voucher_diesel 
+        JOIN vehicle AS v 
+        JOIN person AS p 
+        JOIN vtype AS vt 
+        WHERE v.idVehicle = id_vehicle 
+        AND p.uuid = id_pilot 
+        AND vt.idvtype = v.type 
+        AND iddiesel = ?`, id);
         if (result.length <= 0) {
             return {
             status: 404,
@@ -46,7 +69,16 @@ const getOneVoucherDiesel = async (id) => {
 const getOneVoucherRegular = async (id) => {
     try {
         const connection = await getConnection();
-        const result = await connection.query("SELECT idregular,v.idVehicle,date,cost,v.plate,v.brand,v.model,v.color,comission_to,objective,p.fullname,p.dpi,vt.type_name from voucher_regular join vehicle AS v join person AS p join vtype AS vt where v.idVehicle = id_vehicle and p.uuid = id_pilot and vt.idvtype = v.type and idregular = ?", id);
+        const result = await connection.query(`
+        SELECT idregular,v.idVehicle,date,cost,v.plate,v.brand,v.model,v.color,comission_to,objective,p.fullname,p.dpi,vt.type_name 
+        FROM voucher_regular 
+        JOIN vehicle AS v 
+        JOIN person AS p 
+        JOIN vtype AS vt 
+        WHERE v.idVehicle = id_vehicle 
+        AND p.uuid = id_pilot 
+        AND vt.idvtype = v.type 
+        AND idregular = ?`, id);
         if (result.length <= 0) {
             return {
             status: 404,
@@ -64,7 +96,9 @@ const getOneVoucherRegular = async (id) => {
 const createNewVoucherDiesel = async (newVoucher) => {
     try{
         const connection = await getConnection();
-            await connection.query("INSERT INTO voucher_diesel (date,cost,id_vehicle,comission_to,objective,id_pilot,km_gallon,service_of,comission_date,km_to_travel) values (?,?,?,?,?,?,?,?,?,?)",
+            await connection.query(`
+            INSERT INTO voucher_diesel (date,cost,id_vehicle,comission_to,objective,id_pilot,km_gallon,service_of,comission_date,km_to_travel) 
+            values (?,?,?,?,?,?,?,?,?,?)`,
             [newVoucher.date, newVoucher.cost, newVoucher.id_vehicle,newVoucher.comission_to,newVoucher.objective, newVoucher.id_pilot, newVoucher.km_gallon, newVoucher.service_of, newVoucher.comission_date, newVoucher.km_to_travel]);
             return {date: newVoucher.date, 
                     cost: newVoucher.cost,
@@ -86,7 +120,9 @@ const createNewVoucherDiesel = async (newVoucher) => {
 const createNewVoucherRegular= async (newVoucher) => {
     try{
         const connection = await getConnection();
-            await connection.query("INSERT INTO voucher_regular (date,cost,id_vehicle,comission_to,objective,id_pilot) values (?,?,?,?,?,?)",
+            await connection.query(`
+            INSERT INTO voucher_regular (date,cost,id_vehicle,comission_to,objective,id_pilot) 
+            values (?,?,?,?,?,?)`,
             [newVoucher.date, newVoucher.cost, newVoucher.id_vehicle,newVoucher.comission_to,newVoucher.objective, newVoucher.id_pilot]);
             return {date: newVoucher.date, 
                     cost: newVoucher.cost,
@@ -104,7 +140,9 @@ const createNewVoucherRegular= async (newVoucher) => {
 const updateOneVoucher = async (id, updatedVoucher) => {
     try{
         const connection = await getConnection();
-            const result = await connection.query("UPDATE Voucher SET plate = IFNULL(?, plate), type = IFNULL(?, type), brand = IFNULL(?, brand), model = IFNULL(?, model), km = IFNULL(?, km), gas = IFNULL(?, gas), status = IFNULL(?, status), active = IFNULL(?, active), cylinders = IFNULL(?, cylinders), color = IFNULL(?, color) WHERE vin = ?",
+            const result = await connection.query(`
+            UPDATE Voucher SET plate = IFNULL(?, plate), type = IFNULL(?, type), brand = IFNULL(?, brand), model = IFNULL(?, model), km = IFNULL(?, km), gas = IFNULL(?, gas), status = IFNULL(?, status), active = IFNULL(?, active), cylinders = IFNULL(?, cylinders), color = IFNULL(?, color) 
+            WHERE vin = ?`,
             [updatedVoucher.plate,updatedVoucher.type,updatedVoucher.brand,updatedVoucher.model,updatedVoucher.km, updatedVoucher.gas, updatedVoucher.status, updatedVoucher.active, updatedVoucher.cylinders, updatedVoucher.color, id]);
             if (result.affectedRows === 0) {
                 return {
@@ -112,7 +150,14 @@ const updateOneVoucher = async (id, updatedVoucher) => {
                     message: 'El número de VIN no existe'
                 };
             }
-             const updated = await connection.query("SELECT v.vin,v.brand,v.model,v.plate,v.km,t.type_name,v.gas,s.status_name,v.active,v.cylinders,v.color from Voucher AS v join vtype As t join status AS s where v.type = t.idvtype and v.status = s.idstatus and vin = ?", id);
+             const updated = await connection.query(`
+             SELECT v.vin,v.brand,v.model,v.plate,v.km,t.type_name,v.gas,s.status_name,v.active,v.cylinders,v.color 
+             FROM Voucher AS v 
+             JOIN vtype As t 
+             JOIN status AS s 
+             WHERE v.type = t.idvtype 
+             AND v.status = s.idstatus 
+             AND vin = ?`, id);
              return updated;
 
     } catch(error)
@@ -125,7 +170,9 @@ const updateOneVoucher = async (id, updatedVoucher) => {
 const deleteOneVoucher = async (id) => {
     try {
         const connection = await getConnection();
-        const result = await connection.query("DELETE FROM Voucher WHERE vin = ?", id);
+        const result = await connection.query(`
+        DELETE FROM Voucher 
+        WHERE vin = ?`, id);
         if (result.affectedRows <= 0) {
             return {
                 status: 400,

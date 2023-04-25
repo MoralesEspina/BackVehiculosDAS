@@ -23,9 +23,9 @@ PUT {{host}}/edit/4df44fd8-e8cc-40f6-b48e-b3cf0612c26f
 Content-Type: application/json
 
 {
-    "username": "DTKingdom",
+    "username": "contra",
     "oldPassword": "admin",
-    "newPassword": "admin234",
+    "password": "admin234",
     "rol_id": "4"
 }
 

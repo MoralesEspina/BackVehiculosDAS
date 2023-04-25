@@ -4,7 +4,9 @@ import {getConnection} from "./../database/database";
 const createNewUser = async (newUser) => {
     try{
         const connection = await getConnection();
-            await connection.query("INSERT INTO user (uuid,username,password,rol_id,uuidPerson) values (?,?,?,?,?)",
+            await connection.query(`
+            INSERT INTO user (uuid,username,password,rol_id,uuidPerson) 
+            VALUES (?,?,?,?,?)`,
             [newUser.uuid,newUser.username,newUser.password,newUser.rol_id,newUser.uuidPerson]);
             return {uuid: newUser.uuid, 
                     username: newUser.username,
@@ -20,7 +22,11 @@ const createNewUser = async (newUser) => {
 const getOneUsername = async (detailUsername) => {
     try {
         const connection = await getConnection();
-        const result  = await connection.query("SELECT uuid, username, password, r.rol from user join rol as r where rol_id = r.idrol and username =  ?", detailUsername);
+        const result  = await connection.query(`
+        SELECT uuid, username, password, r.rol 
+        FROM user 
+        JOIN rol as r 
+        WHERE rol_id = r.idrol and username =  ?`, detailUsername);
             return result[0];
     } catch (error) {
         throw error;
@@ -31,7 +37,11 @@ const getOneUsername = async (detailUsername) => {
 const getAllUsers= async () =>{
     try{
         const connection = await getConnection();
-        const result = await connection.query("Select u.uuid,u.username,r.rol,p.fullname from user AS u join rol AS r join person AS p where u.uuidperson = p.uuid and u.rol_id = r.idrol")
+        const result = await connection.query(`
+        Select u.uuid,u.username,r.rol,p.fullname 
+        FROM user AS u JOIN rol AS r 
+        JOIN person AS p 
+        WHERE u.uuidperson = p.uuid and u.rol_id = r.idrol`)
         var data=JSON.parse(JSON.stringify(result))
         return data;
     }catch(error){
@@ -43,7 +53,10 @@ const getAllUsers= async () =>{
 const getOneRol= async (uuid) =>{
     try{
         const connection = await getConnection();
-        const result = await connection.query("Select rol_id from user where uuid = ?", uuid)
+        const result = await connection.query(`
+        Select rol_id 
+        FROM user 
+        WHERE uuid = ?`, uuid)
         var data=JSON.parse(JSON.stringify(result))
         return data[0];
     }catch(error){
@@ -55,7 +68,10 @@ const getOneRol= async (uuid) =>{
 const getOneUser = async (uuid) => {
     try {
         const connection = await getConnection();
-        const result = await connection.query("Select username,rol_id, uuidPerson from user where uuid = ?", uuid);
+        const result = await connection.query(`
+        Select username,rol_id, uuidPerson 
+        FROM user 
+        WHERE uuid = ?`, uuid);
         if (result.length <= 0) {
             return {
             status: 404,
@@ -72,7 +88,10 @@ const getOneUser = async (uuid) => {
 const getPassword = async (uuid) => {
     try {
         const connection = await getConnection();
-        const result  = await connection.query("SELECT password from user where uuid = ?", uuid);
+        const result  = await connection.query(`
+        SELECT password 
+        FROM user 
+        WHERE uuid = ?`, uuid);
             return result[0];
     } catch (error) {
         throw error;
@@ -83,7 +102,10 @@ const getPassword = async (uuid) => {
 const updateOneUser = async (id, updatedUser) => {
     try{
         const connection = await getConnection();
-            const result = await connection.query("UPDATE user SET username = IFNULL(?, username), password = IFNULL(?, password), rol_id = IFNULL(?, rol_id) WHERE uuid = ?",
+            const result = await connection.query(`
+            UPDATE user 
+            SET username = IFNULL(?, username), password = IFNULL(?, password), rol_id = IFNULL(?, rol_id) 
+            WHERE uuid = ?`,
             [updatedUser.username,updatedUser.password,updatedUser.rol_id,id]);
             if (result.affectedRows === 0) {
                 return {
@@ -91,7 +113,10 @@ const updateOneUser = async (id, updatedUser) => {
                     message: 'El usuario no existe'
                 };
             }
-             const updated = await connection.query("Select u.uuid,u.username,r.rol from user AS u join rol AS r where u.rol_id = r.idrol and uuid = ?", id);
+             const updated = await connection.query(`
+             Select u.uuid,u.username,r.rol 
+             FROM user AS u JOIN rol AS r 
+             WHERE u.rol_id = r.idrol and uuid = ?`, id);
              return updated;
 
     } catch(error)
