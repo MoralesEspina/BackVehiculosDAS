@@ -22,19 +22,17 @@ const getAllRequests = async (option) => {
 }
 
 //TODO OBTENER UNA SOLICITYD
-const getOneRequestComplete = async (id) => {
-    try {
-        const oneRequest = await RequestStorage.getOneRequestComplete(id);
-        return oneRequest
-    } catch (error) {
-        
-    }
-}
-
-//TODO OBTENER UNA SOLICITYD
 const getOneRequest = async (id) => {
     try {
-        const oneRequest = await RequestStorage.getOneRequest(id);
+        let oneRequest;
+        switch (option) {
+            case 'complete':
+                oneRequest = await RequestStorage.getOneRequestComplete(id);
+                break;
+            default:
+                oneRequest = await RequestStorage.getOneRequest(id);
+                break;
+        }
         return oneRequest
     } catch (error) {
         
@@ -75,7 +73,6 @@ const updateOneRequest = async (id, Request) => {
 module.exports = {
     getAllRequests,
     getOneRequest,
-    getOneRequestComplete,
     createNewRequest,
     createNewDetailRequest,
     updateOneRequest

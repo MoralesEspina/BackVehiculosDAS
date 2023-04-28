@@ -7,10 +7,10 @@ GET {{host}}/localRequest?value=actives
 GET {{host}}/localRequest/onhold
 
 ### Obteniendo una Persona
-GET {{host}}/localRequest/4
+GET {{host}}/localRequest/2?value=
 
 ### Obteniendo una Persona
-GET {{host}}/localRequest/complete/4
+GET {{host}}/localRequest/complete/2
 
 ### Creando una Nueva Persona
 POST {{host}}/localRequest

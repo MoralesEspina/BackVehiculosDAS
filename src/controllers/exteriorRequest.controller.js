@@ -15,6 +15,8 @@ const getAllRequests = async (req, res) => {
 
 //TODO OBTENER UNA SOLICITUD
 const getOneRequest = async (req, res) => {
+    let myUrl = new URL (process.env.URL+req.url)
+    let option = myUrl.searchParams.get('value')
     const { id } = req.params;
     if (!id) {
         res.status(400).send({
@@ -24,31 +26,7 @@ const getOneRequest = async (req, res) => {
         return;
     }
     try {
-        const oneRequest = await RequestService.getOneRequest(id);
-        if (oneRequest.status == 404) {
-            res.status(404).json({ data: oneRequest })
-        } else {
-            res.status(200).json({ status: "OK", data: oneRequest })
-        }
-
-    } catch (error) {
-        res.status(500);
-        res.send(error.message);
-    }
-}
-
-//TODO OBTENER UNA SOLICITUD COMPLETA
-const getOneRequestComplete = async (req, res) => {
-    const { id } = req.params;
-    if (!id) {
-        res.status(400).send({
-            status: "FAILED",
-            data: { error: "ID no puede ir vacio" },
-        });
-        return;
-    }
-    try {
-        const oneRequest = await RequestService.getOneRequestComplete(id);
+        const oneRequest = await RequestService.getOneRequest(option, id);
         if (oneRequest.status == 404) {
             res.status(404).json({ data: oneRequest })
         } else {
@@ -158,7 +136,6 @@ const updateOneRequest = async (req, res) => {
 export const methods = {
     getAllRequests,
     getOneRequest,
-    getOneRequestComplete,
     createNewRequest,
     updateOneRequest,
 }
