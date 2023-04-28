@@ -16,6 +16,22 @@ const getAllRequests = async () => {
     }
 }
 
+//TODO OBTENER TODAS LAS SOLICITUDES
+const getAllRequestsActives = async () => {
+    try {
+        const connection = await getConnection();
+        const result = await connection.query(`
+        SELECT id,place,date,section,applicantsName,position,phoneNumber,observations,s.status_name 
+        FROM local_request JOIN status AS s 
+        WHERE status = s.idstatus and status = 7
+        ORDER BY id desc`)
+        var data = JSON.parse(JSON.stringify(result))
+        return data;
+    } catch (error) {
+        throw error;
+    }
+}
+
 //TODO OBTENER SOLICITUDES EN ESPERA
 const getRequestsOnHold = async () => {
     try {
@@ -161,6 +177,7 @@ const updateOneRequest = async (id, updatedRequest) => {
 
 module.exports = {
     getAllRequests,
+    getAllRequestsActives,
     getRequestsOnHold,
     getOneRequest,
     getOneRequestComplete,

@@ -2,8 +2,10 @@ const RequestService = require("../services/localRequest.service")
 
 //TODO OBTENER TODAS LAS SOLICITUDES
 const getAllRequests= async(req,res) =>{
+    let myUrl = new URL (process.env.URL+req.url)
+    let option = myUrl.searchParams.get('value')
     try{
-        const allRequests = await RequestService.getAllRequests();
+        const allRequests = await RequestService.getAllRequests(option);
         res.json({status: 'OK' , data: allRequests})
     }catch(error){
         res.status(500);

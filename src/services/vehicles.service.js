@@ -15,12 +15,6 @@ const getAllVehicles = async (option) => {
                 allVehicles = await VehicleStorage.getAllVehicles();
                 break;
         }
-        if (option == 'all') {
-
-        }else{
-
-        }
-
         return allVehicles;
     } catch (error){
         throw error;

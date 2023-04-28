@@ -17,6 +17,24 @@ const getAllRequests = async () => {
     }
 }
 
+//TODO OBTENER TODAS LAS SOLICITUDES
+const getAllRequestsActives = async () => {
+    try {
+        const connection = await getConnection();
+        const result = await connection.query(`
+        SELECT id,requesting_unit,commission_manager,date_request,objective_request,duration_days,phoneNumber,observations,provide_fuel,provide_travel_expenses,s.status_name,reason_rejected 
+        FROM exterior_request 
+        JOIN status AS s 
+        WHERE status_request = s.idstatus and status_request = 7
+        ORDER BY id desc`);
+        var data = JSON.parse(JSON.stringify(result))
+        return data;
+    } catch (error) {
+        throw error;
+    }
+}
+
+
 //TODO OBTENER LAS SOLICITUDES EN ESPERA
 const getRequestsOnHold = async () => {
     try {
@@ -162,6 +180,7 @@ const updateOneRequest = async (id, updatedRequest) => {
 
 module.exports = {
     getAllRequests,
+    getAllRequestsActives,
     getRequestsOnHold,
     getOneRequest,
     getOneRequestComplete,
