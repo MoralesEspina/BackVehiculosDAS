@@ -8,21 +8,14 @@ const getAllRequests = async (option) => {
             case 'actives':
                 allRequests = await RequestStorage.getAllRequestsActives();
                 break;
+                case 'onHold':
+                allRequests = await RequestStorage.getRequestsOnHold();
+                break;
             default:
                 allRequests = await RequestStorage.getAllRequests();
                 break;
         }
         return allRequests;
-    } catch (error){
-        throw error;
-    }   
-}
-
-//TODO OBTENER TODAS LAS SOLICITUDES
-const getRequestsOnHold = async () => {
-    try{
-        const allRequestsOnHold = await RequestStorage.getRequestsOnHold();
-        return allRequestsOnHold;
     } catch (error){
         throw error;
     }   
@@ -81,7 +74,6 @@ const updateOneRequest = async (id, Request) => {
 
 module.exports = {
     getAllRequests,
-    getRequestsOnHold,
     getOneRequest,
     getOneRequestComplete,
     createNewRequest,
