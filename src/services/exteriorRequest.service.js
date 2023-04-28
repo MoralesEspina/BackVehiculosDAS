@@ -8,6 +8,9 @@ const getAllRequests = async (option) => {
             case 'actives':
                 allRequests = await RequestStorage.getAllRequestsActives();
                 break;
+                case 'onHold':
+                    allRequests = await RequestStorage.getRequestsOnHold();
+                    break;
             default:
                 allRequests = await RequestStorage.getAllRequests();
                 break;
