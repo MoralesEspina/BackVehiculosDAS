@@ -44,7 +44,7 @@ const getOneRequest = async (id) => {
         FROM exterior_request
         WHERE id = ? `, id);
         let request, detailRequest;
-        if (status[0].status_request != 6) {
+        if (status[0].status_request == 7) {
             request = await connection.query(`
             SELECT id,requesting_unit,commission_manager,date_request,objective_request,duration_days,phoneNumber,observations,provide_fuel,provide_travel_expenses,status_request,reason_rejected,boss,V.idVehicle as plate_vehicle,P.uuid as pilot_name
             FROM exterior_request 

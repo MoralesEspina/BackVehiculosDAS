@@ -42,7 +42,7 @@ const getOneRequest = async (id) => {
         FROM local_request
         WHERE id = ? `, id);
         let request, detailRequest;
-        if (status[0].status != 6) {
+        if (status[0].status == 7) {
             request = await connection.query(`
             SELECT l.id,l.place,l.date,l.section,l.applicantsName,l.position,l.phoneNumber,l.observations,l.status,l.boss,V.idVehicle as plate ,P.uuid as pilotName
             FROM local_request AS l 

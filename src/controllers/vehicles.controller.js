@@ -2,8 +2,10 @@ const VehiclesService = require("../services/vehicles.service")
 
 //TODO OBTENER TODOS LOS VEHICULOS
 const getAllVehicles= async(req,res) =>{
+    let myUrl = new URL (process.env.URL+req.url)
+    let option = myUrl.searchParams.get('value')
     try{
-        const allVehicles = await VehiclesService.getAllVehicles();
+        const allVehicles = await VehiclesService.getAllVehicles(option);
         res.json({status: 'OK' , data: allVehicles})
     }catch(error){
         res.status(500);

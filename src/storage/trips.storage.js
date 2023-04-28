@@ -16,7 +16,7 @@ const getAllTripsFromExteriorRequest= async () =>{
         AND t.status = S.idstatus 
         AND transp_request_exterior = ER.id 
         AND t.status = 13 
-        ORDER BY t.idtrips desc `)
+        ORDER BY t.idtrips DESC `)
         var data=JSON.parse(JSON.stringify(result))
         return data;
     }catch(error){
@@ -29,18 +29,16 @@ const getTripsOnHoldFromExteriorRequest= async () =>{
     try{
         const connection = await getConnection();
         const result = await connection.query(`
-        SELECT t.idtrips,ER.requesting_unit,ER.commission_manager,ER.date_request,t.transp_request_exterior,P.fullname,V.plate,S.status_name 
-        FROM trips as t 
-        JOIN exterior_request as ER 
-        JOIN person as P 
-        JOIN vehicle as V 
-        JOIN status as S 
-        WHERE pilot = P.uuid 
-        AND vehicle_plate = V.idVehicle 
-        AND t.status = S.idstatus 
-        AND transp_request_exterior = ER.id 
-        AND t.status != 13 
-        ORDER BY t.idtrips desc`)
+        SELECT t.idtrips,ER.requesting_unit,ER.commission_manager,ER.date_request,t.transp_request_exterior,P.fullname,V.plate,S.status_name, 
+        (SELECT MAX(DER.dateTo) FROM detail_exterior_request DER WHERE DER.id_exterior_request = ER.id) as latest_date, 
+        (SELECT MIN(DER.dateOf) FROM detail_exterior_request DER WHERE DER.id_exterior_request = ER.id) as first_date
+		FROM trips as t 
+		JOIN exterior_request as ER ON ER.id = transp_request_exterior
+		JOIN person as P ON P.uuid = pilot
+		JOIN vehicle as V ON V.idVehicle = vehicle_plate
+		JOIN status as S ON S.idstatus = t.status
+		WHERE t.status != 13 
+		ORDER BY t.idtrips DESC`)
         var data=JSON.parse(JSON.stringify(result))
         return data;
     }catch(error){
@@ -76,17 +74,17 @@ const getTripsOnHoldFromLocalRequest= async () =>{
     try{
         const connection = await getConnection();
         const result = await connection.query(`
-        SELECT t.idtrips,LR.applicantsName,LR.date,t.transp_request_local,P.fullname,V.plate,S.status_name 
+        SELECT t.idtrips,LR.applicantsName,LR.date,t.transp_request_local,P.fullname,V.plate,S.status_name, 
+        (SELECT MAX(DLR.dateTo) FROM detail_local_request DLR WHERE DLR.id_local_request = LR.id) as latest_date, 
+        (SELECT MIN(DLR.dateOf) FROM detail_local_request DLR WHERE DLR.id_local_request = LR.id) as first_date
         FROM trips as t 
-        JOIN local_request as LR 
-        JOIN person as P 
-        JOIN vehicle as V 
-        JOIN status as S 
-        WHERE pilot = P.uuid 
-        AND vehicle_plate = V.idVehicle 
-        AND t.status = S.idstatus 
-        AND transp_request_local = LR.id 
-        AND t.status != 13 ORDER BY t.idtrips desc`)
+        JOIN local_request as LR ON transp_request_local = LR.id 
+		JOIN detail_local_request as DLR ON DLR.id_local_request = LR.id
+        JOIN person as P ON pilot = P.uuid 
+        JOIN vehicle as V ON vehicle_plate = V.idVehicle 
+        JOIN status as S ON t.status = S.idstatus 
+        WHERE t.status != 13
+        ORDER BY t.idtrips desc`)
         var data=JSON.parse(JSON.stringify(result))
         return data;
     }catch(error){

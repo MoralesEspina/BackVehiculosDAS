@@ -1,9 +1,26 @@
 const VehicleStorage = require("../storage/vehicles.storage")
 
 //TODO OBTENER TODOS LOS VEHICULOS
-const getAllVehicles = async () => {
+const getAllVehicles = async (option) => {
     try{
-        const allVehicles = await VehicleStorage.getAllVehicles();
+        let allVehicles;
+        switch (option) {
+            case 'diesel':
+                allVehicles = await VehicleStorage.getAllVehiclesDiesel();
+                break;
+                case 'regular':
+                    allVehicles = await VehicleStorage.getAllVehiclesRegular();
+                    break;
+            default:
+                allVehicles = await VehicleStorage.getAllVehicles();
+                break;
+        }
+        if (option == 'all') {
+
+        }else{
+
+        }
+
         return allVehicles;
     } catch (error){
         throw error;
