@@ -22,7 +22,7 @@ const getAllRequests = async (option) => {
 }
 
 //TODO OBTENER UNA SOLICITYD
-const getOneRequest = async (id) => {
+const getOneRequest = async (option, id) => {
     try {
         let oneRequest;
         switch (option) {
