@@ -43,7 +43,7 @@ const getOneVoucherDiesel = async (id) => {
     try {
         const connection = await getConnection();
         const result = await connection.query(`
-        SELECT iddiesel,date,cost,v.idVehicle,v.plate,v.brand,v.model,v.color,comission_to,objective,km_gallon,service_of,comission_date,km_to_travel,p.fullname,p.dpi,vt.type_name 
+        SELECT iddiesel,date,cost,v.idVehicle,v.plate,v.brand,v.model,v.color,comission_to,objective,km_to_travel,p.fullname,p.dpi,vt.type_name 
         FROM voucher_diesel 
         JOIN vehicle AS v 
         JOIN person AS p 
@@ -97,18 +97,15 @@ const createNewVoucherDiesel = async (newVoucher) => {
     try{
         const connection = await getConnection();
             await connection.query(`
-            INSERT INTO voucher_diesel (date,cost,id_vehicle,comission_to,objective,id_pilot,km_gallon,service_of,comission_date,km_to_travel) 
-            VALUES (?,?,?,?,?,?,?,?,?,?)`,
-            [newVoucher.date, newVoucher.cost, newVoucher.id_vehicle,newVoucher.comission_to,newVoucher.objective, newVoucher.id_pilot, newVoucher.km_gallon, newVoucher.service_of, newVoucher.comission_date, newVoucher.km_to_travel]);
+            INSERT INTO voucher_diesel (date,cost,id_vehicle,comission_to,objective,id_pilot,km_to_travel) 
+            VALUES (?,?,?,?,?,?,?)`,
+            [newVoucher.date, newVoucher.cost, newVoucher.id_vehicle,newVoucher.comission_to,newVoucher.objective, newVoucher.id_pilot, newVoucher.km_to_travel]);
             return {date: newVoucher.date, 
                     cost: newVoucher.cost,
                     id_vehicle: newVoucher.id_vehicle,
                     comission_to: newVoucher.comission_to,
                     objective: newVoucher.objective,
-                    id_pilot: newVoucher.id_pilot,
-                    km_gallon: newVoucher.km_gallon,
-                    service_of: newVoucher.service_of,
-                    comission_date: newVoucher.comission_date};
+                    id_pilot: newVoucher.id_pilot};
     } catch(error)
     {
         throw error;
