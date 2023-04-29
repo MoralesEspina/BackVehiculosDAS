@@ -79,10 +79,9 @@ const getTripsOnHoldFromLocalRequest= async () =>{
         (SELECT MIN(DLR.dateOf) FROM detail_local_request DLR WHERE DLR.id_local_request = LR.id) as first_date
         FROM trips as t 
         JOIN local_request as LR ON transp_request_local = LR.id 
-		JOIN detail_local_request as DLR ON DLR.id_local_request = LR.id
-        JOIN person as P ON pilot = P.uuid 
-        JOIN vehicle as V ON vehicle_plate = V.idVehicle 
-        JOIN status as S ON t.status = S.idstatus 
+        JOIN person as P ON P.uuid = pilot 
+        JOIN vehicle as V ON V.idVehicle  = vehicle_plate 
+        JOIN status as S ON S.idstatus = t.status   
         WHERE t.status != 13
         ORDER BY t.idtrips desc`)
         var data=JSON.parse(JSON.stringify(result))

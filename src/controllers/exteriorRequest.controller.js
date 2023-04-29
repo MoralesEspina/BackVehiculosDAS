@@ -4,8 +4,9 @@ const RequestService = require("../services/exteriorRequest.service")
 const getAllRequests = async (req, res) => {
     let myUrl = new URL (process.env.URL+req.url)
     let option = myUrl.searchParams.get('value')
+    let status = myUrl.searchParams.get('status')
     try {
-        const allRequests = await RequestService.getAllRequests(option);
+        const allRequests = await RequestService.getAllRequests(option,status);
         res.json({ status: 'OK', data: allRequests })
     } catch (error) {
         res.status(500);

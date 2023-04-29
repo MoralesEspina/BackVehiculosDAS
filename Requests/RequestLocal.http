@@ -7,7 +7,7 @@ GET {{host}}/localRequest?value=actives
 GET {{host}}/localRequest/onhold
 
 ### Obteniendo una Persona
-GET {{host}}/localRequest/2?value=
+GET {{host}}/localRequest/1?value=complete
 
 ### Obteniendo una Persona
 GET {{host}}/localRequest/complete/2

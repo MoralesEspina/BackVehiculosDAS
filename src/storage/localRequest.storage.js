@@ -5,10 +5,12 @@ const getAllRequests = async () => {
     try {
         const connection = await getConnection();
         const result = await connection.query(`
-        SELECT id,place,date,section,applicantsName,position,phoneNumber,observations,s.status_name 
-        FROM local_request JOIN status AS s 
+        SELECT 	LR.id,LR.place,LR.date,LR.section,LR.applicantsName,LR.position,LR.phoneNumber,LR.observations,s.status_name, 
+        (SELECT MIN(DLR.dateOf) FROM detail_local_request DLR WHERE DLR.id_local_request = LR.id) as first_date, 
+        (SELECT MAX(DLR.dateTo) FROM detail_local_request DLR WHERE DLR.id_local_request = LR.id) as latest_date
+        FROM local_request AS LR JOIN status AS s 
         WHERE status = s.idstatus and status != 6 
-        ORDER BY id desc`)
+        ORDER BY LR.id desc`)
         var data = JSON.parse(JSON.stringify(result))
         return data;
     } catch (error) {
@@ -17,14 +19,16 @@ const getAllRequests = async () => {
 }
 
 //TODO OBTENER TODAS LAS SOLICITUDES
-const getAllRequestsActives = async () => {
+const getAllRequestsActivesAndOnHold = async (status) => {
     try {
         const connection = await getConnection();
         const result = await connection.query(`
-        SELECT id,place,date,section,applicantsName,position,phoneNumber,observations,s.status_name 
-        FROM local_request JOIN status AS s 
-        WHERE status = s.idstatus and status = 7
-        ORDER BY id desc`)
+        SELECT LR.id,LR.place,LR.date,LR.section,LR.applicantsName,LR.position,LR.phoneNumber,LR.observations,s.status_name, 
+        (SELECT MIN(DLR.dateOf) FROM detail_local_request DLR WHERE DLR.id_local_request = LR.id) as first_date, 
+        (SELECT MAX(DLR.dateTo) FROM detail_local_request DLR WHERE DLR.id_local_request = LR.id) as latest_date
+        FROM local_request AS LR JOIN status AS s 
+        WHERE status = s.idstatus and LR.status = ?
+        ORDER BY LR.id desc`, status)
         var data = JSON.parse(JSON.stringify(result))
         return data;
     } catch (error) {
@@ -32,22 +36,6 @@ const getAllRequestsActives = async () => {
     }
 }
 
-//TODO OBTENER SOLICITUDES EN ESPERA
-const getRequestsOnHold = async () => {
-    try {
-        const connection = await getConnection();
-        const result = await connection.query(`
-        SELECT id,place,date,section,applicantsName,position,phoneNumber,observations,s.status_name 
-        FROM local_request 
-        JOIN status AS s 
-        WHERE status = s.idstatus and status = 6 
-        ORDER BY id desc`)
-        var data = JSON.parse(JSON.stringify(result))
-        return data;
-    } catch (error) {
-        throw error;
-    }
-}
 
 //TODO OBTENER UNA SOLICITUD
 const getOneRequest = async (id) => {
@@ -60,12 +48,14 @@ const getOneRequest = async (id) => {
         let request, detailRequest;
         if (status[0].status == 7) {
             request = await connection.query(`
-            SELECT l.id,l.place,l.date,l.section,l.applicantsName,l.position,l.phoneNumber,l.observations,l.status,l.boss,V.idVehicle as plate ,P.uuid as pilotName
+            SELECT l.id,l.place,l.date,l.section,l.applicantsName,l.position,l.phoneNumber,l.observations,l.status,l.boss,V.idVehicle as plate ,P.uuid as pilotName,
+            (SELECT SUBSTRING_INDEX(GROUP_CONCAT(DLR.comission ORDER BY DLR.dateOf ASC SEPARATOR ', '), ',', 1) FROM detail_local_request DLR WHERE DLR.id_local_request = l.id) as first_objective,
+            (SELECT GROUP_CONCAT(DLR.destiny SEPARATOR ', ') FROM detail_local_request DLR WHERE DLR.id_local_request = l.id) as destinations
             FROM local_request AS l 
-            JOIN trips as T ON T.transp_request_local = id
+            JOIN trips as T ON T.transp_request_local = l.id
             JOIN vehicle as V ON V.idVehicle = T.vehicle_plate 
             JOIN person as P ON P.uuid = T.pilot 
-            WHERE id = ?`, id);
+            WHERE l.id = ?`, id);
         }
         else {
             request = await connection.query(`
@@ -177,8 +167,7 @@ const updateOneRequest = async (id, updatedRequest) => {
 
 module.exports = {
     getAllRequests,
-    getAllRequestsActives,
-    getRequestsOnHold,
+    getAllRequestsActivesAndOnHold,
     getOneRequest,
     getOneRequestComplete,
     createNewRequest,

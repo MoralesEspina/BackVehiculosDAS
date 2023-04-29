@@ -1,7 +1,7 @@
 @host = http://localhost:3000/api
 
 ### Obteniendo Todas las Personas
-GET {{host}}/exteriorRequest?value=actives
+GET {{host}}/exteriorRequest?value=actives&status=7
 
 ### Obteniendo Todas las Personas
 GET {{host}}/exteriorRequest/onhold

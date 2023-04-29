@@ -1,15 +1,15 @@
 const RequestStorage = require("../storage/localRequest.storage")
 
 //TODO OBTENER TODAS LAS SOLICITUDES
-const getAllRequests = async (option) => {
+const getAllRequests = async (option, status) => {
     try{
         let allRequests;
         switch (option) {
             case 'actives':
-                allRequests = await RequestStorage.getAllRequestsActives();
+                allRequests = await RequestStorage.getAllRequestsActivesAndOnHold(status);
                 break;
                 case 'onHold':
-                allRequests = await RequestStorage.getRequestsOnHold();
+                allRequests = await RequestStorage.getAllRequestsActivesAndOnHold(status);
                 break;
             default:
                 allRequests = await RequestStorage.getAllRequests();

@@ -5,8 +5,9 @@ const getAllRequests = async () => {
     try {
         const connection = await getConnection();
         const result = await connection.query(`
-        SELECT id,requesting_unit,commission_manager,date_request,objective_request,duration_days,phoneNumber,observations,provide_fuel,provide_travel_expenses,s.status_name,reason_rejected 
-        FROM exterior_request 
+        SELECT ER.id,ER.requesting_unit,ER.commission_manager,ER.date_request,ER.objective_request,ER.duration_days,ER.phoneNumber,ER.observations,ER.provide_fuel,ER.provide_travel_expenses,s.status_name,ER.reason_rejected, 
+        (SELECT MAX(DER.dateTo) FROM detail_exterior_request DER WHERE DER.id_exterior_request = ER.id) as latest_date, (SELECT MIN(DER.dateOf) FROM detail_exterior_request DER WHERE DER.id_exterior_request = ER.id) as first_date
+        FROM exterior_request as ER
         JOIN status AS s 
         WHERE status_request = s.idstatus and status_request != 6 
         ORDER BY id desc`);
@@ -18,40 +19,24 @@ const getAllRequests = async () => {
 }
 
 //TODO OBTENER TODAS LAS SOLICITUDES
-const getAllRequestsActives = async () => {
+const getAllRequestsActivesAndOnHold = async (status) => {
     try {
         const connection = await getConnection();
         const result = await connection.query(`
-        SELECT id,requesting_unit,commission_manager,date_request,objective_request,duration_days,phoneNumber,observations,provide_fuel,provide_travel_expenses,s.status_name,reason_rejected 
-        FROM exterior_request 
+        SELECT ER.id,ER.requesting_unit,ER.commission_manager,ER.date_request,ER.objective_request,ER.duration_days,ER.phoneNumber,ER.observations,ER.provide_fuel,ER.provide_travel_expenses,s.status_name,ER.reason_rejected, 
+        (SELECT MAX(DER.dateTo) FROM detail_exterior_request DER WHERE DER.id_exterior_request = ER.id) as latest_date, 
+        (SELECT MIN(DER.dateOf) FROM detail_exterior_request DER WHERE DER.id_exterior_request = ER.id) as first_date,
+        (SELECT GROUP_CONCAT(DER.department SEPARATOR ', ') FROM detail_exterior_request DER WHERE DER.id_exterior_request = ER.id) as destinations
+        FROM exterior_request as ER
         JOIN status AS s 
-        WHERE status_request = s.idstatus and status_request = 7
-        ORDER BY id desc`);
+        WHERE status_request = s.idstatus and status_request = ?
+        ORDER BY id desc`, status);
         var data = JSON.parse(JSON.stringify(result))
         return data;
     } catch (error) {
         throw error;
     }
 }
-
-
-//TODO OBTENER LAS SOLICITUDES EN ESPERA
-const getRequestsOnHold = async () => {
-    try {
-        const connection = await getConnection();
-        const result = await connection.query(`
-        SELECT id,requesting_unit,commission_manager,date_request,objective_request,duration_days,phoneNumber,observations,provide_fuel,provide_travel_expenses,s.status_name,reason_rejected 
-        FROM exterior_request 
-        JOIN status AS s 
-        WHERE status_request = s.idstatus and status_request = 6 
-        ORDER BY id DESC`);
-        var data = JSON.parse(JSON.stringify(result))
-        return data;
-    } catch (error) {
-        throw error;
-    }
-}
-
 
 //TODO OBTENER UNA SOLICITUD
 const getOneRequest = async (id) => {
@@ -64,12 +49,13 @@ const getOneRequest = async (id) => {
         let request, detailRequest;
         if (status[0].status_request == 7) {
             request = await connection.query(`
-            SELECT id,requesting_unit,commission_manager,date_request,objective_request,duration_days,phoneNumber,observations,provide_fuel,provide_travel_expenses,status_request,reason_rejected,boss,V.idVehicle as plate_vehicle,P.uuid as pilot_name
-            FROM exterior_request 
-            JOIN trips as T ON T.transp_request_exterior = id
+            SELECT ER.id,ER.requesting_unit,ER.commission_manager,ER.date_request,ER.objective_request,ER.duration_days,ER.phoneNumber,ER.observations,ER.provide_fuel,ER.provide_travel_expenses,ER.status_request,ER.reason_rejected,ER.boss,V.idVehicle as plate_vehicle,P.uuid as pilot_name,
+            (SELECT GROUP_CONCAT(DER.department SEPARATOR ', ') FROM detail_exterior_request DER WHERE DER.id_exterior_request = ER.id) as destinations
+            FROM exterior_request as ER
+            JOIN trips as T ON T.transp_request_exterior = ER.id
             JOIN vehicle as V ON V.idVehicle = T.vehicle_plate 
             JOIN person as P ON P.uuid = T.pilot 
-            WHERE id = ?`, id);
+            WHERE ER.id = 1`, id);
         }
         else {
             request = await connection.query(`
@@ -105,7 +91,10 @@ const getOneRequestComplete = async (id) => {
         JOIN trips as T 
         JOIN vehicle as V 
         JOIN person as P 
-        WHERE T.transp_request_exterior = id and T.vehicle_plate = V.idVehicle and T.pilot = P.uuid and id = ?`, id);
+        WHERE T.transp_request_exterior = id 
+        AND T.vehicle_plate = V.idVehicle 
+        AND T.pilot = P.uuid 
+        AND id = ?`, id);
         const detailRequest = await connection.query(`
         SELECT DE.no, DE.number_people, DE.department, DE.municipality, DE.village, DE.dateOf, DE.dateTo , DE.hour 
         FROM detail_exterior_request AS DE 
@@ -180,8 +169,7 @@ const updateOneRequest = async (id, updatedRequest) => {
 
 module.exports = {
     getAllRequests,
-    getAllRequestsActives,
-    getRequestsOnHold,
+    getAllRequestsActivesAndOnHold,
     getOneRequest,
     getOneRequestComplete,
     createNewRequest,
