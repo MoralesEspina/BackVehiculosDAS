@@ -85,7 +85,7 @@ const updateOneTrip= async(req,res) =>{
     }
     try{
         const Trip = {
-            status: 13,    
+            status: req.body.status    
         };
         const updatedTrip = await TripService.updateOneTrip(id, Trip);
         if (updatedTrip.status == 400) {
