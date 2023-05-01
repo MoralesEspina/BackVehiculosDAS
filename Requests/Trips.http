@@ -32,3 +32,10 @@ Content-Type: application/json
     "vehicle_plate": "1023813281092381"
 }
 
+### Creando un Nuevo Viaje Local
+PUT {{host}}/1
+Content-Type: application/json
+
+{
+    "status": 11
+}

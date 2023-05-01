@@ -15,8 +15,14 @@ GET {{host}}/vehicles
 Authorization: Bearer {{login.response.body.token}}
 
 ### Obteniendo Todos los Vehiculos Activos
-GET {{host}}/vehicles/active
+POST {{host}}/vehicles/active
 Authorization: Bearer {{login.response.body.token}}
+Content-Type: application/json
+
+{
+    "initialDateOf": "2023-04-01T06:00:00.000Z",
+    "finalDateTo": "2023-04-03T06:00:00.000Z"
+}
 
 ### Obteniendo un Solo Vehiculo
 GET {{host}}/vehicles/1023813281092381

@@ -16,7 +16,12 @@ const getAllVehicles= async(req,res) =>{
 //TODO OBTENER TODOS LOS VEHICULOS
 const getAllVehiclesActives= async(req,res) =>{
     try{
-        const allVehicles = await VehiclesService.getAllVehiclesActives();
+        const dates = {
+            initialDateOf: req.body.initialDateOf,
+            finalDateTo: req.body.finalDateTo
+        };
+
+        const allVehicles = await VehiclesService.getAllVehiclesActives(dates);
         res.json({status: 'OK' , data: allVehicles})
     }catch(error){
         res.status(500);

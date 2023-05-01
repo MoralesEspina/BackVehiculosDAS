@@ -6,7 +6,7 @@ const {validateCreateVehicle} = require('../validators/vehicles.validator')
 const router = Router();
 
 router.get("/", VehiclesController.getAllVehicles);
-router.get("/active/", VehiclesController.getAllVehiclesActives);
+router.post("/active/", VehiclesController.getAllVehiclesActives);
 router.get("/:id", VehiclesController.getOneVehicle);
 router.get("/voucher/:id", VehiclesController.getOneVehicleForVoucher);
 router.post("/", validateCreateVehicle, VehiclesController.createNewVehicle);

@@ -22,9 +22,9 @@ const getAllVehicles = async (option) => {
 }
 
 //TODO OBTENER TODOS LOS VEHICULOS
-const getAllVehiclesActives = async () => {
+const getAllVehiclesActives = async (dates) => {
     try{
-        const allVehicles = await VehicleStorage.getAllVehiclesActives();
+        const allVehicles = await VehicleStorage.getAllVehiclesActives(dates);
         return allVehicles;
     } catch (error){
         throw error;

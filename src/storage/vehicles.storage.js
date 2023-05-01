@@ -61,17 +61,37 @@ const getAllVehiclesRegular= async () =>{
 
 
 //TODO OBTENER TODOS LOS VEHICULOS
-const getAllVehiclesActives= async () =>{
+const getAllVehiclesActives= async (dates) =>{
     try{
         const connection = await getConnection();
         const result = await connection.query(`
-        SELECT v.idVehicle, v.vin,v.brand,v.model,v.plate,v.km,t.type_name,v.gas,s.status_name,v.active,v.color,v.cylinders 
+        SELECT v.idVehicle,v.vin,v.brand,v.model,v.plate,v.km,t.type_name,v.gas,s.status_name,v.active,v.color,v.cylinders 
         FROM vehicle AS v 
         JOIN vtype As t 
         JOIN status AS s 
         WHERE v.type = t.idvtype 
         AND v.status = s.idstatus 
-        AND v.status = 3`)
+        AND v.status = 3 
+        AND active = 1 
+        AND v.idVehicle NOT IN (
+        SELECT T.vehicle_plate 
+        FROM trips AS T 
+        JOIN detail_local_request AS DLR ON DLR.id_local_request = T.transp_request_local
+        WHERE 
+        (DLR.dateOf BETWEEN ? AND ?) OR
+        (DLR.dateTo BETWEEN ? AND ?) OR
+        (? BETWEEN DLR.dateOf AND DLR.dateTo) OR
+        (? BETWEEN DLR.dateOf AND DLR.dateTo)
+        UNION
+        SELECT T.vehicle_plate 
+        FROM trips AS T 
+        JOIN detail_exterior_request AS DER ON DER.id_exterior_request = T.transp_request_exterior
+        WHERE 
+        (DER.dateOf BETWEEN ? AND ?) OR
+        (DER.dateTo BETWEEN ? AND ?) OR
+        (? BETWEEN DER.dateOf AND DER.dateTo) OR
+        (? BETWEEN DER.dateOf AND DER.dateTo)
+        );`,[dates.initialDateOf, dates.finalDateTo, dates.initialDateOf, dates.finalDateTo, dates.initialDateOf, dates.finalDateTo, dates.initialDateOf, dates.finalDateTo, dates.initialDateOf, dates.finalDateTo, dates.initialDateOf, dates.finalDateTo])
         var data=JSON.parse(JSON.stringify(result))
         return data;
     }catch(error){

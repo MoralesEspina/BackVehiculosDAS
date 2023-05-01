@@ -75,6 +75,8 @@ const createNewTrip= async(req,res) =>{
 
 //TODO ACTUALIZAR UN TRIP
 const updateOneTrip= async(req,res) =>{
+    console.log(req.params)
+    console.log(req.body)
     const { id } = req.params;
     if (!id) {
         res.status(400).send({
