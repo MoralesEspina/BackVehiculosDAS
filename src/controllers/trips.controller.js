@@ -2,9 +2,12 @@ const TripService = require("../services/trips.service")
 
 
 //TODO OBTENER TODOS LOS VIAJES EXTERIORES
-const getAllTripsFromExteriorRequest= async(req,res) =>{
+const getAllTrips= async(req,res) =>{
+    let myUrl = new URL (process.env.URL+req.url)
+    let option = myUrl.searchParams.get('value')
+    let request = myUrl.searchParams.get('request')
     try{
-        const allTrips = await TripService.getAllTripsFromExteriorRequest();
+        const allTrips = await TripService.getAllTrips(option, request);
         res.json({status: 'OK' , data: allTrips})
     }catch(error){
         res.status(500);
@@ -13,32 +16,9 @@ const getAllTripsFromExteriorRequest= async(req,res) =>{
 }
 
 //TODO OBTENER TODOS LOS VIAJES EXTERIORES EN ESPERA
-const getTripsOnHoldFromExteriorRequest= async(req,res) =>{
+const getAllTripsOnHold= async(req,res) =>{
     try{
         const tripsOnHold = await TripService.getTripsOnHoldFromExteriorRequest();
-        res.json({status: 'OK' , data: tripsOnHold})
-    }catch(error){
-        res.status(500);
-        res.send(error.message);
-    }
-}
-
-
-//TODO OBTENER TODOS LOS VIAJES LOCALES
-const getAllTripsFromLocalRequest= async(req,res) =>{
-    try{
-        const allTrips = await TripService.getAllTripsFromLocalRequest();
-        res.json({status: 'OK' , data: allTrips})
-    }catch(error){
-        res.status(500);
-        res.send(error.message);
-    }
-}
-
-//TODO OBTENER TODOS LOS VIAJES LOCALES EN ESPERA
-const getTripsOnHoldFromLocalRequest= async(req,res) =>{
-    try{
-        const tripsOnHold = await TripService.getTripsOnHoldFromLocalRequest();
         res.json({status: 'OK' , data: tripsOnHold})
     }catch(error){
         res.status(500);
@@ -121,10 +101,8 @@ const updateOneTrip= async(req,res) =>{
 }
 
 export const methods = {
-    getAllTripsFromExteriorRequest,
-    getTripsOnHoldFromExteriorRequest,
-    getAllTripsFromLocalRequest,
-    getTripsOnHoldFromLocalRequest,
+    getAllTrips,
+    getAllTripsOnHold,
     getOneTrip,
     createNewTrip,
     updateOneTrip,

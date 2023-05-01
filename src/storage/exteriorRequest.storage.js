@@ -61,7 +61,9 @@ const getOneRequest = async (id) => {
         }
         else {
             request = await connection.query(`
-            SELECT id,requesting_unit,commission_manager,date_request,objective_request,duration_days,phoneNumber,observations,provide_fuel,provide_travel_expenses,status_request,reason_rejected,boss 
+            SELECT id,requesting_unit,commission_manager,date_request,objective_request,duration_days,phoneNumber,observations,provide_fuel,provide_travel_expenses,status_request,reason_rejected,boss,
+            (SELECT MAX(DER.dateTo) FROM detail_exterior_request DER WHERE DER.id_exterior_request = id) as latest_date, 
+            (SELECT MIN(DER.dateOf) FROM detail_exterior_request DER WHERE DER.id_exterior_request = id) as first_date
             FROM exterior_request 
             WHERE id = ?`, id);
         }

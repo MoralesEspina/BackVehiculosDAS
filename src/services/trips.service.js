@@ -1,40 +1,31 @@
 const TripStorage = require("../storage/trips.storage")
 
 //TODO OBTENER TODOS LOS VIAJES EXTERIORES
-const getAllTripsFromExteriorRequest = async () => {
+const getAllTrips = async (option, request) => {
     try{
-        const allTrips = await TripStorage.getAllTripsFromExteriorRequest();
+        let allTrips;
+        switch (option) {
+            case 'actives':
+                if (request == 'exterior') {
+                    allTrips = await TripStorage.getAllTripsFromExteriorRequest();
+                }else{
+                    allTrips = await TripStorage.getAllTripsFromLocalRequest();
+                }
+                break;
+                case 'onHold':
+                    if (request == 'exterior') {
+                        allTrips = await TripStorage.getTripsOnHoldFromExteriorRequest();
+                    }else{
+                        allTrips = await TripStorage.getTripsOnHoldFromLocalRequest();
+                    }
+                    break;
+            default:
+                return {
+                    status: 404,
+                    message: 'Valores incorrectos'
+                };
+        }
         return allTrips;
-    } catch (error){
-        throw error;
-    }   
-}
-
-//TODO OBTENER TODOS LOS VIAJES EXTERIORES EN ESPERA
-const getTripsOnHoldFromExteriorRequest = async () => {
-    try{
-        const tripsOnHold = await TripStorage.getTripsOnHoldFromExteriorRequest();
-        return tripsOnHold;
-    } catch (error){
-        throw error;
-    }   
-}
-
-//TODO OBTENER TODOS LOS VIAJES LOCALES
-const getAllTripsFromLocalRequest = async () => {
-    try{
-        const allTrips = await TripStorage.getAllTripsFromLocalRequest();
-        return allTrips;
-    } catch (error){
-        throw error;
-    }   
-}
-
-//TODO OBTENER TODOS LOS VIAJES LOCALES EN ESPERA
-const getTripsOnHoldFromLocalRequest = async () => {
-    try{
-        const tripsOnHold = await TripStorage.getTripsOnHoldFromLocalRequest();
-        return tripsOnHold;
     } catch (error){
         throw error;
     }   
@@ -72,10 +63,7 @@ const updateOneTrip = async (id, Trip) => {
 }
 
 module.exports = {
-    getAllTripsFromExteriorRequest,
-    getTripsOnHoldFromExteriorRequest,
-    getAllTripsFromLocalRequest,
-    getTripsOnHoldFromLocalRequest,
+    getAllTrips,
     getOneTrip,
     createNewTrip,
     updateOneTrip,
