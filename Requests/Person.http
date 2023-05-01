@@ -8,6 +8,12 @@ GET {{host}}/persons/pilots
 
 ### Obteniendo Todos los Pilotos
 GET {{host}}/persons/pilotsActives
+Content-Type: application/json
+
+{
+    "inicialDateOf": "2023-04-20",
+    "finalDateTo": "2023-04-26"
+}
 
 ### Obteniendo una Persona
 GET {{host}}/persons/1548e177-2e29-48da-add8-ef1af5c7c2a6
