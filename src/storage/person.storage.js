@@ -56,7 +56,7 @@ const getAllPilotsActives= async (dates) =>{
         (DER.dateTo BETWEEN ? AND ?) OR
         (? BETWEEN DER.dateOf AND DER.dateTo) OR
         (? BETWEEN DER.dateOf AND DER.dateTo)
-        );`,[dates.inicialDateOf, dates.finalDateTo, dates.inicialDateOf, dates.finalDateTo, dates.inicialDateOf, dates.finalDateTo, dates.inicialDateOf, dates.finalDateTo, dates.inicialDateOf, dates.finalDateTo, dates.inicialDateOf, dates.finalDateTo])
+        );`,[dates.initialDateOf, dates.finalDateTo, dates.initialDateOf, dates.finalDateTo, dates.initialDateOf, dates.finalDateTo, dates.initialDateOf, dates.finalDateTo, dates.initialDateOf, dates.finalDateTo, dates.initialDateOf, dates.finalDateTo])
         var data=JSON.parse(JSON.stringify(result))
         return data;
     }catch(error){
