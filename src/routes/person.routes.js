@@ -5,7 +5,7 @@ const router = Router();
 
 router.get("/", PersonController.getAllPersons);
 router.get("/pilots/", PersonController.getAllPilots);
-router.get("/pilotsActives/", PersonController.getAllPilotsActives);
+router.post("/pilotsActives/", PersonController.getAllPilotsActives);
 router.get("/:id", PersonController.getOnePerson);
 router.post("/", validateCreatePerson, PersonController.createNewPerson);
 router.put("/:id", validateCreatePerson, PersonController.updateOnePerson);

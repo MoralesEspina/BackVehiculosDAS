@@ -26,6 +26,7 @@ const getAllPilots= async(req,res) =>{
 
 //TODO OBTENER TODAS LOS PERSONAS
 const getAllPilotsActives= async(req,res) =>{
+    console.log(req.body)
     try{
         const dates = {
             inicialDateOf: req.body.inicialDateOf,
