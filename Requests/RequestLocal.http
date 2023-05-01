@@ -3,11 +3,13 @@
 ### Obteniendo Todas las Personas
 GET {{host}}/localRequest?value=actives
 
+
 ### Obteniendo Todas las Personas
 GET {{host}}/localRequest/onhold
 
 ### Obteniendo una Persona
-GET {{host}}/localRequest/1?value=complete
+GET {{host}}/localRequest/1?value=
+
 
 ### Obteniendo una Persona
 GET {{host}}/localRequest/complete/2

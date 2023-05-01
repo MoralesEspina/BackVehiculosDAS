@@ -1,7 +1,7 @@
 @host = http://localhost:3000/api/trips
 
 ### Obteniendo Todos los viajes exteriores
-GET {{host}}/?value=actives&request=exterior
+GET {{host}}/?value=onHold&request=local
 
 ### Obteniendo Todos los viajes exteriores
 GET {{host}}/exteriorRequest/onhold
