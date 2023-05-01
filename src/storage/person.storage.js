@@ -32,13 +32,31 @@ const getAllPilots= async () =>{
 }
 
 //TODO OBTENER TODAS LAS PERSONAS
-const getAllPilotsActives= async () =>{
+const getAllPilotsActives= async (dates) =>{
     try{
         const connection = await getConnection();
         const result = await connection.query(`
         SELECT uuid,fullname,phone,dpi,active,available 
         FROM person 
-        WHERE job = 1 and available = 3`)
+        WHERE job = 1 AND active = 1 AND uuid NOT IN (
+        SELECT T.pilot 
+        FROM trips AS T 
+        JOIN detail_local_request AS DLR ON DLR.id_local_request = T.transp_request_local
+        WHERE 
+        (DLR.dateOf BETWEEN ? AND ?) OR
+        (DLR.dateTo BETWEEN ? AND ?) OR
+        (? BETWEEN DLR.dateOf AND DLR.dateTo) OR
+        (? BETWEEN DLR.dateOf AND DLR.dateTo)
+        UNION
+        SELECT T.pilot 
+        FROM trips AS T 
+        JOIN detail_exterior_request AS DER ON DER.id_exterior_request = T.transp_request_exterior
+        WHERE 
+        (DER.dateOf BETWEEN ? AND ?) OR
+        (DER.dateTo BETWEEN ? AND ?) OR
+        (? BETWEEN DER.dateOf AND DER.dateTo) OR
+        (? BETWEEN DER.dateOf AND DER.dateTo)
+        );`,[dates.inicialDateOf, dates.finalDateTo, dates.inicialDateOf, dates.finalDateTo, dates.inicialDateOf, dates.finalDateTo, dates.inicialDateOf, dates.finalDateTo, dates.inicialDateOf, dates.finalDateTo, dates.inicialDateOf, dates.finalDateTo])
         var data=JSON.parse(JSON.stringify(result))
         return data;
     }catch(error){

@@ -27,7 +27,11 @@ const getAllPilots= async(req,res) =>{
 //TODO OBTENER TODAS LOS PERSONAS
 const getAllPilotsActives= async(req,res) =>{
     try{
-        const allPersons = await PersonService.getAllPilotsActives();
+        const dates = {
+            inicialDateOf: req.body.inicialDateOf,
+            finalDateTo: req.body.finalDateTo
+        };
+        const allPersons = await PersonService.getAllPilotsActives(dates);
         res.json({status: 'OK' , data: allPersons})
     }catch(error){
         res.status(500);

@@ -55,7 +55,7 @@ const getOneRequest = async (id) => {
             JOIN trips as T ON T.transp_request_exterior = ER.id
             JOIN vehicle as V ON V.idVehicle = T.vehicle_plate 
             JOIN person as P ON P.uuid = T.pilot 
-            WHERE ER.id = 1`, id);
+            WHERE ER.id = ?`, id);
         }
         else {
             request = await connection.query(`

@@ -21,9 +21,9 @@ const getAllPilots = async () => {
 }
 
 //TODO OBTENER TODAS LAS PERSONAS
-const getAllPilotsActives = async () => {
+const getAllPilotsActives = async (dates) => {
     try{
-        const allPersons = await PersonStorage.getAllPilotsActives();
+        const allPersons = await PersonStorage.getAllPilotsActives(dates);
         return allPersons;
     } catch (error){
         throw error;
