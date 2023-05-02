@@ -50,8 +50,8 @@ const getOneRequest = async (id) => {
             request = await connection.query(`
             SELECT l.id,l.place,l.date,l.section,l.applicantsName,l.position,l.phoneNumber,l.observations,l.status,l.boss,V.idVehicle as plate ,P.uuid as pilotName,
             (SELECT SUBSTRING_INDEX(GROUP_CONCAT(DLR.comission ORDER BY DLR.dateOf ASC SEPARATOR ', '), ',', 1) FROM detail_local_request DLR WHERE DLR.id_local_request = l.id) as first_objective,
-            (SELECT MIN(DLR.dateOf) FROM detail_local_request DLR WHERE DLR.id_local_request = LR.id) as first_date, 
-            (SELECT MAX(DLR.dateTo) FROM detail_local_request DLR WHERE DLR.id_local_request = LR.id) as latest_date,
+            (SELECT MIN(DLR.dateOf) FROM detail_local_request DLR WHERE DLR.id_local_request = l.id) as first_date, 
+            (SELECT MAX(DLR.dateTo) FROM detail_local_request DLR WHERE DLR.id_local_request = l.id) as latest_date,
             (SELECT GROUP_CONCAT(DLR.destiny SEPARATOR ', ') FROM detail_local_request DLR WHERE DLR.id_local_request = l.id) as destinations
             FROM local_request AS l 
             JOIN trips as T ON T.transp_request_local = l.id
@@ -63,7 +63,7 @@ const getOneRequest = async (id) => {
             request = await connection.query(`
             SELECT l.id,l.place,l.date,l.section,l.applicantsName,l.position,l.phoneNumber,l.observations,l.status,l.boss
             FROM local_request AS l 
-            WHERE id = ?`, id);
+            WHERE l.id = ?`, id);
         }
             detailRequest = await connection.query(`
             SELECT DL.dateOf, DL.dateTo, DL.schedule, DL.destiny, DL.peopleNumber, DL.comission  
