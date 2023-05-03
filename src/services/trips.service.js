@@ -63,9 +63,22 @@ const updateOneTrip = async (id, Trip) => {
 }
 
 //TODO OBTENER UN PASE DE SALIDA
-const getOneExitPass = async (id) => {
+const getOneExitPass = async (id, option) => {
     try {
-        const oneExitPass = await TripStorage.getOneExitPass(id);
+        let oneExitPass;
+        switch (option) {
+            case 'local':
+                oneExitPass = await TripStorage.getOneExitPassForLocalRequest(id);
+                break;
+                case 'exterior':
+                    oneExitPass = await TripStorage.getOneExitPassForExteriorRequest(id);
+                break;
+            default:
+                return {
+                    status: 404,
+                    message: 'Valores incorrectos'
+                };
+        }
         return oneExitPass
     } catch (error) {
         

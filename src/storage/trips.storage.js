@@ -161,16 +161,42 @@ const updateOneTrip = async (id, updatedTrip) => {
 }
 
 //TODO OBTENER DATOS PARA EL PASE DE SALIDA
-const getOneExitPass= async (id) =>{
+const getOneExitPassForExteriorRequest= async (id) =>{
     try{
         const connection = await getConnection();
         const result = await connection.query(`
-        Select V.brand, V.plate, V.km, VT.type_name, P.fullname, ER.id, ER.requesting_unit
+        Select EP.idexit_pass, V.brand, V.plate, V.km, VT.type_name, P.fullname, ER.id, ER.requesting_unit,
+		(SELECT MIN(DER.hour) FROM detail_exterior_request DER WHERE DER.id_exterior_request = ER.id) as first_hour,
+        (SELECT MIN(DER.dateOf) FROM detail_exterior_request DER WHERE DER.id_exterior_request = ER.id) as first_date,
+        (SELECT MAX(DER.department) FROM detail_exterior_request DER WHERE DER.id_exterior_request = ER.id) as destinations
         From exit_pass AS EP
         JOIN trips AS T ON T.idtrips = EP.id_trips
-        JOIN vehicle AS V ON V.idVehicle = T.vehicle_plate
+        JOIN vehicle AS V ON V.idVehicle = T.vehicle_plate 
         JOIN person AS P ON P.uuid = T.pilot
         JOIN exterior_request AS ER ON ER.id = T.transp_request_exterior
+        JOIN vtype AS VT ON VT.idvtype = V.type
+        WHERE idexit_pass = ?`,id)
+        var data=JSON.parse(JSON.stringify(result))
+        return data;
+    }catch(error){
+        throw error;
+    }
+}
+
+//TODO OBTENER DATOS PARA EL PASE DE SALIDA
+const getOneExitPassForLocalRequest= async (id) =>{
+    try{
+        const connection = await getConnection();
+        const result = await connection.query(`
+        Select EP.idexit_pass, V.brand, V.plate, V.km, VT.type_name, P.fullname, LR.id, LR.section,
+		(SELECT MIN(DLR.schedule) FROM detail_local_request DLR WHERE DLR.id_local_request = LR.id) as first_hour,
+        (SELECT MIN(DLR.dateOf) FROM detail_local_request DLR WHERE DLR.id_local_request = LR.id) as first_date,
+        (SELECT MAX(DLR.destiny) FROM detail_local_request DLR WHERE DLR.id_local_request = LR.id) as destinations
+        From exit_pass AS EP
+        JOIN trips AS T ON T.idtrips = EP.id_trips
+        JOIN vehicle AS V ON V.idVehicle = T.vehicle_plate 
+        JOIN person AS P ON P.uuid = T.pilot
+        JOIN local_request AS LR ON LR.id = T.transp_request_local
         JOIN vtype AS VT ON VT.idvtype = V.type
         WHERE idexit_pass = ?`,id)
         var data=JSON.parse(JSON.stringify(result))
@@ -188,5 +214,6 @@ module.exports = {
     getOneTrip,
     createNewTrip,
     updateOneTrip,
-    getOneExitPass
+    getOneExitPassForExteriorRequest,
+    getOneExitPassForLocalRequest
 }

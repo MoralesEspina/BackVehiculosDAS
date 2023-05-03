@@ -160,7 +160,6 @@ const updateOneRequest = async (id, updatedRequest) => {
             VALUES (?,?,?,?)`,
             [updatedRequest.transp_request_exterior,updatedRequest.pilot_name, updatedRequest.plate_vehicle, updatedRequest.status]);
             const idTrips = createTrips.insertId
-            console.log(idTrips)
             const newExitPass = await connection.query(`
             INSERT INTO exit_pass (id_trips)
              VALUES (?)`, idTrips)

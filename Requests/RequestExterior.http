@@ -21,8 +21,8 @@ Content-Type: application/json
     "duration_days": "12",
     "phoneNumber": "41806704",
     "observations": "Ninguna",
-    "provide_fuel": 0,
-    "provide_travel_expenses": 0,
+    "provide_fuel": "1",
+    "provide_travel_expenses": "1",
     "reason_rejected": "Ninguna",
     "boss":"Dylan",
     "detail":   [
@@ -75,14 +75,14 @@ Content-Type: application/json
 }
 
 ### Actualizando Solicitud
-PUT {{host}}/exteriorRequest/edit/20
+PUT {{host}}/exteriorRequest/edit/4
 Content-Type: application/json
 
 {
-    "pilot_name": "08e25be0-b84e-4bf4-aead-b78990a6072a",
-    "plate_vehicle": "1023813281092381",
-    "provide_fuel": 0,
-    "provide_travel_expenses":1,
+    "pilot_name": "b03bee99-4a83-4f4b-a8c0-62a2249fc1fd",
+    "plate_vehicle": "1",
+    "provide_fuel": "",
+    "provide_travel_expenses":"",
     "status_request": 7
 }
 

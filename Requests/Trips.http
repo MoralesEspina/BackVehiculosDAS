@@ -18,8 +18,8 @@ Content-Type: application/json
 
 {
     "transp_request_exterior": 2,
-    "pilot": "08e25be0-b84e-4bf4-aead-b78990a6072a",
-    "vehicle_plate": "1023813281092381"
+    "pilot": "b03bee99-4a83-4f4b-a8c0-62a2249fc1fd",
+    "vehicle_plate": "1"
 }
 
 ### Creando un Nuevo Viaje Local
@@ -39,3 +39,5 @@ Content-Type: application/json
 {
     "status": 11
 }
+### Obteniendo Todos los viajes locales
+GET {{host}}/exitpass/1

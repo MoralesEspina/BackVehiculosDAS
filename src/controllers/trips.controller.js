@@ -104,6 +104,8 @@ const updateOneTrip= async(req,res) =>{
 
 //TODO OBTENER UN PASE DE SALID
 const getOneExitPass= async(req,res) =>{
+    let myUrl = new URL (process.env.URL+req.url)
+    let option = myUrl.searchParams.get('option')
     const { id } = req.params;
     if (!id) {
         res.status(400).send({
@@ -113,7 +115,7 @@ const getOneExitPass= async(req,res) =>{
           return;
     }
     try{
-        const oneExitPass =  await TripService.getOneExitPass(id);
+        const oneExitPass =  await TripService.getOneExitPass(id, option);
         if (oneExitPass.status == 404) {
             res.status(404).json({data: oneExitPass})
         }else{
