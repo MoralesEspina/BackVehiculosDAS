@@ -152,9 +152,9 @@ const updateOneRequest = async (id, updatedRequest) => {
         if (updatedRequest.status_request == 7) {
             const updated = await connection.query(`
             UPDATE exterior_request 
-            SET provide_fuel = IFNULL(?, provide_fuel),provide_travel_expenses = IFNULL(?, provide_travel_expenses), status_request = IFNULL(?, status_request) 
+            SET status_request = IFNULL(?, status_request) 
             WHERE id = ?`,
-            [updatedRequest.provide_fuel, updatedRequest.provide_travel_expenses, updatedRequest.status_request, id]);  
+            [updatedRequest.status_request, id]);  
             const result = await connection.query(`
             INSERT INTO trips(transp_request_exterior,pilot,vehicle_plate,status) 
             VALUES (?,?,?,?)`,
