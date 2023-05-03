@@ -63,12 +63,16 @@ const updateOneTrip = async (id, Trip) => {
 }
 
 //TODO OBTENER UN PASE DE SALIDA
-const getOneExitPass = async (id, option) => {
+const getOnePDF = async (id, option, request) => {
     try {
         let oneExitPass;
         switch (option) {
             case 'local':
-                oneExitPass = await TripStorage.getOneExitPassForLocalRequest(id);
+                if (request == 'exitpass') {
+                    oneExitPass = await TripStorage.getOneExitPassForLocalRequest(id);
+                }else{
+                    oneExitPass = await TripStorage.getOneBinnacleForLocalRequest(id);
+                }
                 break;
                 case 'exterior':
                     oneExitPass = await TripStorage.getOneExitPassForExteriorRequest(id);
@@ -89,5 +93,5 @@ module.exports = {
     getOneTrip,
     createNewTrip,
     updateOneTrip,
-    getOneExitPass
+    getOnePDF
 }

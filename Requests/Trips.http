@@ -40,4 +40,4 @@ Content-Type: application/json
     "status": 11
 }
 ### Obteniendo Todos los viajes locales
-GET {{host}}/exitpass/2?option=local
+GET {{host}}/pdf/1?option=local&request=binnacle

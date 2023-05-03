@@ -206,6 +206,29 @@ const getOneExitPassForLocalRequest= async (id) =>{
     }
 }
 
+//TODO OBTENER DATOS PARA EL PASE DE SALIDA
+const getOneBinnacleForLocalRequest= async (id) =>{
+    try{
+        const connection = await getConnection();
+        const result = await connection.query(`
+        Select B.idbinnacle, P.fullname, V.brand, V.cylinders, V.plate, V.model, V.gas, V.km, VT.type_name, LR.id, LR.phoneNumber,
+		(SELECT MIN(DLR.schedule) FROM detail_local_request DLR WHERE DLR.id_local_request = LR.id) as first_hour,
+        (SELECT MIN(DLR.dateOf) FROM detail_local_request DLR WHERE DLR.id_local_request = LR.id) as first_date,
+        (SELECT MAX(DLR.destiny) FROM detail_local_request DLR WHERE DLR.id_local_request = LR.id) as destinations
+        From binnacle AS B
+        JOIN trips AS T ON T.idtrips = B.id_trips
+        JOIN vehicle AS V ON V.idVehicle = T.vehicle_plate 
+        JOIN person AS P ON P.uuid = T.pilot
+        JOIN local_request AS LR ON LR.id = T.transp_request_local
+        JOIN vtype AS VT ON VT.idvtype = V.type
+        WHERE idbinnacle = ?`,id)
+        var data=JSON.parse(JSON.stringify(result))
+        return data;
+    }catch(error){
+        throw error;
+    }
+}
+
 module.exports = {
     getAllTripsFromExteriorRequest,
     getTripsOnHoldFromExteriorRequest,
@@ -215,5 +238,6 @@ module.exports = {
     createNewTrip,
     updateOneTrip,
     getOneExitPassForExteriorRequest,
-    getOneExitPassForLocalRequest
+    getOneExitPassForLocalRequest,
+    getOneBinnacleForLocalRequest
 }
