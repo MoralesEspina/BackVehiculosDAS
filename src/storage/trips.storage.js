@@ -188,7 +188,7 @@ const getOneExitPassForLocalRequest= async (id) =>{
     try{
         const connection = await getConnection();
         const result = await connection.query(`
-        Select EP.idexit_pass, V.brand, V.plate, V.km, VT.type_name, P.fullname, LR.id, LR.section,
+        Select EP.idexit_pass, V.brand, V.plate, V.km, VT.type_name, P.fullname, LR.id, LR.section AS requesting_unit,
 		(SELECT MIN(DLR.schedule) FROM detail_local_request DLR WHERE DLR.id_local_request = LR.id) as first_hour,
         (SELECT MIN(DLR.dateOf) FROM detail_local_request DLR WHERE DLR.id_local_request = LR.id) as first_date,
         (SELECT MAX(DLR.destiny) FROM detail_local_request DLR WHERE DLR.id_local_request = LR.id) as destinations

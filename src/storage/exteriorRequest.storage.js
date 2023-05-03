@@ -163,7 +163,10 @@ const updateOneRequest = async (id, updatedRequest) => {
             const newExitPass = await connection.query(`
             INSERT INTO exit_pass (id_trips)
              VALUES (?)`, idTrips)
-            return { request: createTrips, updated: updated, exitPass: newExitPass };
+            const newBinnacle = await connection.query(`
+            INSERT INTO binnacle (id_trips)
+             VALUES (?)`, idTrips)
+            return { request: createTrips, updated: updated, exitPass: newExitPass, binnacle: newBinnacle };
             }
             const updated = await connection.query(`
             UPDATE exterior_request SET status_request = IFNULL(?, status_request), reason_rejected = IFNULL(?, reason_rejected) 
