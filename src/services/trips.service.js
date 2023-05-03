@@ -62,9 +62,19 @@ const updateOneTrip = async (id, Trip) => {
 
 }
 
+//TODO OBTENER UN PASE DE SALIDA
+const getOneExitPass = async (id) => {
+    try {
+        const oneExitPass = await TripStorage.getOneExitPass(id);
+        return oneExitPass
+    } catch (error) {
+        
+    }
+}
 module.exports = {
     getAllTrips,
     getOneTrip,
     createNewTrip,
     updateOneTrip,
+    getOneExitPass
 }

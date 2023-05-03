@@ -102,10 +102,35 @@ const updateOneTrip= async(req,res) =>{
     }
 }
 
+//TODO OBTENER UN PASE DE SALID
+const getOneExitPass= async(req,res) =>{
+    const { id } = req.params;
+    if (!id) {
+        res.status(400).send({
+            status: "FAILED",
+            data: { error: "ID no puede ir vacio" },
+          });
+          return;
+    }
+    try{
+        const oneExitPass =  await TripService.getOneExitPass(id);
+        if (oneExitPass.status == 404) {
+            res.status(404).json({data: oneExitPass})
+        }else{
+            res.status(200).json({status: "OK", data: oneExitPass})
+        }
+        
+    }catch(error){
+        res.status(500);
+        res.send(error.message);
+    }
+}
+
 export const methods = {
     getAllTrips,
     getAllTripsOnHold,
     getOneTrip,
     createNewTrip,
     updateOneTrip,
+    getOneExitPass
 }

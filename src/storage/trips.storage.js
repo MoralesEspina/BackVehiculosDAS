@@ -117,15 +117,16 @@ const getOneTrip = async (id) => {
 const createNewTrip = async (Trip) => {
     try{
         const connection = await getConnection();
-            await connection.query(`
+        const request = await connection.query(`
             INSERT INTO trips (transp_request_local,transp_request_exterior,pilot,vehicle_plate,status) 
             VALUES (?,?,?,?,?)`,
             [Trip.transp_request_local,Trip.transp_request_exterior,Trip.pilot,Trip.vehicle_plate,Trip.status]);
-            return {transp_request_local: Trip.transp_request_local, 
-                    transp_request_exterior: Trip.transp_request_exterior,
-                    pilot: Trip.pilot,
-                    vehicle_plate: Trip.vehicle_plate,
-                    status: Trip.status};
+        const idTrips = request.insertID
+            console.log(idTrips + "Hola")
+        const newExitPass = await connection.query(`
+            INSERT INTO exit_pass (id_trips)
+             VALUES (?)`, idTrips)
+             return newExitPass;
     } catch(error)
     {
         throw error;
@@ -159,6 +160,26 @@ const updateOneTrip = async (id, updatedTrip) => {
     }
 }
 
+//TODO OBTENER DATOS PARA EL PASE DE SALIDA
+const getOneExitPass= async (id) =>{
+    try{
+        const connection = await getConnection();
+        const result = await connection.query(`
+        Select V.brand, V.plate, V.km, VT.type_name, P.fullname, ER.id, ER.requesting_unit
+        From exit_pass AS EP
+        JOIN trips AS T ON T.idtrips = EP.id_trips
+        JOIN vehicle AS V ON V.idVehicle = T.vehicle_plate
+        JOIN person AS P ON P.uuid = T.pilot
+        JOIN exterior_request AS ER ON ER.id = T.transp_request_exterior
+        JOIN vtype AS VT ON VT.idvtype = V.type
+        WHERE idexit_pass = ?`,id)
+        var data=JSON.parse(JSON.stringify(result))
+        return data;
+    }catch(error){
+        throw error;
+    }
+}
+
 module.exports = {
     getAllTripsFromExteriorRequest,
     getTripsOnHoldFromExteriorRequest,
@@ -167,4 +188,5 @@ module.exports = {
     getOneTrip,
     createNewTrip,
     updateOneTrip,
+    getOneExitPass
 }

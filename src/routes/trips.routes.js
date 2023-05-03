@@ -7,5 +7,6 @@ router.get("/", TripController.getAllTrips);
 router.get("/:id", TripController.getOneTrip);
 router.post("/", /*validateCreateTrip,*/ TripController.createNewTrip);
 router.put("/:id", /*validateCreateTrip,*/ TripController.updateOneTrip);
+router.get("/exitpass/:id", TripController.getOneExitPass);
 
 export default router;

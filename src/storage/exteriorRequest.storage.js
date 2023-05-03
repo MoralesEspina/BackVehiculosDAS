@@ -155,12 +155,17 @@ const updateOneRequest = async (id, updatedRequest) => {
             SET status_request = IFNULL(?, status_request) 
             WHERE id = ?`,
             [updatedRequest.status_request, id]);  
-            const result = await connection.query(`
+            const createTrips = await connection.query(`
             INSERT INTO trips(transp_request_exterior,pilot,vehicle_plate,status) 
             VALUES (?,?,?,?)`,
             [updatedRequest.transp_request_exterior,updatedRequest.pilot_name, updatedRequest.plate_vehicle, updatedRequest.status]);
-            return { request: result, updated: updated };
-        }
+            const idTrips = createTrips.insertId
+            console.log(idTrips)
+            const newExitPass = await connection.query(`
+            INSERT INTO exit_pass (id_trips)
+             VALUES (?)`, idTrips)
+            return { request: createTrips, updated: updated, exitPass: newExitPass };
+            }
             const updated = await connection.query(`
             UPDATE exterior_request SET status_request = IFNULL(?, status_request), reason_rejected = IFNULL(?, reason_rejected) 
             WHERE id = ?`,
