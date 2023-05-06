@@ -5,7 +5,9 @@ const getAllTripsFromExteriorRequest= async () =>{
     try{
         const connection = await getConnection();
         const result = await connection.query(`
-        SELECT t.idtrips,ER.requesting_unit,ER.commission_manager,ER.date_request,t.transp_request_exterior,P.fullname,V.plate,S.status_name 
+        SELECT t.idtrips,ER.requesting_unit,ER.commission_manager,ER.date_request,t.transp_request_exterior,P.fullname,V.plate,S.status_name,
+        (SELECT MAX(DER.dateTo) FROM detail_exterior_request DER WHERE DER.id_exterior_request = ER.id) as latest_date, 
+        (SELECT MIN(DER.dateOf) FROM detail_exterior_request DER WHERE DER.id_exterior_request = ER.id) as first_date
         FROM trips as t
         JOIN exterior_request as ER 
         JOIN person as P 
@@ -51,7 +53,9 @@ const getAllTripsFromLocalRequest= async () =>{
     try{
         const connection = await getConnection();
         const result = await connection.query(`
-        SELECT t.idtrips,LR.applicantsName,LR.date,t.transp_request_local,P.fullname,V.plate,S.status_name 
+        SELECT t.idtrips,LR.applicantsName,LR.date,t.transp_request_local,P.fullname,V.plate,S.status_name,
+        (SELECT MAX(DLR.dateTo) FROM detail_local_request DLR WHERE DLR.id_local_request = LR.id) as latest_date, 
+        (SELECT MIN(DLR.dateOf) FROM detail_local_request DLR WHERE DLR.id_local_request = LR.id) as first_date
         FROM trips as t JOIN local_request as LR 
         JOIN person as P 
         JOIN vehicle as V 

@@ -26,7 +26,7 @@ Content-Type: application/json
     "position": "Encargado de Area",
     "phoneNumber": 1234567891,
     "observations": "Ninguna",
-    "boss": "Dylan",
+    "created_by": "Esdras",
     "detail":   [
         {
         "dateOf": "2022/01/01", 

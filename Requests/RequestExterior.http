@@ -107,6 +107,7 @@ Content-Type: application/json
   "pilot_name": "",
   "reason_rejected": "",
   "status_request": "",
+  "created_by": "Esdras",
   "detail": [
     {
       "dateOf": "2023-05-24",
