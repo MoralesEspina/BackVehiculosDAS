@@ -42,20 +42,20 @@ const getAllPilotsActives= async (dates) =>{
         SELECT T.pilot 
         FROM trips AS T 
         JOIN detail_local_request AS DLR ON DLR.id_local_request = T.transp_request_local
-        WHERE 
-        (DLR.dateOf BETWEEN ? AND ?) OR
-        (DLR.dateTo BETWEEN ? AND ?) OR
-        (? BETWEEN DLR.dateOf AND DLR.dateTo) OR
-        (? BETWEEN DLR.dateOf AND DLR.dateTo)
+        WHERE T.status NOT LIKE 13 AND (
+        (DLR.dateOf BETWEEN Date(?) AND Date(?)) OR
+        (DLR.dateTo BETWEEN Date(?) AND Date(?)) OR
+        (Date(?) BETWEEN DLR.dateOf AND DLR.dateTo) OR
+        (Date(?) BETWEEN DLR.dateOf AND DLR.dateTo))
         UNION
         SELECT T.pilot 
         FROM trips AS T 
         JOIN detail_exterior_request AS DER ON DER.id_exterior_request = T.transp_request_exterior
-        WHERE 
-        (DER.dateOf BETWEEN ? AND ?) OR
-        (DER.dateTo BETWEEN ? AND ?) OR
-        (? BETWEEN DER.dateOf AND DER.dateTo) OR
-        (? BETWEEN DER.dateOf AND DER.dateTo)
+        WHERE T.status NOT LIKE 13 AND (
+        (DER.dateOf BETWEEN Date(?) AND Date(?)) OR
+        (DER.dateTo BETWEEN Date(?) AND Date(?)) OR
+        (Date(?) BETWEEN DER.dateOf AND DER.dateTo) OR
+        (Date(?) BETWEEN DER.dateOf AND DER.dateTo))
         );`,[dates.initialDateOf, dates.finalDateTo, dates.initialDateOf, dates.finalDateTo, dates.initialDateOf, dates.finalDateTo, dates.initialDateOf, dates.finalDateTo, dates.initialDateOf, dates.finalDateTo, dates.initialDateOf, dates.finalDateTo])
         var data=JSON.parse(JSON.stringify(result))
         return data;

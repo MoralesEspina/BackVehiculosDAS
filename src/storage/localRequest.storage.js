@@ -61,7 +61,9 @@ const getOneRequest = async (id) => {
         }
         else {
             request = await connection.query(`
-            SELECT l.id,l.place,l.date,l.section,l.applicantsName,l.position,l.phoneNumber,l.observations,l.status,l.boss
+            SELECT l.id,l.place,l.date,l.section,l.applicantsName,l.position,l.phoneNumber,l.observations,l.status,l.boss,
+            (SELECT MIN(DLR.dateOf) FROM detail_local_request DLR WHERE DLR.id_local_request = l.id) as first_date, 
+            (SELECT MAX(DLR.dateTo) FROM detail_local_request DLR WHERE DLR.id_local_request = l.id) as latest_date
             FROM local_request AS l 
             WHERE l.id = ?`, id);
         }
@@ -118,9 +120,9 @@ const createNewRequest = async (newRequest) => {
     try {
         const connection = await getConnection();
         const Request = await connection.query(`
-        INSERT INTO local_request (place,date,section,applicantsName,position,phoneNumber,observations,status, boss) 
+        INSERT INTO local_request (place,date,section,applicantsName,position,phoneNumber,observations,status, reason_rejected boss) 
         VALUES (?,?,?,?,?,?,?,?,?)`,
-            [newRequest.place, newRequest.date, newRequest.section, newRequest.applicantsName, newRequest.position, newRequest.phoneNumber, newRequest.observations, newRequest.status, newRequest.boss]);
+            [newRequest.place, newRequest.date, newRequest.section, newRequest.applicantsName, newRequest.position, newRequest.phoneNumber, newRequest.observations, newRequest.status, newRequest.reason_rejected, newRequest.boss]);
         return Request.insertId
     } catch (error) {
         throw error;
@@ -165,9 +167,9 @@ const updateOneRequest = async (id, updatedRequest) => {
             return { request: createTrips, updated: updated, exitPass: newExitPass, binnacle: newBinnacle };
         }
         const updated = await connection.query(`
-            UPDATE local_request SET status = IFNULL(?, status) 
+            UPDATE local_request SET status = IFNULL(?, status), reason_rejected = IFNULL(?, reason_rejected)  
             WHERE id = ?`,
-            [updatedRequest.status_request, id]);
+            [updatedRequest.status_request, updatedRequest.reason_rejected, id]);
         return updated;
     } catch (error) {
         throw error;

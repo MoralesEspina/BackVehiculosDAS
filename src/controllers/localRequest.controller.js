@@ -53,6 +53,7 @@ const createNewRequest= async(req,res) =>{
             position: data.position,
             phoneNumber: data.phoneNumber,
             observations: data.observations,
+            reason_rejected: data.reason_rejected,
             boss: data.boss,
         };
         const createdRequest = await RequestService.createNewRequest(Request);
@@ -107,6 +108,7 @@ const updateOneRequest = async (req, res) => {
             pilot_name: req.body.pilotName,
             plate_vehicle: req.body.plate,
             status_request: req.body.status,
+            reason_rejected: req.body.reason_rejected,
             transp_request_local: parseInt(id),
             status: 6
         };

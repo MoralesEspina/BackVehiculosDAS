@@ -161,10 +161,17 @@ const updateOneTrip = async (id, updatedTrip) => {
 }
 
 //TODO OBTENER DATOS PARA EL PASE DE SALIDA
-const getOneExitPassForExteriorRequest= async (id) =>{
+const getOneExitPass= async (id) =>{
     try{
         const connection = await getConnection();
-        const result = await connection.query(`
+        const status = await connection.query(`
+        SELECT transp_request_local 
+        FROM trips
+        WHERE idtrips = ? `, id);
+        let exteriorRequest, localRequest, data;
+        console.log(status[0].transp_request_local)
+        if (!status[0].transp_request_local) {
+            exteriorRequest = await connection.query(`
         Select EP.idexit_pass, V.brand, V.plate, V.km, VT.type_name, P.fullname, ER.id, ER.requesting_unit,
 		(SELECT MIN(DER.hour) FROM detail_exterior_request DER WHERE DER.id_exterior_request = ER.id) as first_hour,
         (SELECT MIN(DER.dateOf) FROM detail_exterior_request DER WHERE DER.id_exterior_request = ER.id) as first_date,
@@ -176,18 +183,10 @@ const getOneExitPassForExteriorRequest= async (id) =>{
         JOIN exterior_request AS ER ON ER.id = T.transp_request_exterior
         JOIN vtype AS VT ON VT.idvtype = V.type
         WHERE idexit_pass = ?`,id)
-        var data=JSON.parse(JSON.stringify(result))
-        return data;
-    }catch(error){
-        throw error;
-    }
-}
 
-//TODO OBTENER DATOS PARA EL PASE DE SALIDA
-const getOneExitPassForLocalRequest= async (id) =>{
-    try{
-        const connection = await getConnection();
-        const result = await connection.query(`
+            data=JSON.parse(JSON.stringify(exteriorRequest))
+        }else{
+            localRequest = await connection.query(`
         Select EP.idexit_pass, V.brand, V.plate, V.km, VT.type_name, P.fullname, LR.id, LR.section AS requesting_unit,
 		(SELECT MIN(DLR.schedule) FROM detail_local_request DLR WHERE DLR.id_local_request = LR.id) as first_hour,
         (SELECT MIN(DLR.dateOf) FROM detail_local_request DLR WHERE DLR.id_local_request = LR.id) as first_date,
@@ -199,7 +198,10 @@ const getOneExitPassForLocalRequest= async (id) =>{
         JOIN local_request AS LR ON LR.id = T.transp_request_local
         JOIN vtype AS VT ON VT.idvtype = V.type
         WHERE idexit_pass = ?`,id)
-        var data=JSON.parse(JSON.stringify(result))
+
+            data=JSON.parse(JSON.stringify(localRequest))
+        }
+        
         return data;
     }catch(error){
         throw error;
@@ -207,22 +209,45 @@ const getOneExitPassForLocalRequest= async (id) =>{
 }
 
 //TODO OBTENER DATOS PARA EL PASE DE SALIDA
-const getOneBinnacleForLocalRequest= async (id) =>{
+const getOneBinnacle= async (id) =>{
     try{
         const connection = await getConnection();
-        const result = await connection.query(`
-        Select B.idbinnacle, P.fullname, V.brand, V.cylinders, V.plate, V.model, V.gas, V.km, VT.type_name, LR.id, LR.phoneNumber,
-		(SELECT MIN(DLR.schedule) FROM detail_local_request DLR WHERE DLR.id_local_request = LR.id) as first_hour,
-        (SELECT MIN(DLR.dateOf) FROM detail_local_request DLR WHERE DLR.id_local_request = LR.id) as first_date,
-        (SELECT MAX(DLR.destiny) FROM detail_local_request DLR WHERE DLR.id_local_request = LR.id) as destinations
-        From binnacle AS B
-        JOIN trips AS T ON T.idtrips = B.id_trips
-        JOIN vehicle AS V ON V.idVehicle = T.vehicle_plate 
-        JOIN person AS P ON P.uuid = T.pilot
-        JOIN local_request AS LR ON LR.id = T.transp_request_local
-        JOIN vtype AS VT ON VT.idvtype = V.type
-        WHERE idbinnacle = ?`,id)
-        var data=JSON.parse(JSON.stringify(result))
+        const status = await connection.query(`
+        SELECT transp_request_local 
+        FROM trips
+        WHERE idtrips = ? `, id);
+        let exteriorRequest, localRequest, data;
+        console.log(status[0].transp_request_local)
+        if (!status[0].transp_request_local) {
+            exteriorRequest = await connection.query(`
+            Select B.idbinnacle, P.fullname, V.brand, V.cylinders, V.plate, V.model, V.gas, V.km, VT.type_name, ER.id, ER.phoneNumber,
+			(SELECT MIN(DER.hour) FROM detail_exterior_request DER WHERE DER.id_exterior_request = ER.id) as first_hour,
+            (SELECT MIN(DER.dateOf) FROM detail_exterior_request DER WHERE DER.id_exterior_request = ER.id) as first_date,
+            (SELECT MAX(DER.department) FROM detail_exterior_request DER WHERE DER.id_exterior_request = ER.id) as destinations
+            From binnacle AS B
+            JOIN trips AS T ON T.idtrips = B.id_trips
+            JOIN vehicle AS V ON V.idVehicle = T.vehicle_plate 
+            JOIN person AS P ON P.uuid = T.pilot
+            JOIN exterior_request AS ER ON ER.id = T.transp_request_exterior
+            JOIN vtype AS VT ON VT.idvtype = V.type
+            WHERE idbinnacle = ?`,id)
+
+            data=JSON.parse(JSON.stringify(exteriorRequest))
+        }else{
+            localRequest = await connection.query(`
+            Select B.idbinnacle, P.fullname, V.brand, V.cylinders, V.plate, V.model, V.gas, V.km, VT.type_name, LR.id, LR.phoneNumber,
+            (SELECT MIN(DLR.schedule) FROM detail_local_request DLR WHERE DLR.id_local_request = LR.id) as first_hour,
+            (SELECT MIN(DLR.dateOf) FROM detail_local_request DLR WHERE DLR.id_local_request = LR.id) as first_date,
+            (SELECT MAX(DLR.destiny) FROM detail_local_request DLR WHERE DLR.id_local_request = LR.id) as destinations
+            From binnacle AS B
+            JOIN trips AS T ON T.idtrips = B.id_trips
+            JOIN vehicle AS V ON V.idVehicle = T.vehicle_plate 
+            JOIN person AS P ON P.uuid = T.pilot
+            JOIN local_request AS LR ON LR.id = T.transp_request_local
+            JOIN vtype AS VT ON VT.idvtype = V.type
+            WHERE idbinnacle = ?`,id)
+            data=JSON.parse(JSON.stringify(localRequest))
+        }
         return data;
     }catch(error){
         throw error;
@@ -237,7 +262,6 @@ module.exports = {
     getOneTrip,
     createNewTrip,
     updateOneTrip,
-    getOneExitPassForExteriorRequest,
-    getOneExitPassForLocalRequest,
-    getOneBinnacleForLocalRequest
+    getOneExitPass,
+    getOneBinnacle
 }

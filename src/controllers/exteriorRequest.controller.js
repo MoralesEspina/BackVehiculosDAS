@@ -44,6 +44,7 @@ const getOneRequest = async (req, res) => {
 const createNewRequest = async (req, res) => {
     let data = req.body;
     let detail = data.detail;
+    console.log(data)
     try {
         const Request = {
             requesting_unit: data.requesting_unit,

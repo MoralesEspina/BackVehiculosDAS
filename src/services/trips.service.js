@@ -67,15 +67,11 @@ const getOnePDF = async (id, option, request) => {
     try {
         let oneExitPass;
         switch (option) {
-            case 'local':
-                if (request == 'exitpass') {
-                    oneExitPass = await TripStorage.getOneExitPassForLocalRequest(id);
-                }else{
-                    oneExitPass = await TripStorage.getOneBinnacleForLocalRequest(id);
-                }
+            case 'exitpass':
+                oneExitPass = await TripStorage.getOneExitPass(id);
                 break;
-                case 'exterior':
-                    oneExitPass = await TripStorage.getOneExitPassForExteriorRequest(id);
+                case 'binnacle':
+                        oneExitPass = await TripStorage.getOneBinnacle(id);
                 break;
             default:
                 return {

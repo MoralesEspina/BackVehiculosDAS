@@ -88,3 +88,34 @@ Content-Type: application/json
 
 ### Obteniendo una Persona
 GET {{host}}/exteriorRequest/complete/25
+
+### Creando una Nueva Persona
+POST {{host}}/exteriorRequest
+Content-Type: application/json
+
+{
+  "requesting_unit": "ñlkjasd",
+  "commission_manager": "asñldj",
+  "date_request": "2023/05/02",
+  "objective_request": "añsldj",
+  "duration_days": 13,
+  "phoneNumber": 123,
+  "observations": ",",
+  "provide_fuel": "1",
+  "provide_travel_expenses": "2",
+  "plate_vehicle": "",
+  "pilot_name": "",
+  "reason_rejected": "",
+  "status_request": "",
+  "detail": [
+    {
+      "dateOf": "2023-05-24",
+      "dateTo": "2023-05-11",
+      "hour": "01:18",
+      "department": "Chimaltenango",
+      "number_people": 12,
+      "municipality": "Acatenango",
+      "village": "123"
+    }
+  ]
+}
