@@ -121,7 +121,7 @@ const createNewRequest = async (newRequest) => {
         const connection = await getConnection();
         const Request = await connection.query(`
         INSERT INTO local_request (place,date,section,applicantsName,position,phoneNumber,observations,status, reason_rejected, created_by) 
-        VALUES (?,?,?,?,?,?,?,?,?)`,
+        VALUES (?,?,?,?,?,?,?,?,?,?)`,
             [newRequest.place, newRequest.date, newRequest.section, newRequest.applicantsName, newRequest.position, newRequest.phoneNumber, newRequest.observations, newRequest.status, newRequest.reason_rejected, newRequest.created_by]);
         return Request.insertId
     } catch (error) {
