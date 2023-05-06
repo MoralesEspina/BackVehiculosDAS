@@ -58,7 +58,7 @@ const createNewRequest = async (req, res) => {
             provide_travel_expenses: data.provide_travel_expenses,
             status_request: 6,
             reason_rejected: data.reason_rejected,
-            boss: data.boss,
+            created_by: data.created_by,
         };
         const createdRequest = await RequestService.createNewRequest(Request);
 
