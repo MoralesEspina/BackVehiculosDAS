@@ -68,7 +68,17 @@ const updateOneUser = async (id, User) => {
     } catch (error) {
         throw error;
     }
+}
 
+
+//TODO ELIMINAR UN USUARIO
+const deleteOneUser = async (id) => {
+    try {
+        const deletedUser = await AuthStorage.deleteOneUser(id);
+        return deletedUser;
+    } catch (error) {
+        throw error;
+    }
 }
 
 module.exports = {
@@ -78,5 +88,6 @@ module.exports = {
     getOneUser,
     getOneRol,
     updateOneUser,
-    getPassword
+    getPassword,
+    deleteOneUser
 }

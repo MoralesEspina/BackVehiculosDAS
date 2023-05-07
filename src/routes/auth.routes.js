@@ -7,4 +7,5 @@ router.post("/register", AuthController.registerUser);
 router.put("/edit/:id", AuthController.updateOneUser);
 router.get("/users", AuthController.getAllUsers);
 router.get("/user/:id", AuthController.getOneUser);
+router.delete("/user/:id", AuthController.deleteOneUser);
 export default router;

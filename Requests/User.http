@@ -19,14 +19,13 @@ Content-Type: application/json
 }
 
 ### Editando un Usuario
-PUT {{host}}/edit/4df44fd8-e8cc-40f6-b48e-b3cf0612c26f
+PUT {{host}}/edit/8c5cd53e-d5e9-48b7-9c2b-99cff7a56c52
 Content-Type: application/json
 
 {
-    "username": "contra",
-    "oldPassword": "admin",
-    "password": "admin234",
-    "rol_id": "4"
+    "username": "Secre3",
+    "password": "",
+    "rol_id": "1"
 }
 
 

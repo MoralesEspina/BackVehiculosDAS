@@ -163,7 +163,6 @@ const deleteOnePerson = async (id) => {
     } catch (error) {
         throw error;
     }
-    
 }
 module.exports = {
     getAllPersons,

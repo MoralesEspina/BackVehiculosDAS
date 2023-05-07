@@ -84,6 +84,7 @@ const getOneUser = async (req, res) => {
 const updateOneUser = async (req, res) => {
     const { body } = req
     const { id } = req.params;
+    let passwordHash;
     if (!id) {
         res.status(400).send({
             status: "FAILED",
@@ -93,22 +94,18 @@ const updateOneUser = async (req, res) => {
     }
     
     try {
-        const detailUser = await AuthService.getPassword(id);
-        const checkPassword = await compare(body.oldPassword, detailUser.password)
-        if (!checkPassword) {
-            res.status(400).send({
-                data: { error: "Contraseña no coincide" }
-                })
-                return;
+        if (req.body.password == '') {
+            passwordHash = ''
+        }else{
+            passwordHash = await encrypt(body.password);
         }
 
-        const passwordHash = await encrypt(body.newPassword);
         const user = {
             username: req.body.username,
             password: passwordHash,
             rol_id: req.body.rol_id,
         };
-
+        console.log(passwordHash)
         const updatedUser = await AuthService.updateOneUser(id, user);
 
         if (updatedUser.status == 400) {
@@ -123,10 +120,32 @@ const updateOneUser = async (req, res) => {
     }
 }
 
+//TODO ELIMINAR UN USUARIO  
+const deleteOneUser= async(req,res) =>{
+    const { id } = req.params;
+    if (!id) {
+        res.status(400).send({
+            status: "FAILED",
+            data: { error: "Se necesita un ID" },
+          });
+          return;
+    }
+    try{
+        const deletedUser = await AuthService.deleteOneUser(id);
+        if (deletedUser.status == 400) {
+            res.status(400).json({data: deletedUser})
+        }else{
+            res.status(204).json({status: "Eliminado Correctamente", data: deletedUser})
+        }
+    }catch(error){
+    
+    }
+}
 export const methods = {
     loginUser,
     registerUser,
     getAllUsers,
     getOneUser,
-    updateOneUser
+    updateOneUser,
+    deleteOneUser
 }

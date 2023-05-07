@@ -102,29 +102,48 @@ const getPassword = async (uuid) => {
 const updateOneUser = async (id, updatedUser) => {
     try{
         const connection = await getConnection();
-            const result = await connection.query(`
-            UPDATE user 
-            SET username = IFNULL(?, username), password = IFNULL(?, password), rol_id = IFNULL(?, rol_id) 
-            WHERE uuid = ?`,
-            [updatedUser.username,updatedUser.password,updatedUser.rol_id,id]);
-            if (result.affectedRows === 0) {
-                return {
-                    status: 400,
-                    message: 'El usuario no existe'
-                };
+            let result;
+            if (updatedUser.password == '') {
+                result = await connection.query(`
+                UPDATE user 
+                SET username = IFNULL(?, username), rol_id = IFNULL(?, rol_id) 
+                WHERE uuid = ?`,
+                [updatedUser.username,updatedUser.rol_id,id]);
+            }else{
+                result = await connection.query(`
+                UPDATE user 
+                SET username = IFNULL(?, username), password = IFNULL(?, password), rol_id = IFNULL(?, rol_id) 
+                WHERE uuid = ?`,
+                [updatedUser.username,updatedUser.password,updatedUser.rol_id,id]);
             }
-             const updated = await connection.query(`
-             Select u.uuid,u.username,r.rol 
-             FROM user AS u JOIN rol AS r 
-             WHERE u.rol_id = r.idrol and uuid = ?`, id);
-             return updated;
-
+             return result;
     } catch(error)
     {
         throw error;
     }
 }
 
+//TODO ELIMINAR UN USUARIO
+const deleteOneUser = async (id) => {
+    try {
+        const connection = await getConnection();
+        const result = await connection.query(`
+        DELETE FROM user 
+        WHERE uuid = ?`, id);
+        if (result.affectedRows <= 0) {
+            return {
+                status: 400,
+                message: 'El Usuario no existe'
+            };
+        }
+        return {
+            status: 204
+        }
+    } catch (error) {
+        throw error;
+    }
+    
+}
 module.exports = {
     createNewUser,
     getOneUsername,
@@ -132,5 +151,6 @@ module.exports = {
     getOneUser,
     getOneRol,
     updateOneUser,
-    getPassword
+    getPassword,
+    deleteOneUser
 }
