@@ -49,7 +49,7 @@ const getOneRequest = async (id) => {
         let request, detailRequest;
         if (status[0].status_request == 7) {
             request = await connection.query(`
-            SELECT ER.id,ER.requesting_unit,ER.commission_manager,ER.date_request,ER.objective_request,ER.duration_days,ER.phoneNumber,ER.observations,ER.provide_fuel,ER.provide_travel_expenses,ER.status_request,ER.reason_rejected,ER.boss,V.idVehicle as plate_vehicle,P.uuid as pilot_name,
+            SELECT ER.id,ER.requesting_unit,ER.commission_manager,ER.date_request,ER.objective_request,ER.duration_days,ER.phoneNumber,ER.observations,ER.provide_fuel,ER.provide_travel_expenses,ER.status_request,ER.reason_rejected,ER.created_by,V.idVehicle as plate_vehicle,P.uuid as pilot_name,
             (SELECT MAX(DER.dateTo) FROM detail_exterior_request DER WHERE DER.id_exterior_request = ER.id) as latest_date, 
             (SELECT MIN(DER.dateOf) FROM detail_exterior_request DER WHERE DER.id_exterior_request = ER.id) as first_date,
             (SELECT GROUP_CONCAT(DER.department SEPARATOR ', ') FROM detail_exterior_request DER WHERE DER.id_exterior_request = ER.id) as destinations
@@ -61,7 +61,7 @@ const getOneRequest = async (id) => {
         }
         else {
             request = await connection.query(`
-            SELECT ER.id,ER.requesting_unit,ER.commission_manager,ER.date_request,ER.objective_request,ER.duration_days,ER.phoneNumber,ER.observations,ER.provide_fuel,ER.provide_travel_expenses,ER.status_request,ER.reason_rejected,ER.boss,
+            SELECT ER.id,ER.requesting_unit,ER.commission_manager,ER.date_request,ER.objective_request,ER.duration_days,ER.phoneNumber,ER.observations,ER.provide_fuel,ER.provide_travel_expenses,ER.status_request,ER.reason_rejected,ER.created_by,
             (SELECT MAX(DER.dateTo) FROM detail_exterior_request DER WHERE DER.id_exterior_request = ER.id) as latest_date, 
             (SELECT MIN(DER.dateOf) FROM detail_exterior_request DER WHERE DER.id_exterior_request = ER.id) as first_date
             FROM exterior_request as ER
@@ -90,7 +90,7 @@ const getOneRequestComplete = async (id) => {
     try {
         const connection = await getConnection();
         const request = await connection.query(`
-        SELECT id,requesting_unit,commission_manager,date_request,objective_request,duration_days,phoneNumber,observations,provide_fuel,provide_travel_expenses,status_request,reason_rejected,boss,V.plate,P.fullname 
+        SELECT id,requesting_unit,commission_manager,date_request,objective_request,duration_days,phoneNumber,observations,provide_fuel,provide_travel_expenses,status_request,reason_rejected,created_by,V.plate,P.fullname 
         FROM exterior_request 
         JOIN trips as T 
         JOIN vehicle as V 
