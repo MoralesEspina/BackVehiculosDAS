@@ -1,11 +1,11 @@
 @host = http://localhost:3000/api
 
 ### Obteniendo Todas las Personas
-GET {{host}}/localRequest?value=actives
+GET {{host}}/localRequest?created_by=admin
 
 
 ### Obteniendo Todas las Personas
-GET {{host}}/localRequest/onhold
+GET {{host}}/localRequest?value=onHold&status=6&created_by=Secre1
 
 ### Obteniendo una Persona
 GET {{host}}/localRequest/1?value=

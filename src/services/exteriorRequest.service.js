@@ -1,18 +1,19 @@
 const RequestStorage = require("../storage/exteriorRequest.storage")
 
 //TODO OBTENER TODAS LAS SOLICITUDES
-const getAllRequests = async (option, status) => {
+const getAllRequests = async (option, status, created_by) => {
     try{
         let allRequests;
         switch (option) {
             case 'actives':
-                allRequests = await RequestStorage.getAllRequestsActivesAndOnHold(status);
+                allRequests = await RequestStorage.getAllRequestsActivesAndOnHold(status, created_by);
                 break;
                 case 'onHold':
-                    allRequests = await RequestStorage.getAllRequestsActivesAndOnHold(status);
+                    allRequests = await RequestStorage.getAllRequestsActivesAndOnHold(status, created_by);
                     break;
             default:
-                allRequests = await RequestStorage.getAllRequests();
+                console.log(created_by)
+                allRequests = await RequestStorage.getAllRequests(created_by);
                 break;
         }
 

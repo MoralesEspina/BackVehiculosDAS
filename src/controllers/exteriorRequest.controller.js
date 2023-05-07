@@ -5,8 +5,9 @@ const getAllRequests = async (req, res) => {
     let myUrl = new URL (process.env.URL+req.url)
     let option = myUrl.searchParams.get('value')
     let status = myUrl.searchParams.get('status')
+    let created_by = myUrl.searchParams.get('created_by')
     try {
-        const allRequests = await RequestService.getAllRequests(option,status);
+        const allRequests = await RequestService.getAllRequests(option,status,created_by);
         res.json({ status: 'OK', data: allRequests })
     } catch (error) {
         res.status(500);

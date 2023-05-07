@@ -1,7 +1,7 @@
 import { getConnection } from "../database/database";
 
 //TODO OBTENER TODAS LAS SOLICITUDES
-const getAllRequests = async () => {
+const getAllRequests = async (created_by) => {
     try {
         const connection = await getConnection();
         const result = await connection.query(`
@@ -9,8 +9,10 @@ const getAllRequests = async () => {
         (SELECT MAX(DER.dateTo) FROM detail_exterior_request DER WHERE DER.id_exterior_request = ER.id) as latest_date, (SELECT MIN(DER.dateOf) FROM detail_exterior_request DER WHERE DER.id_exterior_request = ER.id) as first_date
         FROM exterior_request as ER
         JOIN status AS s 
-        WHERE status_request = s.idstatus and status_request != 6 
-        ORDER BY id desc`);
+        WHERE status_request = s.idstatus 
+        AND status_request != 6 
+        AND ER.created_by = ?
+        ORDER BY id desc`, created_by);
         var data = JSON.parse(JSON.stringify(result))
         return data;
     } catch (error) {
@@ -19,7 +21,7 @@ const getAllRequests = async () => {
 }
 
 //TODO OBTENER TODAS LAS SOLICITUDES
-const getAllRequestsActivesAndOnHold = async (status) => {
+const getAllRequestsActivesAndOnHold = async (status, created_by) => {
     try {
         const connection = await getConnection();
         const result = await connection.query(`
@@ -29,8 +31,10 @@ const getAllRequestsActivesAndOnHold = async (status) => {
         (SELECT GROUP_CONCAT(DER.department SEPARATOR ', ') FROM detail_exterior_request DER WHERE DER.id_exterior_request = ER.id) as destinations
         FROM exterior_request as ER
         JOIN status AS s 
-        WHERE status_request = s.idstatus and status_request = ?
-        ORDER BY id desc`, status);
+        WHERE status_request = s.idstatus 
+        AND status_request = ?
+        AND ER.created_by = ?
+        ORDER BY id desc`, [status,created_by]);
         var data = JSON.parse(JSON.stringify(result))
         return data;
     } catch (error) {

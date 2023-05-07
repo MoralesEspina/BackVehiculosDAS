@@ -1,7 +1,7 @@
 import { getConnection } from "../database/database";
 
 //TODO OBTENER TODAS LAS SOLICITUDES
-const getAllRequests = async () => {
+const getAllRequests = async (created_by) => {
     try {
         const connection = await getConnection();
         const result = await connection.query(`
@@ -9,8 +9,10 @@ const getAllRequests = async () => {
         (SELECT MIN(DLR.dateOf) FROM detail_local_request DLR WHERE DLR.id_local_request = LR.id) as first_date, 
         (SELECT MAX(DLR.dateTo) FROM detail_local_request DLR WHERE DLR.id_local_request = LR.id) as latest_date
         FROM local_request AS LR JOIN status AS s 
-        WHERE status = s.idstatus and status != 6 
-        ORDER BY LR.id desc`)
+        WHERE status = s.idstatus 
+        AND status != 6 
+        AND LR.created_by = ?
+        ORDER BY LR.id desc`, created_by)
         var data = JSON.parse(JSON.stringify(result))
         return data;
     } catch (error) {
@@ -19,7 +21,7 @@ const getAllRequests = async () => {
 }
 
 //TODO OBTENER TODAS LAS SOLICITUDES
-const getAllRequestsActivesAndOnHold = async (status) => {
+const getAllRequestsActivesAndOnHold = async (status, created_by) => {
     try {
         const connection = await getConnection();
         const result = await connection.query(`
@@ -27,8 +29,10 @@ const getAllRequestsActivesAndOnHold = async (status) => {
         (SELECT MIN(DLR.dateOf) FROM detail_local_request DLR WHERE DLR.id_local_request = LR.id) as first_date, 
         (SELECT MAX(DLR.dateTo) FROM detail_local_request DLR WHERE DLR.id_local_request = LR.id) as latest_date
         FROM local_request AS LR JOIN status AS s 
-        WHERE status = s.idstatus and LR.status = ?
-        ORDER BY LR.id desc`, status)
+        WHERE status = s.idstatus 
+        AND LR.status = ?
+        AND LR.created_by = ?
+        ORDER BY LR.id desc`, [status, created_by])
         var data = JSON.parse(JSON.stringify(result))
         return data;
     } catch (error) {
