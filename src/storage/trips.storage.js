@@ -17,7 +17,7 @@ const getAllTripsFromExteriorRequest= async () =>{
         AND vehicle_plate = V.idVehicle 
         AND t.status = S.idstatus 
         AND transp_request_exterior = ER.id 
-        AND t.status = 13 
+        AND t.status IN (8,13)
         ORDER BY t.idtrips DESC `)
         var data=JSON.parse(JSON.stringify(result))
         return data;
@@ -39,7 +39,7 @@ const getTripsOnHoldFromExteriorRequest= async () =>{
 		JOIN person as P ON P.uuid = pilot
 		JOIN vehicle as V ON V.idVehicle = vehicle_plate
 		JOIN status as S ON S.idstatus = t.status
-		WHERE t.status != 13 
+		WHERE t.status IN (6,11) 
 		ORDER BY t.idtrips DESC`)
         var data=JSON.parse(JSON.stringify(result))
         return data;
@@ -64,7 +64,7 @@ const getAllTripsFromLocalRequest= async () =>{
         AND vehicle_plate = V.idVehicle 
         AND t.status = S.idstatus 
         AND transp_request_local = LR.id 
-        AND t.status = 13 
+        AND t.status IN (8,13)
         ORDER BY t.idtrips desc`)
         var data=JSON.parse(JSON.stringify(result))
         return data;
@@ -86,7 +86,7 @@ const getTripsOnHoldFromLocalRequest= async () =>{
         JOIN person as P ON P.uuid = pilot 
         JOIN vehicle as V ON V.idVehicle  = vehicle_plate 
         JOIN status as S ON S.idstatus = t.status   
-        WHERE t.status != 13
+        WHERE t.status IN (6,11)
         ORDER BY t.idtrips desc`)
         var data=JSON.parse(JSON.stringify(result))
         return data;
@@ -142,13 +142,10 @@ const updateOneTrip = async (id, updatedTrip) => {
         const connection = await getConnection();
             const result = await connection.query(`
             UPDATE trips 
-            SET status = IFNULL(?, status) 
+            SET status = IFNULL(?, status), reason_rejected = IFNULL(?, reason_rejected)
             WHERE idtrips = ?`,
-            [updatedTrip.status,id]);
-            /*const vehicle = await connection.query(`UPDATE vehicle SET status = IFNULL(?, status) WHERE vin = ?`,
-            [updatedTrip.status_vehicle,updatedTrip.vin]);
-            const pilot = await connection.query(`UPDATE person SET available = IFNULL(?, available) WHERE uuid = ?`,
-            [updatedTrip.status_pilot,updatedTrip.uuid]);*/
+            [updatedTrip.status, updatedTrip.reason_rejected, id]);
+
             if (result.affectedRows === 0) {
                 return {
                     status: 400,

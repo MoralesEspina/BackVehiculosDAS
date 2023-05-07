@@ -75,8 +75,6 @@ const createNewTrip= async(req,res) =>{
 
 //TODO ACTUALIZAR UN TRIP
 const updateOneTrip= async(req,res) =>{
-    console.log(req.params)
-    console.log(req.body)
     const { id } = req.params;
     if (!id) {
         res.status(400).send({
@@ -87,7 +85,8 @@ const updateOneTrip= async(req,res) =>{
     }
     try{
         const Trip = {
-            status: req.body.status    
+            status: req.body.status,
+            reason_rejected: req.body.reason_rejected
         };
         const updatedTrip = await TripService.updateOneTrip(id, Trip);
         if (updatedTrip.status == 400) {
