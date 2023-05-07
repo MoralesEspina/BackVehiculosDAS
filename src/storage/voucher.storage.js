@@ -94,20 +94,25 @@ const getOneVoucherRegular = async (id) => {
 
 //TODO CREAR NUEVO VALE DIESEL
 const createNewVoucherDiesel = async (newVoucher) => {
-    try{
         const connection = await getConnection();
-            await connection.query(`
+    try{
+        await connection.beginTransaction();
+        const request = await connection.query(`
             INSERT INTO voucher_diesel (date,cost,id_vehicle,comission_to,objective,id_pilot,km_to_travel) 
             VALUES (?,?,?,?,?,?,?)`,
             [newVoucher.date, newVoucher.cost, newVoucher.id_vehicle,newVoucher.comission_to,newVoucher.objective, newVoucher.id_pilot, newVoucher.km_to_travel]);
-            return {date: newVoucher.date, 
-                    cost: newVoucher.cost,
-                    id_vehicle: newVoucher.id_vehicle,
-                    comission_to: newVoucher.comission_to,
-                    objective: newVoucher.objective,
-                    id_pilot: newVoucher.id_pilot};
+            const idVoucherDiesel = request.insertId
+            const updateTrip = await connection.query(`
+            UPDATE trips SET voucher_id = IFNULL(?, voucher_id) WHERE idtrips = ?`, [idVoucherDiesel,newVoucher.idtrips])
+
+            await connection.commit();
+
+            return {
+                request, 
+                updateTrip};
     } catch(error)
     {
+        await connection.rollback();
         throw error;
     }
 }
@@ -115,20 +120,26 @@ const createNewVoucherDiesel = async (newVoucher) => {
 
 //TODO CREAR NUEVO VALE DIESEL
 const createNewVoucherRegular= async (newVoucher) => {
-    try{
         const connection = await getConnection();
-            await connection.query(`
-            INSERT INTO voucher_regular (date,cost,id_vehicle,comission_to,objective,id_pilot) 
-            VALUES (?,?,?,?,?,?)`,
-            [newVoucher.date, newVoucher.cost, newVoucher.id_vehicle,newVoucher.comission_to,newVoucher.objective, newVoucher.id_pilot]);
-            return {date: newVoucher.date, 
-                    cost: newVoucher.cost,
-                    id_vehicle: newVoucher.id_vehicle,
-                    comission_to: newVoucher.comission_to,
-                    objective: newVoucher.objective,
-                    id_pilot: newVoucher.id_pilot,};
-    } catch(error)
-    {
+    try{
+        await connection.beginTransaction();
+        const voucherRegularInsert = await connection.query(`
+            INSERT INTO voucher_regular (date,cost,id_vehicle,comission_to,objective,id_pilot,km_to_travel) 
+            VALUES (?,?,?,?,?,?,?)`,
+            [newVoucher.date, newVoucher.cost, newVoucher.id_vehicle,newVoucher.comission_to,newVoucher.objective, newVoucher.id_pilot, newVoucher.km_to_travel]);
+        const idVoucherRegular = voucherRegularInsert.insertId
+
+        const updateTrip = await connection.query(`
+            UPDATE trips SET voucher_id = IFNULL(?, voucher_id) WHERE idtrips = ?`, [idVoucherRegular,newVoucher.idtrips])
+        
+        await connection.commit();
+
+        return {
+            voucherRegularInsert, 
+            updateTrip
+        }
+    } catch(error){
+        await connection.rollback();
         throw error;
     }
 }

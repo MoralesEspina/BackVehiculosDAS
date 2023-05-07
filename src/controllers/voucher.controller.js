@@ -83,6 +83,7 @@ const createNewVoucherDiesel= async(req,res) =>{
             objective: req.body.objective,
             id_pilot: req.body.id_pilot,
             km_to_travel: req.body.km_to_travel,
+            idtrips: req.body.idtrips
         };
         console.log(Voucher)
         const createdVoucher = await VoucherService.createNewVoucherDiesel(Voucher);
@@ -108,6 +109,8 @@ const createNewVoucherRegular= async(req,res) =>{
             comission_to: req.body.comission_to,
             objective: req.body.objective,
             id_pilot: req.body.id_pilot,
+            km_to_travel: req.body.km_to_travel,
+            idtrips: req.body.idtrips
         };
         console.log(Voucher)
         const createdVoucher = await VoucherService.createNewVoucherRegular(Voucher);

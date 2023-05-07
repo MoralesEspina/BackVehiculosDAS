@@ -125,9 +125,8 @@ const createNewTrip = async (Trip) => {
             INSERT INTO trips (transp_request_local,transp_request_exterior,pilot,vehicle_plate,status) 
             VALUES (?,?,?,?,?)`,
             [Trip.transp_request_local,Trip.transp_request_exterior,Trip.pilot,Trip.vehicle_plate,Trip.status]);
-        const idTrips = request.insertID
-            console.log(idTrips + "Hola")
-        const newExitPass = await connection.query(`
+            const idTrips = request.insertID
+            const newExitPass = await connection.query(`
             INSERT INTO exit_pass (id_trips)
              VALUES (?)`, idTrips)
              return newExitPass;
