@@ -53,7 +53,7 @@ const getAllTripsFromLocalRequest= async () =>{
     try{
         const connection = await getConnection();
         const result = await connection.query(`
-        SELECT t.idtrips,LR.applicantsName,LR.date,t.transp_request_local,P.fullname,V.plate,S.status_name,
+        SELECT t.idtrips,LR.applicantsName,LR.section,LR.date,t.transp_request_local,P.fullname,V.plate,S.status_name,
         (SELECT MAX(DLR.dateTo) FROM detail_local_request DLR WHERE DLR.id_local_request = LR.id) as latest_date, 
         (SELECT MIN(DLR.dateOf) FROM detail_local_request DLR WHERE DLR.id_local_request = LR.id) as first_date
         FROM trips as t JOIN local_request as LR 
@@ -78,7 +78,7 @@ const getTripsOnHoldFromLocalRequest= async () =>{
     try{
         const connection = await getConnection();
         const result = await connection.query(`
-        SELECT t.idtrips,LR.applicantsName,LR.date,t.transp_request_local,P.fullname,V.plate,S.status_name, 
+        SELECT t.idtrips,LR.applicantsName,LR.section,LR.date,t.transp_request_local,P.fullname,V.plate,S.status_name, 
         (SELECT MAX(DLR.dateTo) FROM detail_local_request DLR WHERE DLR.id_local_request = LR.id) as latest_date, 
         (SELECT MIN(DLR.dateOf) FROM detail_local_request DLR WHERE DLR.id_local_request = LR.id) as first_date
         FROM trips as t 
