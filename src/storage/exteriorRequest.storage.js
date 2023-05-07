@@ -4,15 +4,27 @@ import { getConnection } from "../database/database";
 const getAllRequests = async (created_by) => {
     try {
         const connection = await getConnection();
-        const result = await connection.query(`
-        SELECT ER.id,ER.requesting_unit,ER.commission_manager,ER.date_request,ER.objective_request,ER.duration_days,ER.phoneNumber,ER.observations,ER.provide_fuel,ER.provide_travel_expenses,s.status_name,ER.reason_rejected, 
-        (SELECT MAX(DER.dateTo) FROM detail_exterior_request DER WHERE DER.id_exterior_request = ER.id) as latest_date, (SELECT MIN(DER.dateOf) FROM detail_exterior_request DER WHERE DER.id_exterior_request = ER.id) as first_date
-        FROM exterior_request as ER
-        JOIN status AS s 
-        WHERE status_request = s.idstatus 
-        AND status_request != 6 
-        AND ER.created_by = ?
-        ORDER BY id desc`, created_by);
+        let result;
+        if (created_by == 'Admin') {
+            result = await connection.query(`
+            SELECT ER.id,ER.requesting_unit,ER.commission_manager,ER.date_request,ER.objective_request,ER.duration_days,ER.phoneNumber,ER.observations,ER.provide_fuel,ER.provide_travel_expenses,s.status_name,ER.reason_rejected, 
+            (SELECT MAX(DER.dateTo) FROM detail_exterior_request DER WHERE DER.id_exterior_request = ER.id) as latest_date, (SELECT MIN(DER.dateOf) FROM detail_exterior_request DER WHERE DER.id_exterior_request = ER.id) as first_date
+            FROM exterior_request as ER
+            JOIN status AS s 
+            WHERE status_request = s.idstatus 
+            AND status_request != 6 
+            ORDER BY id desc`);
+        } else{
+            result = await connection.query(`
+            SELECT ER.id,ER.requesting_unit,ER.commission_manager,ER.date_request,ER.objective_request,ER.duration_days,ER.phoneNumber,ER.observations,ER.provide_fuel,ER.provide_travel_expenses,s.status_name,ER.reason_rejected, 
+            (SELECT MAX(DER.dateTo) FROM detail_exterior_request DER WHERE DER.id_exterior_request = ER.id) as latest_date, (SELECT MIN(DER.dateOf) FROM detail_exterior_request DER WHERE DER.id_exterior_request = ER.id) as first_date
+            FROM exterior_request as ER
+            JOIN status AS s 
+            WHERE status_request = s.idstatus 
+            AND status_request != 6 
+            AND ER.created_by = ?
+            ORDER BY id desc`, created_by);
+        }
         var data = JSON.parse(JSON.stringify(result))
         return data;
     } catch (error) {
@@ -24,17 +36,32 @@ const getAllRequests = async (created_by) => {
 const getAllRequestsActivesAndOnHold = async (status, created_by) => {
     try {
         const connection = await getConnection();
-        const result = await connection.query(`
-        SELECT ER.id,ER.requesting_unit,ER.commission_manager,ER.date_request,ER.objective_request,ER.duration_days,ER.phoneNumber,ER.observations,ER.provide_fuel,ER.provide_travel_expenses,s.status_name,ER.reason_rejected, 
-        (SELECT MAX(DER.dateTo) FROM detail_exterior_request DER WHERE DER.id_exterior_request = ER.id) as latest_date, 
-        (SELECT MIN(DER.dateOf) FROM detail_exterior_request DER WHERE DER.id_exterior_request = ER.id) as first_date,
-        (SELECT GROUP_CONCAT(DER.department SEPARATOR ', ') FROM detail_exterior_request DER WHERE DER.id_exterior_request = ER.id) as destinations
-        FROM exterior_request as ER
-        JOIN status AS s 
-        WHERE status_request = s.idstatus 
-        AND status_request = ?
-        AND ER.created_by = ?
-        ORDER BY id desc`, [status,created_by]);
+        let result;
+        if (created_by == 'Admin') {
+            result = await connection.query(`
+            SELECT ER.id,ER.requesting_unit,ER.commission_manager,ER.date_request,ER.objective_request,ER.duration_days,ER.phoneNumber,ER.observations,ER.provide_fuel,ER.provide_travel_expenses,s.status_name,ER.reason_rejected, 
+            (SELECT MAX(DER.dateTo) FROM detail_exterior_request DER WHERE DER.id_exterior_request = ER.id) as latest_date, 
+            (SELECT MIN(DER.dateOf) FROM detail_exterior_request DER WHERE DER.id_exterior_request = ER.id) as first_date,
+            (SELECT GROUP_CONCAT(DER.department SEPARATOR ', ') FROM detail_exterior_request DER WHERE DER.id_exterior_request = ER.id) as destinations
+            FROM exterior_request as ER
+            JOIN status AS s 
+            WHERE status_request = s.idstatus 
+            AND status_request = ?
+            ORDER BY id desc`, status);
+        } else{
+            result = await connection.query(`
+            SELECT ER.id,ER.requesting_unit,ER.commission_manager,ER.date_request,ER.objective_request,ER.duration_days,ER.phoneNumber,ER.observations,ER.provide_fuel,ER.provide_travel_expenses,s.status_name,ER.reason_rejected, 
+            (SELECT MAX(DER.dateTo) FROM detail_exterior_request DER WHERE DER.id_exterior_request = ER.id) as latest_date, 
+            (SELECT MIN(DER.dateOf) FROM detail_exterior_request DER WHERE DER.id_exterior_request = ER.id) as first_date,
+            (SELECT GROUP_CONCAT(DER.department SEPARATOR ', ') FROM detail_exterior_request DER WHERE DER.id_exterior_request = ER.id) as destinations
+            FROM exterior_request as ER
+            JOIN status AS s 
+            WHERE status_request = s.idstatus 
+            AND status_request = ?
+            AND ER.created_by = ?
+            ORDER BY id desc`, [status,created_by]);
+        }
+
         var data = JSON.parse(JSON.stringify(result))
         return data;
     } catch (error) {

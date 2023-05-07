@@ -9,7 +9,6 @@ const getAllRequests = async (option, status, created_by) => {
                 allRequests = await RequestStorage.getAllRequestsActivesAndOnHold(status, created_by);
                 break;
                 case 'onHold':
-                    console.log(created_by)
                 allRequests = await RequestStorage.getAllRequestsActivesAndOnHold(status, created_by);
                 break;
             default:

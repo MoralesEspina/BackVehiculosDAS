@@ -4,15 +4,28 @@ import { getConnection } from "../database/database";
 const getAllRequests = async (created_by) => {
     try {
         const connection = await getConnection();
-        const result = await connection.query(`
-        SELECT 	LR.id,LR.place,LR.date,LR.section,LR.applicantsName,LR.position,LR.phoneNumber,LR.observations,s.status_name, 
-        (SELECT MIN(DLR.dateOf) FROM detail_local_request DLR WHERE DLR.id_local_request = LR.id) as first_date, 
-        (SELECT MAX(DLR.dateTo) FROM detail_local_request DLR WHERE DLR.id_local_request = LR.id) as latest_date
-        FROM local_request AS LR JOIN status AS s 
-        WHERE status = s.idstatus 
-        AND status != 6 
-        AND LR.created_by = ?
-        ORDER BY LR.id desc`, created_by)
+        let result;
+        console.log(created_by)
+        if (created_by == 'Admin') {
+            result = await connection.query(`
+            SELECT 	LR.id,LR.place,LR.date,LR.section,LR.applicantsName,LR.position,LR.phoneNumber,LR.observations,s.status_name, 
+            (SELECT MIN(DLR.dateOf) FROM detail_local_request DLR WHERE DLR.id_local_request = LR.id) as first_date, 
+            (SELECT MAX(DLR.dateTo) FROM detail_local_request DLR WHERE DLR.id_local_request = LR.id) as latest_date
+            FROM local_request AS LR JOIN status AS s 
+            WHERE status = s.idstatus 
+            AND status != 6 
+            ORDER BY LR.id desc`)
+        }else{
+            result = await connection.query(`
+            SELECT 	LR.id,LR.place,LR.date,LR.section,LR.applicantsName,LR.position,LR.phoneNumber,LR.observations,s.status_name, 
+            (SELECT MIN(DLR.dateOf) FROM detail_local_request DLR WHERE DLR.id_local_request = LR.id) as first_date, 
+            (SELECT MAX(DLR.dateTo) FROM detail_local_request DLR WHERE DLR.id_local_request = LR.id) as latest_date
+            FROM local_request AS LR JOIN status AS s 
+            WHERE status = s.idstatus 
+            AND status != 6 
+            AND LR.created_by = ?
+            ORDER BY LR.id desc`, created_by)
+        }
         var data = JSON.parse(JSON.stringify(result))
         return data;
     } catch (error) {
@@ -24,15 +37,27 @@ const getAllRequests = async (created_by) => {
 const getAllRequestsActivesAndOnHold = async (status, created_by) => {
     try {
         const connection = await getConnection();
-        const result = await connection.query(`
-        SELECT LR.id,LR.place,LR.date,LR.section,LR.applicantsName,LR.position,LR.phoneNumber,LR.observations,s.status_name, 
-        (SELECT MIN(DLR.dateOf) FROM detail_local_request DLR WHERE DLR.id_local_request = LR.id) as first_date, 
-        (SELECT MAX(DLR.dateTo) FROM detail_local_request DLR WHERE DLR.id_local_request = LR.id) as latest_date
-        FROM local_request AS LR JOIN status AS s 
-        WHERE status = s.idstatus 
-        AND LR.status = ?
-        AND LR.created_by = ?
-        ORDER BY LR.id desc`, [status, created_by])
+        let result;
+        if (created_by == 'Admin') {
+            result = await connection.query(`
+            SELECT LR.id,LR.place,LR.date,LR.section,LR.applicantsName,LR.position,LR.phoneNumber,LR.observations,s.status_name, 
+            (SELECT MIN(DLR.dateOf) FROM detail_local_request DLR WHERE DLR.id_local_request = LR.id) as first_date, 
+            (SELECT MAX(DLR.dateTo) FROM detail_local_request DLR WHERE DLR.id_local_request = LR.id) as latest_date
+            FROM local_request AS LR JOIN status AS s 
+            WHERE status = s.idstatus 
+            AND LR.status = ?
+            ORDER BY LR.id desc`, status)
+        } else{
+            result = await connection.query(`
+            SELECT LR.id,LR.place,LR.date,LR.section,LR.applicantsName,LR.position,LR.phoneNumber,LR.observations,s.status_name, 
+            (SELECT MIN(DLR.dateOf) FROM detail_local_request DLR WHERE DLR.id_local_request = LR.id) as first_date, 
+            (SELECT MAX(DLR.dateTo) FROM detail_local_request DLR WHERE DLR.id_local_request = LR.id) as latest_date
+            FROM local_request AS LR JOIN status AS s 
+            WHERE status = s.idstatus 
+            AND LR.status = ?
+            AND LR.created_by = ?
+            ORDER BY LR.id desc`, [status, created_by])
+        }
         var data = JSON.parse(JSON.stringify(result))
         return data;
     } catch (error) {
