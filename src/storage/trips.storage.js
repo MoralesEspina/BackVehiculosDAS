@@ -169,10 +169,9 @@ const getOneExitPass= async (id) =>{
         FROM trips
         WHERE idtrips = ? `, id);
         let exteriorRequest, localRequest, data;
-        console.log(status[0].transp_request_local)
         if (!status[0].transp_request_local) {
             exteriorRequest = await connection.query(`
-        Select EP.idexit_pass, V.brand, V.plate, V.km, VT.type_name, P.fullname, ER.id, ER.requesting_unit,
+        Select EP.idexit_pass, V.brand, V.plate, V.km, VT.type_name, P.fullname, CONCAT(ER.id,' (Exterior)') as id, ER.requesting_unit,
 		(SELECT MIN(DER.hour) FROM detail_exterior_request DER WHERE DER.id_exterior_request = ER.id) as first_hour,
         (SELECT MIN(DER.dateOf) FROM detail_exterior_request DER WHERE DER.id_exterior_request = ER.id) as first_date,
         (SELECT MAX(DER.department) FROM detail_exterior_request DER WHERE DER.id_exterior_request = ER.id) as destinations
@@ -187,7 +186,7 @@ const getOneExitPass= async (id) =>{
             data=JSON.parse(JSON.stringify(exteriorRequest))
         }else{
             localRequest = await connection.query(`
-        Select EP.idexit_pass, V.brand, V.plate, V.km, VT.type_name, P.fullname, LR.id, LR.section AS requesting_unit,
+        Select EP.idexit_pass, V.brand, V.plate, V.km, VT.type_name, P.fullname, CONCAT(LR.id,' (Exterior)') as id, LR.section AS requesting_unit,
 		(SELECT MIN(DLR.schedule) FROM detail_local_request DLR WHERE DLR.id_local_request = LR.id) as first_hour,
         (SELECT MIN(DLR.dateOf) FROM detail_local_request DLR WHERE DLR.id_local_request = LR.id) as first_date,
         (SELECT MAX(DLR.destiny) FROM detail_local_request DLR WHERE DLR.id_local_request = LR.id) as destinations
@@ -217,10 +216,9 @@ const getOneBinnacle= async (id) =>{
         FROM trips
         WHERE idtrips = ? `, id);
         let exteriorRequest, localRequest, data;
-        console.log(status[0].transp_request_local)
         if (!status[0].transp_request_local) {
             exteriorRequest = await connection.query(`
-            Select B.idbinnacle, P.fullname, V.brand, V.cylinders, V.plate, V.model, V.gas, V.km, VT.type_name, ER.id, ER.phoneNumber,
+            Select B.idbinnacle, P.fullname, V.brand, V.cylinders, V.plate, V.model, V.gas, V.km, VT.type_name, CONCAT(ER.id,' (Exterior)') as id, ER.phoneNumber,
 			(SELECT MIN(DER.hour) FROM detail_exterior_request DER WHERE DER.id_exterior_request = ER.id) as first_hour,
             (SELECT MIN(DER.dateOf) FROM detail_exterior_request DER WHERE DER.id_exterior_request = ER.id) as first_date,
             (SELECT MAX(DER.department) FROM detail_exterior_request DER WHERE DER.id_exterior_request = ER.id) as destinations
@@ -231,11 +229,10 @@ const getOneBinnacle= async (id) =>{
             JOIN exterior_request AS ER ON ER.id = T.transp_request_exterior
             JOIN vtype AS VT ON VT.idvtype = V.type
             WHERE idbinnacle = ?`,id)
-
             data=JSON.parse(JSON.stringify(exteriorRequest))
         }else{
             localRequest = await connection.query(`
-            Select B.idbinnacle, P.fullname, V.brand, V.cylinders, V.plate, V.model, V.gas, V.km, VT.type_name, LR.id, LR.phoneNumber,
+            Select B.idbinnacle, P.fullname, V.brand, V.cylinders, V.plate, V.model, V.gas, V.km, VT.type_name, CONCAT(LR.id,' (Exterior)') as id, LR.phoneNumber,
             (SELECT MIN(DLR.schedule) FROM detail_local_request DLR WHERE DLR.id_local_request = LR.id) as first_hour,
             (SELECT MIN(DLR.dateOf) FROM detail_local_request DLR WHERE DLR.id_local_request = LR.id) as first_date,
             (SELECT MAX(DLR.destiny) FROM detail_local_request DLR WHERE DLR.id_local_request = LR.id) as destinations

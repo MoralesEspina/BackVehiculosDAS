@@ -93,7 +93,6 @@ const getAllVehiclesActives= async (dates) =>{
         (Date(?) BETWEEN DER.dateOf AND DER.dateTo))
         );`,[dates.initialDateOf, dates.finalDateTo, dates.initialDateOf, dates.finalDateTo, dates.initialDateOf, dates.finalDateTo, dates.initialDateOf, dates.finalDateTo, dates.initialDateOf, dates.finalDateTo, dates.initialDateOf, dates.finalDateTo])
         var data=JSON.parse(JSON.stringify(result))
-        console.log(data)
         return data;
     }catch(error){
         throw error;

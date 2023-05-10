@@ -45,7 +45,6 @@ const getOneRequest = async (req, res) => {
 const createNewRequest = async (req, res) => {
     let data = req.body;
     let detail = data.detail;
-    console.log(data)
     try {
         const Request = {
             requesting_unit: data.requesting_unit,
@@ -122,7 +121,6 @@ const updateOneRequest = async (req, res) => {
             transp_request_exterior: parseInt(id),
             status: 6
         };
-        console.log(Request)
         const updatedRequest = await RequestService.updateOneRequest(id, Request);
         if (updatedRequest.status == 400) {
             res.status(400).json({ data: updatedRequest })

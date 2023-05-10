@@ -105,7 +105,6 @@ const updateOneUser = async (req, res) => {
             password: passwordHash,
             rol_id: req.body.rol_id,
         };
-        console.log(passwordHash)
         const updatedUser = await AuthService.updateOneUser(id, user);
 
         if (updatedUser.status == 400) {

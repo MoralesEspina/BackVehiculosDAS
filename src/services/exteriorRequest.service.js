@@ -12,7 +12,6 @@ const getAllRequests = async (option, status, created_by) => {
                     allRequests = await RequestStorage.getAllRequestsActivesAndOnHold(status, created_by);
                     break;
             default:
-                console.log(created_by)
                 allRequests = await RequestStorage.getAllRequests(created_by);
                 break;
         }

@@ -85,7 +85,6 @@ const createNewVoucherDiesel= async(req,res) =>{
             km_to_travel: req.body.km_to_travel,
             idtrips: req.body.idtrips
         };
-        console.log(Voucher)
         const createdVoucher = await VoucherService.createNewVoucherDiesel(Voucher);
         if (createdVoucher.status == 400) {
             res.status(400).json({data: createdVoucher})
@@ -112,7 +111,6 @@ const createNewVoucherRegular= async(req,res) =>{
             km_to_travel: req.body.km_to_travel,
             idtrips: req.body.idtrips
         };
-        console.log(Voucher)
         const createdVoucher = await VoucherService.createNewVoucherRegular(Voucher);
         if (createdVoucher.status == 400) {
             res.status(400).json({data: createdVoucher})
@@ -150,7 +148,6 @@ const updateOneVoucher= async(req,res) =>{
             color: req.body.color,
             active: req.body.active
         };
-        console.log(Voucher)
         const updatedVoucher = await VouchersService.updateOneVoucher(id, Voucher);
         if (updatedVoucher.status == 400) {
             res.status(400).json({data: updatedVoucher})

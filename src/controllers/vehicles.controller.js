@@ -93,7 +93,6 @@ const createNewVehicle= async(req,res) =>{
             color: req.body.color,
             status: req.body.status,
         };
-        console.log(vehicle)
         const createdVehicle = await VehiclesService.createNewVehicle(vehicle);
         if (createdVehicle.status == 400) {
             res.status(400).json({data: createdVehicle})
@@ -132,7 +131,6 @@ const updateOneVehicle= async(req,res) =>{
             color: req.body.color,
             active: req.body.active
         };
-        console.log(vehicle)
         const updatedVehicle = await VehiclesService.updateOneVehicle(id, vehicle);
         if (updatedVehicle.status == 400) {
             res.status(400).json({data: updatedVehicle})

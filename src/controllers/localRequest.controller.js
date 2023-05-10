@@ -113,7 +113,6 @@ const updateOneRequest = async (req, res) => {
             transp_request_local: parseInt(id),
             status: 6
         };
-        console.log(Request)
         const updatedRequest = await RequestService.updateOneRequest(id, Request);
         if (updatedRequest.status == 400) {
             res.status(400).json({ data: updatedRequest })

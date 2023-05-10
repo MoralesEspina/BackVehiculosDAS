@@ -5,7 +5,6 @@ const getAllRequests = async (created_by) => {
     try {
         const connection = await getConnection();
         let result;
-        console.log(created_by)
         if (created_by == 'Admin') {
             result = await connection.query(`
             SELECT 	LR.id,LR.place,LR.date,LR.section,LR.applicantsName,LR.position,LR.phoneNumber,LR.observations,s.status_name, 
