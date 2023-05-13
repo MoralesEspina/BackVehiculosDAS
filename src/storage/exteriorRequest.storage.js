@@ -121,15 +121,15 @@ const getOneRequestComplete = async (id) => {
     try {
         const connection = await getConnection();
         const request = await connection.query(`
-        SELECT id,requesting_unit,commission_manager,date_request,objective_request,duration_days,phoneNumber,observations,provide_fuel,provide_travel_expenses,status_request,reason_rejected,created_by,V.plate,P.fullname 
-        FROM exterior_request 
+        SELECT ER.id,ER.requesting_unit,ER.commission_manager,ER.date_request,ER.objective_request,ER.duration_days,ER.phoneNumber,ER.observations,ER.provide_fuel,ER.provide_travel_expenses,ER.status_request,ER.reason_rejected,ER.created_by,V.plate,P.fullname 
+        FROM exterior_request  as ER
         JOIN trips as T 
         JOIN vehicle as V 
         JOIN person as P 
         WHERE T.transp_request_exterior = id 
         AND T.vehicle_plate = V.idVehicle 
         AND T.pilot = P.uuid 
-        AND id = ?`, id);
+        AND ER.id = ?`, id);
         const detailRequest = await connection.query(`
         SELECT DE.no, DE.number_people, DE.department, DE.municipality, DE.village, DE.dateOf, DE.dateTo , DE.hour 
         FROM detail_exterior_request AS DE 

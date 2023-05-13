@@ -76,7 +76,7 @@ const getOneRequest = async (id) => {
         let request, detailRequest;
         if (status[0].status == 7) {
             request = await connection.query(`
-            SELECT l.id,l.place,l.date,l.section,l.applicantsName,l.position,l.phoneNumber,l.observations,l.status,l.created_by,V.idVehicle as plate ,P.uuid as pilotName, T.idtrips,
+            SELECT l.id,l.place,l.date,l.section,l.applicantsName,l.position,l.phoneNumber,l.observations,l.status,l.created_by, l.reason_rejected, V.idVehicle as plate ,P.uuid as pilotName, T.idtrips,
             (SELECT SUBSTRING_INDEX(GROUP_CONCAT(DLR.comission ORDER BY DLR.dateOf ASC SEPARATOR ', '), ',', 1) FROM detail_local_request DLR WHERE DLR.id_local_request = l.id) as first_objective,
             (SELECT MIN(DLR.dateOf) FROM detail_local_request DLR WHERE DLR.id_local_request = l.id) as first_date, 
             (SELECT MAX(DLR.dateTo) FROM detail_local_request DLR WHERE DLR.id_local_request = l.id) as latest_date,
@@ -89,7 +89,7 @@ const getOneRequest = async (id) => {
         }
         else {
             request = await connection.query(`
-            SELECT l.id,l.place,l.date,l.section,l.applicantsName,l.position,l.phoneNumber,l.observations,l.status,l.created_by,
+            SELECT l.id,l.place,l.date,l.section,l.applicantsName,l.position,l.phoneNumber,l.observations,l.status,l.created_by,l.reason_rejected,
             (SELECT MIN(DLR.dateOf) FROM detail_local_request DLR WHERE DLR.id_local_request = l.id) as first_date, 
             (SELECT MAX(DLR.dateTo) FROM detail_local_request DLR WHERE DLR.id_local_request = l.id) as latest_date
             FROM local_request AS l 
@@ -118,7 +118,7 @@ const getOneRequestComplete = async (id) => {
     try {
         const connection = await getConnection();
         const request = await connection.query(`
-        SELECT l.id,l.place,l.date,l.section,l.applicantsName,l.position,l.phoneNumber,l.observations,l.status,l.created_by,V.plate,P.fullname 
+        SELECT l.id,l.place,l.date,l.section,l.applicantsName,l.position,l.phoneNumber,l.observations,l.status,l.created_by, l.reason_rejected, V.plate,P.fullname 
         FROM local_request AS l 
         JOIN trips as T ON T.transp_request_local = id
         JOIN vehicle as V ON V.idVehicle = T.vehicle_plate
