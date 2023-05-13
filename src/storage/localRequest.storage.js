@@ -117,18 +117,31 @@ const getOneRequest = async (id) => {
 const getOneRequestComplete = async (id) => {
     try {
         const connection = await getConnection();
-        const request = await connection.query(`
-        SELECT l.id,l.place,l.date,l.section,l.applicantsName,l.position,l.phoneNumber,l.observations,l.status,l.created_by, l.reason_rejected, V.plate,P.fullname 
-        FROM local_request AS l 
-        JOIN trips as T ON T.transp_request_local = id
-        JOIN vehicle as V ON V.idVehicle = T.vehicle_plate
-        JOIN person as P ON P.uuid = T.pilot
-        WHERE id = ?`, id);
-
-        const detailRequest = await connection.query(`
-        SELECT DL.dateOf, DL.dateTo, DL.schedule, DL.destiny, DL.peopleNumber, DL.comission  
-        FROM detail_local_request AS DL JOIN local_request AS l 
-        WHERE id_local_request = l.id and DL.id_local_request = ?`, id);
+        const status = await connection.query(`
+        SELECT status 
+        FROM local_request
+        WHERE id = ? `, id);
+        let request, detailRequest;
+        if (status[0].status == 7) {
+            request = await connection.query(`
+                SELECT l.id,l.place,l.date,l.section,l.applicantsName,l.position,l.phoneNumber,l.observations,l.status,l.created_by, l.reason_rejected, V.plate,P.fullname 
+                FROM local_request AS l 
+                JOIN trips as T ON T.transp_request_local = id
+                JOIN vehicle as V ON V.idVehicle = T.vehicle_plate
+                JOIN person as P ON P.uuid = T.pilot
+                WHERE id = ?`, id);
+        }
+        else {
+            request = await connection.query(`
+                SELECT l.id,l.place,l.date,l.section,l.applicantsName,l.position,l.phoneNumber,l.observations,l.status,l.created_by,l.reason_rejected 
+                FROM local_request AS l 
+                WHERE id = ?`, id);
+        }
+            detailRequest = await connection.query(`
+                SELECT DL.dateOf, DL.dateTo, DL.schedule, DL.destiny, DL.peopleNumber, DL.comission  
+                FROM detail_local_request AS DL 
+                JOIN local_request AS l 
+                WHERE DL.id_local_request = l.id and DL.id_local_request = ?`, id);
         if (request.length <= 0) {
             return {
                 status: 404,

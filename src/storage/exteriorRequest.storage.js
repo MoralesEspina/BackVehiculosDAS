@@ -120,7 +120,45 @@ const getOneRequest = async (id) => {
 const getOneRequestComplete = async (id) => {
     try {
         const connection = await getConnection();
-        const request = await connection.query(`
+        const status = await connection.query(`
+        SELECT status_request 
+        FROM exterior_request
+        WHERE id = ? `, id);
+        let request, detailRequest;
+        if (status[0].status_request == 7) {
+            request = await connection.query(`
+            SELECT ER.id,ER.requesting_unit,ER.commission_manager,ER.date_request,ER.objective_request,ER.duration_days,ER.phoneNumber,ER.observations,ER.provide_fuel,ER.provide_travel_expenses,ER.status_request,ER.reason_rejected,ER.created_by,V.plate,P.fullname 
+            FROM exterior_request  as ER
+            JOIN trips as T 
+            JOIN vehicle as V 
+            JOIN person as P 
+            WHERE T.transp_request_exterior = id 
+            AND T.vehicle_plate = V.idVehicle 
+            AND T.pilot = P.uuid 
+            AND ER.id = ?`, id);
+        }
+        else {
+            request = await connection.query(`
+            SELECT ER.id,ER.requesting_unit,ER.commission_manager,ER.date_request,ER.objective_request,ER.duration_days,ER.phoneNumber,ER.observations,ER.provide_fuel,ER.provide_travel_expenses,ER.status_request,ER.reason_rejected,ER.created_by,
+            (SELECT MAX(DER.dateTo) FROM detail_exterior_request DER WHERE DER.id_exterior_request = ER.id) as latest_date, 
+            (SELECT MIN(DER.dateOf) FROM detail_exterior_request DER WHERE DER.id_exterior_request = ER.id) as first_date
+            FROM exterior_request as ER
+            WHERE id = ?`, id);
+        }
+            detailRequest = await connection.query(`
+            SELECT DE.no, DE.number_people, DE.department, DE.municipality, DE.village, DE.dateOf, DE.dateTo , DE.hour 
+            FROM detail_exterior_request AS DE 
+            JOIN exterior_request AS e 
+            WHERE id_exterior_request = e.id and DE.id_exterior_request = ?`, id);
+        if (request.length <= 0) {
+            return {
+                status: 404,
+                message: 'No se encontro la Solicitud'
+            };
+        } else {
+            return { request: request, detailRequest: detailRequest };
+        }
+        request = await connection.query(`
         SELECT ER.id,ER.requesting_unit,ER.commission_manager,ER.date_request,ER.objective_request,ER.duration_days,ER.phoneNumber,ER.observations,ER.provide_fuel,ER.provide_travel_expenses,ER.status_request,ER.reason_rejected,ER.created_by,V.plate,P.fullname 
         FROM exterior_request  as ER
         JOIN trips as T 
@@ -130,7 +168,7 @@ const getOneRequestComplete = async (id) => {
         AND T.vehicle_plate = V.idVehicle 
         AND T.pilot = P.uuid 
         AND ER.id = ?`, id);
-        const detailRequest = await connection.query(`
+        detailRequest = await connection.query(`
         SELECT DE.no, DE.number_people, DE.department, DE.municipality, DE.village, DE.dateOf, DE.dateTo , DE.hour 
         FROM detail_exterior_request AS DE 
         JOIN exterior_request AS e 
