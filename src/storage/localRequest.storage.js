@@ -133,9 +133,11 @@ const getOneRequestComplete = async (id) => {
         }
         else {
             request = await connection.query(`
-                SELECT l.id,l.place,l.date,l.section,l.applicantsName,l.position,l.phoneNumber,l.observations,l.status,l.created_by,l.reason_rejected 
+                SELECT l.id,l.place,l.date,l.section,l.applicantsName,l.position,l.phoneNumber,l.observations,l.status,l.created_by,l.reason_rejected,
+                (SELECT MIN(DLR.dateOf) FROM detail_local_request DLR WHERE DLR.id_local_request = l.id) as first_date, 
+                (SELECT MAX(DLR.dateTo) FROM detail_local_request DLR WHERE DLR.id_local_request = l.id) as latest_date
                 FROM local_request AS l 
-                WHERE id = ?`, id);
+                WHERE l.id = ?`, id);
         }
             detailRequest = await connection.query(`
                 SELECT DL.dateOf, DL.dateTo, DL.schedule, DL.destiny, DL.peopleNumber, DL.comission  

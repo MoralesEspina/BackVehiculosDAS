@@ -103,7 +103,7 @@ const createNewVoucherDiesel = async (newVoucher) => {
             [newVoucher.date, newVoucher.cost, newVoucher.id_vehicle,newVoucher.comission_to,newVoucher.objective, newVoucher.id_pilot, newVoucher.km_to_travel]);
             const idVoucherDiesel = request.insertId
             const updateTrip = await connection.query(`
-            UPDATE trips SET voucher_id = IFNULL(?, voucher_id) WHERE idtrips = ?`, [idVoucherDiesel,newVoucher.idtrips])
+            UPDATE trips SET voucher_diesel = IFNULL(?, voucher_diesel) WHERE idtrips = ?`, [idVoucherDiesel,newVoucher.idtrips])
 
             await connection.commit();
 
@@ -128,9 +128,10 @@ const createNewVoucherRegular= async (newVoucher) => {
             VALUES (?,?,?,?,?,?,?)`,
             [newVoucher.date, newVoucher.cost, newVoucher.id_vehicle,newVoucher.comission_to,newVoucher.objective, newVoucher.id_pilot, newVoucher.km_to_travel]);
         const idVoucherRegular = voucherRegularInsert.insertId
-
+        console.log(idVoucherRegular)
+        console.log(newVoucher.idtrips)
         const updateTrip = await connection.query(`
-            UPDATE trips SET voucher_id = IFNULL(?, voucher_id) WHERE idtrips = ?`, [idVoucherRegular,newVoucher.idtrips])
+            UPDATE trips SET voucher_regular = IFNULL(?, voucher_regular) WHERE idtrips = ?`, [idVoucherRegular,newVoucher.idtrips])
         
         await connection.commit();
 

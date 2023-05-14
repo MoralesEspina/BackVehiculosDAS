@@ -165,39 +165,38 @@ const getOneExitPass= async (id) =>{
     try{
         const connection = await getConnection();
         const status = await connection.query(`
-        SELECT transp_request_local 
-        FROM trips
-        WHERE idtrips = ? `, id);
+                SELECT transp_request_local 
+                FROM trips
+                WHERE idtrips = ? `, id);
         let exteriorRequest, localRequest, data;
         if (!status[0].transp_request_local) {
             exteriorRequest = await connection.query(`
-        Select EP.idexit_pass, V.brand, V.plate, V.km, VT.type_name, P.fullname, CONCAT(ER.id,' (Exterior)') as id, ER.requesting_unit,
-		(SELECT MIN(DER.hour) FROM detail_exterior_request DER WHERE DER.id_exterior_request = ER.id) as first_hour,
-        (SELECT MIN(DER.dateOf) FROM detail_exterior_request DER WHERE DER.id_exterior_request = ER.id) as first_date,
-        (SELECT MAX(DER.department) FROM detail_exterior_request DER WHERE DER.id_exterior_request = ER.id) as destinations
-        From exit_pass AS EP
-        JOIN trips AS T ON T.idtrips = EP.id_trips
-        JOIN vehicle AS V ON V.idVehicle = T.vehicle_plate 
-        JOIN person AS P ON P.uuid = T.pilot
-        JOIN exterior_request AS ER ON ER.id = T.transp_request_exterior
-        JOIN vtype AS VT ON VT.idvtype = V.type
-        WHERE idexit_pass = ?`,id)
+                Select EP.idexit_pass, V.brand, V.plate, V.km, VT.type_name, P.fullname, CONCAT(ER.id,' (Exterior)') as id, ER.requesting_unit,
+                (SELECT MIN(DER.hour) FROM detail_exterior_request DER WHERE DER.id_exterior_request = ER.id) as first_hour,
+                (SELECT MIN(DER.dateOf) FROM detail_exterior_request DER WHERE DER.id_exterior_request = ER.id) as first_date,
+                (SELECT MAX(DER.department) FROM detail_exterior_request DER WHERE DER.id_exterior_request = ER.id) as destinations
+                From exit_pass AS EP
+                JOIN trips AS T ON T.idtrips = EP.id_trips
+                JOIN vehicle AS V ON V.idVehicle = T.vehicle_plate 
+                JOIN person AS P ON P.uuid = T.pilot
+                JOIN exterior_request AS ER ON ER.id = T.transp_request_exterior
+                JOIN vtype AS VT ON VT.idvtype = V.type
+                WHERE idexit_pass = ?`,id)
 
             data=JSON.parse(JSON.stringify(exteriorRequest))
         }else{
             localRequest = await connection.query(`
-        Select EP.idexit_pass, V.brand, V.plate, V.km, VT.type_name, P.fullname, CONCAT(LR.id,' (Exterior)') as id, LR.section AS requesting_unit,
-		(SELECT MIN(DLR.schedule) FROM detail_local_request DLR WHERE DLR.id_local_request = LR.id) as first_hour,
-        (SELECT MIN(DLR.dateOf) FROM detail_local_request DLR WHERE DLR.id_local_request = LR.id) as first_date,
-        (SELECT MAX(DLR.destiny) FROM detail_local_request DLR WHERE DLR.id_local_request = LR.id) as destinations
-        From exit_pass AS EP
-        JOIN trips AS T ON T.idtrips = EP.id_trips
-        JOIN vehicle AS V ON V.idVehicle = T.vehicle_plate 
-        JOIN person AS P ON P.uuid = T.pilot
-        JOIN local_request AS LR ON LR.id = T.transp_request_local
-        JOIN vtype AS VT ON VT.idvtype = V.type
-        WHERE idexit_pass = ?`,id)
-
+                Select EP.idexit_pass, V.brand, V.plate, V.km, VT.type_name, P.fullname, CONCAT(LR.id,' (Exterior)') as id, LR.section AS requesting_unit,
+                (SELECT MIN(DLR.schedule) FROM detail_local_request DLR WHERE DLR.id_local_request = LR.id) as first_hour,
+                (SELECT MIN(DLR.dateOf) FROM detail_local_request DLR WHERE DLR.id_local_request = LR.id) as first_date,
+                (SELECT MAX(DLR.destiny) FROM detail_local_request DLR WHERE DLR.id_local_request = LR.id) as destinations
+                From exit_pass AS EP
+                JOIN trips AS T ON T.idtrips = EP.id_trips
+                JOIN vehicle AS V ON V.idVehicle = T.vehicle_plate 
+                JOIN person AS P ON P.uuid = T.pilot
+                JOIN local_request AS LR ON LR.id = T.transp_request_local
+                JOIN vtype AS VT ON VT.idvtype = V.type
+                WHERE idexit_pass = ?`,id)
             data=JSON.parse(JSON.stringify(localRequest))
         }
         
@@ -218,12 +217,14 @@ const getOneBinnacle= async (id) =>{
         let exteriorRequest, localRequest, data;
         if (!status[0].transp_request_local) {
             exteriorRequest = await connection.query(`
-            Select B.idbinnacle, P.fullname, V.brand, V.cylinders, V.plate, V.model, V.gas, V.km, VT.type_name, CONCAT(ER.id,' (Exterior)') as id, ER.phoneNumber,
+            Select B.idbinnacle, P.fullname, V.brand, V.cylinders, V.plate, V.model, V.gas, V.km, VT.type_name, CONCAT(ER.id,' (Exterior)') as id, ER.phoneNumber,COALESCE( CONCAT(VR.idregular,' (Regular)'), CONCAT(VD.iddiesel,' (Diesel)')) AS idVoucher, COALESCE(VR.cost, VD.cost) AS cost,
 			(SELECT MIN(DER.hour) FROM detail_exterior_request DER WHERE DER.id_exterior_request = ER.id) as first_hour,
             (SELECT MIN(DER.dateOf) FROM detail_exterior_request DER WHERE DER.id_exterior_request = ER.id) as first_date,
             (SELECT MAX(DER.department) FROM detail_exterior_request DER WHERE DER.id_exterior_request = ER.id) as destinations
             From binnacle AS B
             JOIN trips AS T ON T.idtrips = B.id_trips
+            LEFT JOIN voucher_regular AS VR ON T.voucher_regular = VR.idregular
+			LEFT JOIN voucher_diesel AS VD ON T.voucher_diesel = VD.iddiesel
             JOIN vehicle AS V ON V.idVehicle = T.vehicle_plate 
             JOIN person AS P ON P.uuid = T.pilot
             JOIN exterior_request AS ER ON ER.id = T.transp_request_exterior
@@ -232,12 +233,14 @@ const getOneBinnacle= async (id) =>{
             data=JSON.parse(JSON.stringify(exteriorRequest))
         }else{
             localRequest = await connection.query(`
-            Select B.idbinnacle, P.fullname, V.brand, V.cylinders, V.plate, V.model, V.gas, V.km, VT.type_name, CONCAT(LR.id,' (Exterior)') as id, LR.phoneNumber,
+            Select B.idbinnacle, P.fullname, V.brand, V.cylinders, V.plate, V.model, V.gas, V.km, VT.type_name, CONCAT(LR.id,' (Exterior)') as id, LR.phoneNumber,COALESCE( CONCAT(VR.idregular,' (Regular)'), CONCAT(VD.iddiesel,' (Diesel)')) AS idVoucher, COALESCE(VR.cost, VD.cost) AS cost,
             (SELECT MIN(DLR.schedule) FROM detail_local_request DLR WHERE DLR.id_local_request = LR.id) as first_hour,
             (SELECT MIN(DLR.dateOf) FROM detail_local_request DLR WHERE DLR.id_local_request = LR.id) as first_date,
             (SELECT MAX(DLR.destiny) FROM detail_local_request DLR WHERE DLR.id_local_request = LR.id) as destinations
             From binnacle AS B
             JOIN trips AS T ON T.idtrips = B.id_trips
+            LEFT JOIN voucher_regular AS VR ON T.voucher_regular = VR.idregular
+			LEFT JOIN voucher_diesel AS VD ON T.voucher_diesel = VD.iddiesel
             JOIN vehicle AS V ON V.idVehicle = T.vehicle_plate 
             JOIN person AS P ON P.uuid = T.pilot
             JOIN local_request AS LR ON LR.id = T.transp_request_local
